@@ -1,0 +1,157 @@
+{
+  "max_level": 50.0,
+  "max_star": 10.0,
+  "star_hp_bonus": 10.0,
+  "star_stat_pct": 0.08,
+  "star_move": 0.0,
+  "arm_mods": {
+    "盾": {
+      "hp": 1.15,
+      "def": 1.25,
+      "mdef": 1.1,
+      "atk": 0.95,
+      "move": 0.0,
+      "range": 0.0
+    },
+    "枪": {
+      "hp": 1.05,
+      "def": 1.05,
+      "mdef": 1.0,
+      "atk": 1.05,
+      "move": 0.0,
+      "range": 0.0
+    },
+    "弓": {
+      "hp": 0.9,
+      "def": 0.9,
+      "mdef": 0.9,
+      "atk": 1.1,
+      "move": 0.0,
+      "range": 0.0
+    },
+    "骑": {
+      "hp": 1.0,
+      "def": 0.95,
+      "mdef": 0.95,
+      "atk": 1.1,
+      "move": 1.0,
+      "range": 0.0
+    }
+  },
+  "arm_counter": {
+    "枪": [
+      "骑"
+    ],
+    "骑": [
+      "弓"
+    ],
+    "弓": [
+      "盾"
+    ],
+    "盾": [
+      "枪"
+    ]
+  },
+  "arm_counter_bonus": 0.25,
+  "arm_counter_reduce": 0.1,
+  "crit_per_luck": 0.004,
+  "crit_per_mei": 0.007,
+  "crit_damage": 1.5,
+  "mei_crit_per": 0.0,
+  "mei_crit_dmg_per": 0.0,
+  "damage_variance": 0.05,
+  "min_damage": 1.0,
+  "damage_floor_k": 0.05,
+  "mult_basic": 1.0,
+  "mult_counter": 0.8,
+  "mult_combo": 0.5,
+  "mult_pursuit": 1.0,
+  "heal_mult_default": 0.8,
+  "douqi_per_stack": 0.05,
+  "wushuang_mult": 1.15,
+  "derive_five": false,
+  "five_weight": 1.0,
+  "growth": {
+    "level_atk": 1.0,
+    "level_def": 1.0,
+    "level_matk": 1.0,
+    "level_mdef": 1.0,
+    "level_hp": 4.0
+  },
+  "growth_rate": {
+    "wu": 1.0,
+    "zhi": 1.0,
+    "tong": 1.0,
+    "zheng": 1.0,
+    "mei": 1.0
+  },
+  "default_move": 4.0,
+  "default_range": 1.0,
+  "anim_fps_idle": 4.0,
+  "anim_fps_walk": 8.0,
+  "anim_fps_attack": 12.0,
+  "anim_frame_w": 64.0,
+  "anim_frame_h": 64.0,
+  "anim_default_frames": 4.0,
+  "arm_base_move": {
+    "盾": 5.0,
+    "枪": 5.0,
+    "弓": 4.0,
+    "骑": 6.0
+  },
+  "arm_base_range": {
+    "盾": 1.0,
+    "枪": 1.0,
+    "弓": 2.0,
+    "骑": 1.0
+  },
+  "arm_upgrade": {
+    "max_lv": 20.0,
+    "five_pool": 0.5,
+    "per_lv_points": 1.0,
+    "point_hp": 0.0,
+    "point_atk": 0.0,
+    "point_def": 0.0,
+    "point_matk": 0.0,
+    "point_mdef": 0.0,
+    "point_luck": 0.0,
+    "lv_move_every": 0.0,
+    "lv_range_every": 0.0
+  },
+  "star_rule": {
+    "max_star": 10.0,
+    "skill_stars": [
+      2.0,
+      3.0,
+      4.0,
+      6.0,
+      7.0,
+      9.0
+    ],
+    "talent_stars": [
+      5.0,
+      10.0
+    ],
+    "stat_bonus_stars": {
+      "8": 0.08
+    },
+    "stat_bonus_pct": 0.08,
+    "cost_common": 1.0,
+    "cost_rare": 2.0,
+    "gacha_same_pity": 100.0,
+    "star_stat_pct": 0.08,
+    "star_hp_bonus": 10.0,
+    "cost_per_star": 1.0
+  },
+  "gacha_rate_same": 0.05,
+  "five_growth": {
+    "per_level": 1.0,
+    "wu": 1.0,
+    "zhi": 1.0,
+    "tong": 1.0,
+    "zheng": 1.0,
+    "mei": 1.0,
+    "cap": 100.0
+  },
+  "fortune_per_mei": 1.0
+}

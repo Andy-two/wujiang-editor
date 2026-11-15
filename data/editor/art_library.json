@@ -1,0 +1,47 @@
+{
+  "res://assets/units/lu_bu/atk64.png": {
+    "kind": "sprite",
+    "key": "lu_bu",
+    "res": "res://assets/imported/sprite/lu_bu_1794577638808.png",
+    "size": [
+      64.0,
+      768.0
+    ]
+  },
+  "res://assets/units/lu_bu/mov64.png": {
+    "kind": "sprite",
+    "key": "lu_bu",
+    "res": "res://assets/imported/sprite/lu_bu_1794577638822.png",
+    "size": [
+      64.0,
+      704.0
+    ]
+  },
+  "res://assets/units/lu_bu/spc64.png": {
+    "kind": "sprite",
+    "key": "lu_bu",
+    "res": "res://assets/imported/sprite/lu_bu_1794577638841.png",
+    "size": [
+      64.0,
+      320.0
+    ]
+  },
+  "F:/Migrated/Downloads/吕布头像.png": {
+    "kind": "portrait",
+    "key": "lu_bu",
+    "res": "res://assets/imported/portrait/lu_bu_1794578895837.png",
+    "size": [
+      1536.0,
+      1536.0
+    ]
+  },
+  "F:/Migrated/Downloads/吕布立绘.png": {
+    "kind": "illust",
+    "key": "lu_bu",
+    "res": "res://assets/imported/illust/lu_bu_1794578910559.png",
+    "size": [
+      1328.0,
+      1776.0
+    ]
+  }
+}

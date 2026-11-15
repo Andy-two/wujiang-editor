@@ -1,0 +1,1889 @@
+{
+  "1201": {
+    "id": 1201,
+    "name": "鲍信",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1201.png",
+    "effect_name": "御锋",
+    "effect_desc": "每回合受到的首次伤害降低15%。",
+    "taolue": [
+      "提升1.5%兵力",
+      "战斗中伤害提升2%"
+    ],
+    "intro": "十八路诸侯之一，曹操的好友。",
+    "stats": {
+      "hp": 1.5
+    },
+    "dmg": 2
+  },
+  "1202": {
+    "id": 1202,
+    "name": "董昭",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1202.png",
+    "effect_name": "劝进",
+    "effect_desc": "释放群体技策时谋攻提升15%。",
+    "taolue": [
+      "战斗中技能伤害提升1.5%",
+      "提升1.5%兵力"
+    ],
+    "intro": "年轻时被举为孝廉。",
+    "stats": {
+      "matk": 15,
+      "hp": 1.5
+    },
+    "dmg": 15
+  },
+  "1203": {
+    "id": 1203,
+    "name": "李通",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1203.png",
+    "effect_name": "裂伤",
+    "effect_desc": "造成暴击伤害后对敌军额外造成物攻25%的固定伤害。",
+    "taolue": [
+      "战斗中提升20点运势",
+      "提升1.5%物攻"
+    ],
+    "intro": "以侠义闻名于江汝。",
+    "stats": {
+      "atk": 1.5
+    },
+    "dmg": 0
+  },
+  "1204": {
+    "id": 1204,
+    "name": "高览",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1204.png",
+    "effect_name": "叠锋",
+    "effect_desc": "造成单体伤害后为自身增加3%物攻，最多叠加5层，持续3回合。",
+    "taolue": [
+      "战斗中普攻伤害提升1.5%",
+      "提升1.5%兵力"
+    ],
+    "intro": "曾与许褚大战不分胜负。",
+    "stats": {
+      "atk": 3,
+      "hp": 1.5
+    },
+    "dmg": 1.5
+  },
+  "1205": {
+    "id": 1205,
+    "name": "朱灵",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1205.png",
+    "effect_name": "韧守",
+    "effect_desc": "受到主动单体攻击后，对攻击者造成物防40%的固定伤害。",
+    "taolue": [
+      "战斗中受到伤害减免2%",
+      "反击伤害增加1.5%"
+    ],
+    "intro": "公私分明，用兵有道。",
+    "stats": {
+      "hp": 6,
+      "atk": 3,
+      "matk": 3
+    },
+    "dmg": 0
+  },
+  "1206": {
+    "id": 1206,
+    "name": "张燕",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1206.png",
+    "effect_name": "激昂",
+    "effect_desc": "自身获得增益时，额外增加2.2%物攻物防，可叠加5层，持续3回合。",
+    "taolue": [
+      "战斗中技能伤害提升1.5%",
+      "受到反击伤害降低1.5%"
+    ],
+    "intro": "剽悍敏捷，军中称为“飞燕”",
+    "stats": {
+      "atk": 2.2
+    },
+    "dmg": 1.5
+  },
+  "1207": {
+    "id": 1207,
+    "name": "曹纯",
+    "quality": 0,
+    "quality_name": "奇",
+    "portrait": "res://assets/vice/1207.png",
+    "effect_name": "严守",
+    "effect_desc": "受到的普攻伤害降低15%。",
+    "taolue": [],
+    "intro": "曹仁之弟，年少有为。",
+    "stats": {
+      "hp": 2,
+      "atk": 1,
+      "matk": 1
+    },
+    "dmg": 0
+  },
+  "1208": {
+    "id": 1208,
+    "name": "史涣",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1208.png",
+    "effect_name": "忠护",
+    "effect_desc": "自身兵力大于80%时谋防提升10%。",
+    "taolue": [],
+    "intro": "年少任侠，以忠诚勇敢著称。",
+    "stats": {
+      "mdef": 10
+    },
+    "dmg": 0
+  },
+  "1209": {
+    "id": 1209,
+    "name": "卞瑶",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1209.png",
+    "effect_name": "抚琴",
+    "effect_desc": "为友军施加单体增益时，使其下次主动攻击造成伤害提升15%。",
+    "taolue": [
+      "提升1.5%兵力",
+      "战斗中提升2%暴击抗性"
+    ],
+    "intro": "善于音乐歌舞。",
+    "stats": {
+      "hp": 1.5
+    },
+    "dmg": 15
+  },
+  "1210": {
+    "id": 1210,
+    "name": "蔡邕",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1210.png",
+    "effect_name": "博闻",
+    "effect_desc": "释放群体技策时谋攻提升8%。",
+    "taolue": [],
+    "intro": "善文学书法，精通音律经史。",
+    "stats": {
+      "matk": 8
+    },
+    "dmg": 8
+  },
+  "1211": {
+    "id": 1211,
+    "name": "戏志才",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1211.png",
+    "effect_name": "残谋",
+    "effect_desc": "兵力小于90%时，主动攻击前谋攻提升15%；行动结束时，若自身兵力小于50%，回复兵力上限10%的兵力。",
+    "taolue": [
+      "战斗中技能伤害提升1.5%",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "善于谋略，有辅佐之才。",
+    "stats": {
+      "matk": 15
+    },
+    "dmg": 1.5
+  },
+  "1212": {
+    "id": 1212,
+    "name": "枣袛",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1212.png",
+    "effect_name": "屯守",
+    "effect_desc": "受到单体攻击时双防提升8%。",
+    "taolue": [],
+    "intro": "屯田制首倡者之一。",
+    "stats": {
+      "hp": 4,
+      "atk": 2,
+      "matk": 2
+    },
+    "dmg": 0
+  },
+  "1213": {
+    "id": 1213,
+    "name": "臧霸",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1213.png",
+    "effect_name": "长驱",
+    "effect_desc": "主动单体攻击前若移动过2格以上，对敌军造成物攻20%的固定伤害。",
+    "taolue": [
+      "战斗中提升3%暴击伤害",
+      "克制伤害提升1.5%"
+    ],
+    "intro": "屯于开阳一带，自成一方霸主。",
+    "stats": {},
+    "dmg": 1.5
+  },
+  "1214": {
+    "id": 1214,
+    "name": "胡车儿",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1214.png",
+    "effect_name": "追袭",
+    "effect_desc": "追击伤害提升30%，触发追击后使下一次主动攻击伤害提升20%。",
+    "taolue": [
+      "战斗中提升3%暴击伤害",
+      "战斗中提升20点运势"
+    ],
+    "intro": "力大无穷，勇冠其军。",
+    "stats": {},
+    "dmg": 30
+  },
+  "1215": {
+    "id": 1215,
+    "name": "夏侯昭",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1215.png",
+    "effect_name": "燕护",
+    "effect_desc": "反击与追击伤害提升30%，受到单体攻击前为自身回复兵力上限8%的兵力。",
+    "taolue": [
+      "提升1.5%物攻",
+      "反击伤害增加1.5%"
+    ],
+    "intro": "被夏侯渊视为己出。",
+    "stats": {
+      "atk": 1.5
+    },
+    "dmg": 30
+  },
+  "1216": {
+    "id": 1216,
+    "name": "邹蕙",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1216.png",
+    "effect_name": "蕙心",
+    "effect_desc": "自身1格范围内没有敌军时，双攻提升15%。",
+    "taolue": [
+      "战斗中技能伤害提升1.5%",
+      "提升1.5%谋防"
+    ],
+    "intro": "容貌昳丽，擅长音律。",
+    "stats": {
+      "mdef": 1.5
+    },
+    "dmg": 1.5
+  },
+  "1217": {
+    "id": 1217,
+    "name": "吕虔",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1217.png",
+    "effect_name": "固本",
+    "effect_desc": "自身兵力大于80%时物防提升10%。",
+    "taolue": [],
+    "intro": "有勇有谋，善领兵打仗。",
+    "stats": {
+      "def": 10
+    },
+    "dmg": 0
+  },
+  "1218": {
+    "id": 1218,
+    "name": "管亥",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1218.png",
+    "effect_name": "滞敌",
+    "effect_desc": "对移动大于自身的敌军造成伤害提升15%，受到伤害降低15%。",
+    "taolue": [
+      "提升1.5%物攻",
+      "提升1.5%物防"
+    ],
+    "intro": "骁勇善战，可以一当十。",
+    "stats": {
+      "atk": 1.5,
+      "def": 1.5
+    },
+    "dmg": 15
+  },
+  "1219": {
+    "id": 1219,
+    "name": "蒯越",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1219.png",
+    "effect_name": "伺机",
+    "effect_desc": "兵力提升8%，每次受到伤害立即回复5点战意。",
+    "taolue": [],
+    "intro": "足智多谋。出身荆州名门。",
+    "stats": {
+      "hp": 8
+    },
+    "dmg": 0
+  },
+  "1220": {
+    "id": 1220,
+    "name": "韩浩",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1220.png",
+    "effect_name": "镇军",
+    "effect_desc": "造成范围伤害后，物攻提升5%并获得5%#「攻心」#link1，最多3层，持续3回合。",
+    "taolue": [
+      "反击伤害增加1.5%",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "与王匡一起领兵抵御董卓。",
+    "stats": {
+      "atk": 5
+    },
+    "dmg": 0
+  },
+  "1221": {
+    "id": 1221,
+    "name": "毛玠",
+    "quality": 0,
+    "quality_name": "奇",
+    "portrait": "res://assets/vice/1221.png",
+    "effect_name": "先佐",
+    "effect_desc": "每回合受到的首次伤害降低11%。",
+    "taolue": [],
+    "intro": "为官以清廉公正著称。",
+    "stats": {
+      "hp": 2,
+      "atk": 1,
+      "matk": 1
+    },
+    "dmg": 0
+  },
+  "1222": {
+    "id": 1222,
+    "name": "杜若",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1222.png",
+    "effect_name": "幽思",
+    "effect_desc": "施放单体技策时谋攻提升15%。",
+    "taolue": [
+      "战斗中伤害提升2%",
+      "克制伤害提升1.5%"
+    ],
+    "intro": "原为吕布将秦宜禄之妻。",
+    "stats": {
+      "matk": 15
+    },
+    "dmg": 15
+  },
+  "1223": {
+    "id": 1223,
+    "name": "蹋顿",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1223.png",
+    "effect_name": "扫蛮",
+    "effect_desc": "主动攻击击杀敌军后为自身回复兵力上限10%的兵力；自身兵力大于80%物攻物防提升12%。",
+    "taolue": [
+      "提升1.5%物攻",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "丘力居之侄，骁勇善战。",
+    "stats": {
+      "def": 12,
+      "atk": 1.5
+    },
+    "dmg": 0
+  },
+  "1224": {
+    "id": 1224,
+    "name": "娄圭",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1224.png",
+    "effect_name": "隐智",
+    "effect_desc": "自身兵力小于90%时谋攻提升8%。",
+    "taolue": [],
+    "intro": "年少时便与曹操相识。",
+    "stats": {
+      "matk": 8
+    },
+    "dmg": 0
+  },
+  "1225": {
+    "id": 1225,
+    "name": "王朗",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1225.png",
+    "effect_name": "富瞻",
+    "effect_desc": "自身2格范围内每有一个携带减益状态的敌军，物防谋防提升10%，最多提升20%。",
+    "taolue": [
+      "战斗中技能伤害提升1.5%",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "博学多闻，性格严谨慷慨。",
+    "stats": {
+      "mdef": 10
+    },
+    "dmg": 1.5
+  },
+  "1226": {
+    "id": 1226,
+    "name": "武安国",
+    "quality": 0,
+    "quality_name": "奇",
+    "portrait": "res://assets/vice/1226.png",
+    "effect_name": "蹈锋",
+    "effect_desc": "攻击克制的目标伤害提升12%。",
+    "taolue": [],
+    "intro": "知恩图报，善用铁锤作战。",
+    "stats": {},
+    "dmg": 12
+  },
+  "1227": {
+    "id": 1227,
+    "name": "杨阜",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1227.png",
+    "effect_name": "长策",
+    "effect_desc": "抵抗每回合首次受到的#「封技」#link1；兵力小于90%时造成谋略伤害提升15%。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "提升1.5%兵力"
+    ],
+    "intro": "曹魏名臣。",
+    "stats": {
+      "matk": 1.5,
+      "hp": 1.5
+    },
+    "dmg": 15
+  },
+  "1228": {
+    "id": 1228,
+    "name": "牛金",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1228.png",
+    "effect_name": "悍攻",
+    "effect_desc": "普攻伤害提升20%并获得20%攻心。",
+    "taolue": [
+      "提升1.5%物攻",
+      "提升1.5%兵力"
+    ],
+    "intro": "以勇猛著称，屡立战功。",
+    "stats": {
+      "atk": 1.5,
+      "hp": 1.5
+    },
+    "dmg": 20
+  },
+  "1229": {
+    "id": 1229,
+    "name": "严珩",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1229.png",
+    "effect_name": "励军",
+    "effect_desc": "谋攻提升5%。为友军回复战意时，额外使其获得#「昂扬」#link1，持续2回合。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "吕布被围时曾反对陈宫的计谋。",
+    "stats": {
+      "matk": 6.5
+    },
+    "dmg": 0
+  },
+  "1230": {
+    "id": 1230,
+    "name": "梁习",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1230.png",
+    "effect_name": "铁骑",
+    "effect_desc": "自身为骑马部队时物理伤害和暴击伤害提升12%；自身为非骑马部队时受到物理伤害和暴击伤害降低20%。",
+    "taolue": [
+      "战斗中受到伤害减免2%",
+      "战斗中伤害提升2%"
+    ],
+    "intro": "传有“梁习治最”典故。",
+    "stats": {},
+    "dmg": 12
+  },
+  "1231": {
+    "id": 1231,
+    "name": "杨修",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1231.png",
+    "effect_name": "机辩",
+    "effect_desc": "释放单体技策时谋攻提升8%。",
+    "taolue": [],
+    "intro": "心思敏捷，善揣摩人心。",
+    "stats": {
+      "matk": 8
+    },
+    "dmg": 8
+  },
+  "1232": {
+    "id": 1232,
+    "name": "曹昂",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1232.png",
+    "effect_name": "荡寇",
+    "effect_desc": "对兵力100%的敌军造成伤害时暴击率提升10%。",
+    "taolue": [],
+    "intro": "曹操长子，二十岁时被举为孝廉。",
+    "stats": {},
+    "dmg": 10
+  },
+  "1234": {
+    "id": 1234,
+    "name": "赵娥",
+    "quality": 0,
+    "quality_name": "奇",
+    "portrait": "res://assets/vice/1234.png",
+    "effect_name": "枕戈",
+    "effect_desc": "行动结束时，若未主动攻击，则立即获得18点战意。",
+    "taolue": [],
+    "intro": "为报父仇筹备十余年。",
+    "stats": {
+      "hp": 2,
+      "atk": 1,
+      "matk": 1
+    },
+    "dmg": 0
+  },
+  "1235": {
+    "id": 1235,
+    "name": "韩遂",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1235.png",
+    "effect_name": "坚行",
+    "effect_desc": "物防提升8%；移动力+1（唯一）。（该天赋效果仅对短兵、长兵、器械兵系生效）",
+    "taolue": [
+      "战斗中技能伤害提升1.5%",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "曾举兵叛乱，拥兵自守。",
+    "stats": {
+      "def": 8
+    },
+    "dmg": 1.5
+  },
+  "1236": {
+    "id": 1236,
+    "name": "仓慈",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1236.png",
+    "effect_name": "蓄谋",
+    "effect_desc": "对敌军施加减益后自身谋攻谋防提升3%，可叠加5层，持续3回合。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "任敦煌太守，深受百姓爱戴。",
+    "stats": {
+      "mdef": 3,
+      "matk": 1.5
+    },
+    "dmg": 0
+  },
+  "1237": {
+    "id": 1237,
+    "name": "曹安民",
+    "quality": 0,
+    "quality_name": "奇",
+    "portrait": "res://assets/vice/1237.png",
+    "effect_name": "疾斩",
+    "effect_desc": "普攻伤害提升8%。",
+    "taolue": [],
+    "intro": "曹操之侄。",
+    "stats": {},
+    "dmg": 8
+  },
+  "1238": {
+    "id": 1238,
+    "name": "崔琰",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1238.png",
+    "effect_name": "防护",
+    "effect_desc": "为其他我方部队回复兵力后自身谋攻提升6%（最多18%），持续2回合；主动造成谋略伤害后自身双防提升6%（最多18%），持续2回合。",
+    "taolue": [
+      "战斗中受到伤害减免2%",
+      "提升1.5%谋攻"
+    ],
+    "intro": "东汉时期大臣、名士。",
+    "stats": {
+      "matk": 7.5
+    },
+    "dmg": 6
+  },
+  "1239": {
+    "id": 1239,
+    "name": "糜芮",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1239.png",
+    "effect_name": "慈援",
+    "effect_desc": "行动结束时，为另一个兵力最低的我方部队回复自身兵力上限10%的兵力。",
+    "taolue": [
+      "提升1.5%物防",
+      "受到治疗效果提升3%"
+    ],
+    "intro": "天生丽质，睿智贤明。",
+    "stats": {
+      "def": 1.5
+    },
+    "dmg": 0
+  },
+  "1242": {
+    "id": 1242,
+    "name": "陈琳",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1242.png",
+    "effect_name": "孤笔",
+    "effect_desc": "1格范围内没有敌军时谋攻提升8%。",
+    "taolue": [],
+    "intro": "善诗词，风格雄放强劲。",
+    "stats": {
+      "matk": 8
+    },
+    "dmg": 0
+  },
+  "1243": {
+    "id": 1243,
+    "name": "华歆",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1243.png",
+    "effect_name": "德素",
+    "effect_desc": "自身获得增益时，额外增加2.2%谋攻谋防，可叠加5层，持续3回合。",
+    "taolue": [
+      "战斗中受到技能伤害减免1.5%",
+      "战斗中技能伤害提升1.5%"
+    ],
+    "intro": "见识高远，清正廉洁。",
+    "stats": {
+      "matk": 2.2
+    },
+    "dmg": 1.5
+  },
+  "1244": {
+    "id": 1244,
+    "name": "蔡瑁",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1244.png",
+    "effect_name": "督水",
+    "effect_desc": "主动单体攻击时，若此次攻击无法被反击，则物攻提升16.5%，暴击伤害提升24%，持续2回合；受到主动攻击时，若自身无法反击，则降低30%受到的伤害，持续2回合；若自身位于浅滩中，该提升效果翻倍。",
+    "taolue": [
+      "提升1.5%物攻",
+      "战斗中伤害提升2%"
+    ],
+    "intro": "刘表麾下重臣。",
+    "stats": {
+      "atk": 18
+    },
+    "dmg": 24
+  },
+  "1245": {
+    "id": 1245,
+    "name": "麹义",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1245.png",
+    "effect_name": "锐矢",
+    "effect_desc": "主动攻击时，暴击率和暴击伤害提升20%。",
+    "taolue": [
+      "提升1.5%物攻",
+      "合击伤害增加1.5%"
+    ],
+    "intro": "善骑射，部下皆为精锐。",
+    "stats": {
+      "atk": 1.5
+    },
+    "dmg": 20
+  },
+  "1246": {
+    "id": 1246,
+    "name": "张既",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1246.png",
+    "effect_name": "斩谋",
+    "effect_desc": "自身对敌军施加的减益被驱散或移除时，每被驱散或移除1层对其造成谋攻15%（最多45%）的固定伤害；自身3格范围内每有一个拥有减益的敌军谋攻谋防提升4%（最多12%）。",
+    "taolue": [
+      "提升1.5%兵力",
+      "提升1.5%谋攻"
+    ],
+    "intro": "曹操手下名臣，治绩为三辅第一。",
+    "stats": {
+      "mdef": 4,
+      "hp": 1.5,
+      "matk": 1.5
+    },
+    "dmg": 0
+  },
+  "1247": {
+    "id": 1247,
+    "name": "许攸",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1247.png",
+    "effect_name": "傲睨",
+    "effect_desc": "自身兵力大于80%时谋攻提升9%。",
+    "taolue": [],
+    "intro": "胸有谋略但性格狂傲。",
+    "stats": {
+      "matk": 9
+    },
+    "dmg": 0
+  },
+  "1248": {
+    "id": 1248,
+    "name": "钟繇",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1248.png",
+    "effect_name": "墨伐",
+    "effect_desc": "谋攻提升5%，为友军施加单体增益时，增益持续时间+1。",
+    "taolue": [
+      "战斗中提升2%治疗效果",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "善书法政治，德高望重。",
+    "stats": {
+      "matk": 5
+    },
+    "dmg": 0
+  },
+  "1250": {
+    "id": 1250,
+    "name": "邢道荣",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1250.png",
+    "effect_name": "蛮勇",
+    "effect_desc": "兵力大于等于50%时物攻提升8%，兵力小于50%时物防提升10%。",
+    "taolue": [],
+    "intro": "善用开山斧，人称万人敌。",
+    "stats": {
+      "atk": 8,
+      "def": 10
+    },
+    "dmg": 0
+  },
+  "1251": {
+    "id": 1251,
+    "name": "阎柔",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1251.png",
+    "effect_name": "增势",
+    "effect_desc": "造成固定伤害时回复伤害值20%的兵力；造成固定伤害后物攻物防提升5%，可叠加3层，持续3回合。",
+    "taolue": [
+      "提升1.5%物攻",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "成长于乌桓，深得外族信任。",
+    "stats": {
+      "def": 5,
+      "atk": 1.5
+    },
+    "dmg": 5
+  },
+  "1253": {
+    "id": 1253,
+    "name": "孙资",
+    "quality": 0,
+    "quality_name": "奇",
+    "portrait": "res://assets/vice/1253.png",
+    "effect_name": "富瞻",
+    "effect_desc": "使用群体攻击技能前，谋攻额外提升15%。",
+    "taolue": [],
+    "intro": "举孝廉出身，博学多才。",
+    "stats": {
+      "hp": 2,
+      "atk": 1,
+      "matk": 1
+    },
+    "dmg": 0
+  },
+  "1254": {
+    "id": 1254,
+    "name": "曹节",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1254.png",
+    "effect_name": "连环",
+    "effect_desc": "自身3格范围内的其他我方部队双防提升10.8%；自身3格范围内每有一个其他我方部队自身回复量和免伤提升5.4%（最多21.6%）。",
+    "taolue": [
+      "战斗中受到伤害减免2%",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "汉献帝的第二任皇后。",
+    "stats": {
+      "hp": 6,
+      "atk": 3,
+      "matk": 3
+    },
+    "dmg": 0
+  },
+  "1256": {
+    "id": 1256,
+    "name": "淳于琼",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1256.png",
+    "effect_name": "恃力",
+    "effect_desc": "反击伤害提升15%。",
+    "taolue": [],
+    "intro": "西园八校尉之一，后为袁绍部将。",
+    "stats": {},
+    "dmg": 15
+  },
+  "1257": {
+    "id": 1257,
+    "name": "宋宪",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1257.png",
+    "effect_name": "锐兵",
+    "effect_desc": "主动攻击时物攻提升8%。",
+    "taolue": [],
+    "intro": "八健将之一。",
+    "stats": {
+      "atk": 8
+    },
+    "dmg": 0
+  },
+  "1258": {
+    "id": 1258,
+    "name": "魏续",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1258.png",
+    "effect_name": "骁掠",
+    "effect_desc": "对兵力大于80%的敌军造成伤害提升9%。",
+    "taolue": [],
+    "intro": "八健将之一。",
+    "stats": {},
+    "dmg": 9
+  },
+  "1259": {
+    "id": 1259,
+    "name": "蒋济",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1259.png",
+    "effect_name": "叠势",
+    "effect_desc": "造成固定伤害时获得10%攻心；造成固定伤害后自身谋攻提升4%，受到伤害降低4%，可叠加3层，持续3回合。",
+    "taolue": [
+      "提升1.5%兵力",
+      "战斗中伤害提升2%"
+    ],
+    "intro": "曹操的心腹谋士。",
+    "stats": {
+      "matk": 4,
+      "hp": 1.5
+    },
+    "dmg": 4
+  },
+  "1262": {
+    "id": 1262,
+    "name": "向朗",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1262.png",
+    "effect_name": "砺锋",
+    "effect_desc": "每移除自身1层增益时，暴击率提升4%（最多10层），持续2回合；造成非主动伤害时物攻提升15%。",
+    "taolue": [
+      "提升1.5%物攻",
+      "战斗中提升3%暴击伤害"
+    ],
+    "intro": "蜀汉官员、藏书家、学者。",
+    "stats": {
+      "atk": 16.5
+    },
+    "dmg": 15
+  },
+  "1264": {
+    "id": 1264,
+    "name": "张允",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1264.png",
+    "effect_name": "党立",
+    "effect_desc": "增伤减伤提升15%；受到伤害时将40%伤害分摊给最近的自身召唤物；自身召唤物受到伤害时自身为其分摊2%伤害，若本次分摊时的伤害超过自身当前兵力，则不触发分摊。",
+    "taolue": [
+      "战斗中受到伤害减免2%",
+      "提升1.5%物攻"
+    ],
+    "intro": "诋毁刘琦，助刘琮继位。",
+    "stats": {
+      "atk": 1.5
+    },
+    "dmg": 0
+  },
+  "1265": {
+    "id": 1265,
+    "name": "蔡阳",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1265.png",
+    "effect_name": "猎敌",
+    "effect_desc": "追击时双攻提升20%；追击后自身主动攻击伤害提升5%，可叠加3层，持续3回合。",
+    "taolue": [
+      "提升1.5%物攻",
+      "提升1.5%谋攻"
+    ],
+    "intro": "于古城与关羽交战。",
+    "stats": {
+      "atk": 1.5,
+      "matk": 1.5
+    },
+    "dmg": 5
+  },
+  "1266": {
+    "id": 1266,
+    "name": "晏明",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1266.png",
+    "effect_name": "倚城",
+    "effect_desc": "自身2格范围内每有一个其他我方部队自身物攻物防提升6%（最多12%）；行动结束时若自身2格范围内有其他我方部队为自身回复兵力上限10%的兵力。",
+    "taolue": [
+      "提升1.5%兵力",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "在长坂坡领军围捕赵云。",
+    "stats": {
+      "def": 6,
+      "hp": 1.5
+    },
+    "dmg": 0
+  },
+  "1268": {
+    "id": 1268,
+    "name": "霍峻",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1268.png",
+    "effect_name": "抗衡",
+    "effect_desc": "受到主动攻击或反击后物理增伤减伤提升6%（最多18%），持续3回合。",
+    "taolue": [
+      "提升1.5%物防",
+      "提升1.5%物攻"
+    ],
+    "intro": "刘璋部下围攻下坚守一年。",
+    "stats": {
+      "def": 1.5,
+      "atk": 1.5
+    },
+    "dmg": 6
+  },
+  "1271": {
+    "id": 1271,
+    "name": "糜芳",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1271.png",
+    "effect_name": "疗续",
+    "effect_desc": "回复能力提升10%。",
+    "taolue": [],
+    "intro": "糜竺之弟。",
+    "stats": {
+      "hp": 4,
+      "atk": 2,
+      "matk": 2
+    },
+    "dmg": 0
+  },
+  "1272": {
+    "id": 1272,
+    "name": "孙乾",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1272.png",
+    "effect_name": "预攻",
+    "effect_desc": "回复量提升20%，护盾率提升15%，自身3格范围内的其他我方部队物理伤害提升5%。",
+    "taolue": [
+      "提升1.5%物防",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "刘备拜为秉忠将军。",
+    "stats": {
+      "def": 1.5
+    },
+    "dmg": 5
+  },
+  "1273": {
+    "id": 1273,
+    "name": "伊籍",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1273.png",
+    "effect_name": "预谋",
+    "effect_desc": "回复量提升20%，护盾率提升15%，自身3格范围内的其他我方部队谋略伤害提升5%。",
+    "taolue": [
+      "战斗中受到伤害减免2%",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "参与编制︽蜀科︾。",
+    "stats": {},
+    "dmg": 5
+  },
+  "1274": {
+    "id": 1274,
+    "name": "夏侯兰",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1274.png",
+    "effect_name": "逐敌",
+    "effect_desc": "移动每经过一个敌军自身获得1层#「龙怒」#link1：下一次主动攻击或追击伤害提升20%，触发后移除1层，上限4层，不可驱散。",
+    "taolue": [
+      "战斗中伤害提升2%",
+      "提升1.5%物攻"
+    ],
+    "intro": "自小与赵云相识。",
+    "stats": {
+      "atk": 1.5
+    },
+    "dmg": 20
+  },
+  "1275": {
+    "id": 1275,
+    "name": "车胄",
+    "quality": 2,
+    "quality_name": "杰",
+    "portrait": "res://assets/vice/1275.png",
+    "effect_name": "追剿",
+    "effect_desc": "追击伤害提升15%。",
+    "taolue": [],
+    "intro": "后任徐州刺史。",
+    "stats": {},
+    "dmg": 15
+  },
+  "1276": {
+    "id": 1276,
+    "name": "夏侯恩",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1276.png",
+    "effect_name": "断锋",
+    "effect_desc": "主动攻击落单敌军（1格范围内没有友军）时物攻提升15%；受到落单敌军攻击或反击时物防提升15%。",
+    "taolue": [
+      "战斗中伤害提升2%",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "负责背负青釭剑。",
+    "stats": {
+      "atk": 15,
+      "def": 15
+    },
+    "dmg": 2
+  },
+  "1277": {
+    "id": 1277,
+    "name": "诸葛均",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1277.png",
+    "effect_name": "潜谋",
+    "effect_desc": "追击伤害提升30%；自身处于场地上时，伤害增加10%、受到伤害减少6%。",
+    "taolue": [
+      "战斗中伤害提升2%",
+      "提升1.5%谋攻"
+    ],
+    "intro": "在蜀汉官至长水校尉。",
+    "stats": {
+      "matk": 1.5
+    },
+    "dmg": 30
+  },
+  "1278": {
+    "id": 1278,
+    "name": "卞喜",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1278.png",
+    "effect_name": "飞锤",
+    "effect_desc": "主动攻击或追击自身1格范围外的敌军时物攻和暴击伤害提升12%。",
+    "taolue": [
+      "战斗中伤害提升2%",
+      "战斗中提升3%暴击伤害"
+    ],
+    "intro": "任汜水关守将。",
+    "stats": {},
+    "dmg": 12
+  },
+  "1282": {
+    "id": 1282,
+    "name": "刘琦",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1282.png",
+    "effect_name": "反行",
+    "effect_desc": "抵抗每回合首次受到的#「缴械」#link1；普攻和反击时物攻提升22%和暴击率提升22%。",
+    "taolue": [
+      "战斗中伤害提升2%",
+      "提升1.5%物防"
+    ],
+    "intro": "被刘备表为荆州刺史。",
+    "stats": {
+      "atk": 22,
+      "def": 1.5
+    },
+    "dmg": 22
+  },
+  "1283": {
+    "id": 1283,
+    "name": "胡班",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1283.png",
+    "effect_name": "锐击",
+    "effect_desc": "主动单体攻击时伤害提升15%且本回合受到伤害降低30%。",
+    "taolue": [
+      "战斗中受到伤害减免2%",
+      "提升1.5%物攻"
+    ],
+    "intro": "后追随关羽。",
+    "stats": {
+      "atk": 1.5
+    },
+    "dmg": 15
+  },
+  "1288": {
+    "id": 1288,
+    "name": "周仓",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1288.png",
+    "effect_name": "奋迅",
+    "effect_desc": "触发#「再行动」#link1或#「继续行动」#link1时，自身增益状态时间不减，主动攻击后若击杀敌军下一次主动攻击造成的物理伤害提升25%，若未击杀敌军下次受到物理伤害降低25%。",
+    "taolue": [
+      "战斗中技能伤害提升1.5%",
+      "提升1.5%兵力"
+    ],
+    "intro": "关羽侍从，臂有千斤之力。",
+    "stats": {
+      "hp": 1.5
+    },
+    "dmg": 25
+  },
+  "1290": {
+    "id": 1290,
+    "name": "辛宪英",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1290.png",
+    "effect_name": "运筹",
+    "effect_desc": "自身减益小于3时回复量、护盾率、双防提升20%；抵抗每回合首次受到的#「封技」#link1。",
+    "taolue": [
+      "提升1.5%兵力",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "辛毗之女，善于鉴人知事。",
+    "stats": {
+      "hp": 1.5
+    },
+    "dmg": 0
+  },
+  "1295": {
+    "id": 1295,
+    "name": "廖化",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1295.png",
+    "effect_name": "先锋",
+    "effect_desc": "自身2格范围内每有一个敌军，物攻提升6%（最多3层），每回合减免12%实际受到的敌方伤害（最多3层），下回合自身行动结束时，受到减免量等额的固定伤害。",
+    "taolue": [
+      "提升1.5%物攻",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "后随姜维防御魏将伐蜀。",
+    "stats": {
+      "atk": 7.5
+    },
+    "dmg": 0
+  },
+  "1296": {
+    "id": 1296,
+    "name": "曹性",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1296.png",
+    "effect_name": "势压",
+    "effect_desc": "范围攻击物攻提升15%，造成范围伤害后本回合其余范围攻击物攻提升10%；自身2格范围内每有一个敌军物防提升5%（最多15%）。",
+    "taolue": [
+      "提升1.5%物攻",
+      "战斗中提升3%暴击伤害"
+    ],
+    "intro": "八健将之一。",
+    "stats": {
+      "atk": 26.5,
+      "def": 5
+    },
+    "dmg": 10
+  },
+  "1297": {
+    "id": 1297,
+    "name": "侯成",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1297.png",
+    "effect_name": "迅防",
+    "effect_desc": "抵抗每回合首次受到的#「定身」#link1或#「牵制」#link1；自身获得移动增益时额外提升5%物攻物防，可叠加3层，持续3回合。",
+    "taolue": [
+      "提升1.5%物防",
+      "提升1.5%兵力"
+    ],
+    "intro": "八健将之一。",
+    "stats": {
+      "atk": 5,
+      "def": 1.5,
+      "hp": 1.5
+    },
+    "dmg": 0
+  },
+  "1298": {
+    "id": 1298,
+    "name": "黄承彦",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1298.png",
+    "effect_name": "备势",
+    "effect_desc": "造成物理伤害后谋攻提升20%，持续3回合；造成谋略伤害后物攻提升20%，持续3回合。",
+    "taolue": [
+      "战斗中受到伤害减免2%",
+      "战斗中伤害提升2%"
+    ],
+    "intro": "沔南名士。",
+    "stats": {
+      "matk": 20,
+      "atk": 20
+    },
+    "dmg": 20
+  },
+  "1299": {
+    "id": 1299,
+    "name": "明远",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1299.png",
+    "effect_name": "远谋",
+    "effect_desc": "造成非主动伤害时谋攻提升20%；造成主动伤害后谋攻谋防提升10%（最多20%）直到自身行动开始。",
+    "taolue": [
+      "战斗中伤害提升2%",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "诸葛亮身边的书童。",
+    "stats": {
+      "matk": 20,
+      "mdef": 10
+    },
+    "dmg": 20
+  },
+  "1301": {
+    "id": 1301,
+    "name": "颜良",
+    "quality": 2,
+    "quality_name": "",
+    "portrait": "res://assets/vice/1301.png",
+    "effect_name": "",
+    "effect_desc": "",
+    "taolue": [],
+    "intro": "河北名将，",
+    "stats": {},
+    "dmg": 0
+  },
+  "1302": {
+    "id": 1302,
+    "name": "文丑",
+    "quality": 2,
+    "quality_name": "",
+    "portrait": "res://assets/vice/1302.png",
+    "effect_name": "",
+    "effect_desc": "",
+    "taolue": [],
+    "intro": "河北名将，",
+    "stats": {},
+    "dmg": 0
+  },
+  "1303": {
+    "id": 1303,
+    "name": "王允",
+    "quality": 2,
+    "quality_name": "",
+    "portrait": "res://assets/vice/1303.png",
+    "effect_name": "",
+    "effect_desc": "",
+    "taolue": [],
+    "intro": "字子师，",
+    "stats": {},
+    "dmg": 0
+  },
+  "1304": {
+    "id": 1304,
+    "name": "袁熙",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1304.png",
+    "effect_name": "玄谋",
+    "effect_desc": "对拥有减益的敌军造成谋略伤害提升15%；受到拥有减益的敌军物理伤害降低15%。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "提升1.5%兵力"
+    ],
+    "intro": "袁绍次子。",
+    "stats": {
+      "matk": 1.5,
+      "hp": 1.5
+    },
+    "dmg": 15
+  },
+  "1305": {
+    "id": 1305,
+    "name": "郭淮",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1305.png",
+    "effect_name": "趁势",
+    "effect_desc": "回复自身战意后除兵力外全属性提升2%，可叠加5层，持续3回合，若回复战意大于45点额外提升10%增伤减伤，持续2回合。",
+    "taolue": [
+      "提升1.5%物攻",
+      "提升1.5%物防"
+    ],
+    "intro": "雁门郡太守郭缊之子。",
+    "stats": {
+      "atk": 1.5,
+      "def": 1.5
+    },
+    "dmg": 0
+  },
+  "1306": {
+    "id": 1306,
+    "name": "孙翊",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1306.png",
+    "effect_name": "震击",
+    "effect_desc": "自身对敌军施加的减益被驱散或移除时，每被驱散或移除1层对其造成物攻10%（最多50%）的固定伤害；造成固定伤害后自身暴击率和暴击伤害提升4%，可叠加5层，持续3回合。",
+    "taolue": [
+      "战斗中提升3%暴击伤害",
+      "提升1.5%物攻"
+    ],
+    "intro": "孙坚的第三个儿子。",
+    "stats": {
+      "atk": 1.5
+    },
+    "dmg": 4
+  },
+  "1307": {
+    "id": 1307,
+    "name": "孙绍",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1307.png",
+    "effect_name": "增护",
+    "effect_desc": "为我方部队回复战意后自身除兵力外全属性提升5.02%，可叠加3层，持续3回合；自身消耗战意后为自身3格范围内的我方部队施加谋攻40%的护盾，持续2回合。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "被封为吴侯，后被改封上虞侯。",
+    "stats": {
+      "matk": 1.5
+    },
+    "dmg": 0
+  },
+  "1308": {
+    "id": 1308,
+    "name": "关平",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1308.png",
+    "effect_name": "断金",
+    "effect_desc": "主动单体攻击时暴击伤害提升20%；触发#「再行动」#link1或#「继续行动」#link1时自身物理增伤减伤提升10%直到自身行动开始。",
+    "taolue": [
+      "战斗中提升3%暴击伤害",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "随关羽北伐曹仁。",
+    "stats": {},
+    "dmg": 20
+  },
+  "1309": {
+    "id": 1309,
+    "name": "陈宫",
+    "quality": 2,
+    "quality_name": "",
+    "portrait": "res://assets/vice/1309.png",
+    "effect_name": "",
+    "effect_desc": "",
+    "taolue": [],
+    "intro": "字公台，",
+    "stats": {},
+    "dmg": 0
+  },
+  "1310": {
+    "id": 1310,
+    "name": "徐庶",
+    "quality": 2,
+    "quality_name": "",
+    "portrait": "res://assets/vice/1310.png",
+    "effect_name": "",
+    "effect_desc": "",
+    "taolue": [],
+    "intro": "字元直，",
+    "stats": {},
+    "dmg": 0
+  },
+  "1311": {
+    "id": 1311,
+    "name": "司马徽",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1311.png",
+    "effect_name": "借力",
+    "effect_desc": "自身每有1个增益谋攻谋防提升6%（最多18%）；自身增益被驱散或移除时获得兵力上限10%的护盾，持续2回合。",
+    "taolue": [
+      "克制伤害提升1.5%",
+      "提升1.5%谋攻"
+    ],
+    "intro": "有“水镜先生”之称。",
+    "stats": {
+      "mdef": 6,
+      "matk": 1.5
+    },
+    "dmg": 1.5
+  },
+  "1312": {
+    "id": 1312,
+    "name": "马岱",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1312.png",
+    "effect_name": "虎跃",
+    "effect_desc": "主动单体攻击时移动力每大于敌军1格暴击率和暴击伤害提升8%（最多24%）；行动结束时若本回合位移累计大于10格自身增伤减伤提升12%，持续3回合。",
+    "taolue": [
+      "战斗中提升3%暴击伤害",
+      "战斗中伤害提升2%"
+    ],
+    "intro": "诸葛亮病逝后斩杀了魏延。",
+    "stats": {},
+    "dmg": 8
+  },
+  "1313": {
+    "id": 1313,
+    "name": "赵襄",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1313.png",
+    "effect_name": "扶汉",
+    "effect_desc": "抵抗每回合首次受到的#「破坏」#link1；普攻和追击时暴击率和暴击伤害提升20%。",
+    "taolue": [
+      "提升1.5%物攻",
+      "战斗中提升3%暴击伤害"
+    ],
+    "intro": "后嫁与关羽之子关平为妻。",
+    "stats": {
+      "atk": 1.5
+    },
+    "dmg": 20
+  },
+  "1314": {
+    "id": 1314,
+    "name": "庞德公",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1314.png",
+    "effect_name": "乘势",
+    "effect_desc": "为其他我方部队施加增益后自身谋攻谋防提升5.02%（最多15%），持续3回合；对敌军施加减益或控制后额外降低其除兵力外5%全属性，持续2回合。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "与襄阳诸隐士交往甚密。",
+    "stats": {
+      "mdef": 5.02,
+      "matk": 1.5
+    },
+    "dmg": 0
+  },
+  "1315": {
+    "id": 1315,
+    "name": "张瑾云",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1315.png",
+    "effect_name": "易型",
+    "effect_desc": "自身主动或被动换位后物理伤害提升15%，物理伤害减免提升15%，持续2回合。",
+    "taolue": [
+      "提升1.5%物防",
+      "提升1.5%物攻"
+    ],
+    "intro": "继其姐成为刘禅的皇后。",
+    "stats": {
+      "def": 1.5,
+      "atk": 1.5
+    },
+    "dmg": 15
+  },
+  "1316": {
+    "id": 1316,
+    "name": "王平",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1316.png",
+    "effect_name": "饮刃",
+    "effect_desc": "反击时「攻心」提升5%；自身「攻心」效果触发时，若兵力回复超出最大上限，则物攻提升5%，伤害提升3.34%，可叠加3层，持续3回合。",
+    "taolue": [
+      "提升1.5%物攻",
+      "提升1.5%兵力"
+    ],
+    "intro": "蜀汉后期名将。",
+    "stats": {
+      "atk": 6.5,
+      "hp": 1.5
+    },
+    "dmg": 3.34
+  },
+  "1317": {
+    "id": 1317,
+    "name": "董衡",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1317.png",
+    "effect_name": "聚势",
+    "effect_desc": "施放技策后，增伤减伤提升3.6%（最多提升5层），持续3回合。",
+    "taolue": [
+      "提升1.5%物攻",
+      "提升1.5%物防"
+    ],
+    "intro": "随庞德驰援樊城曹仁。",
+    "stats": {
+      "atk": 1.5,
+      "def": 1.5
+    },
+    "dmg": 0
+  },
+  "1318": {
+    "id": 1318,
+    "name": "张昭",
+    "quality": 2,
+    "quality_name": "",
+    "portrait": "res://assets/vice/1318.png",
+    "effect_name": "",
+    "effect_desc": "",
+    "taolue": [],
+    "intro": "字子布，",
+    "stats": {},
+    "dmg": 0
+  },
+  "1319": {
+    "id": 1319,
+    "name": "张纮",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1319.png",
+    "effect_name": "策引",
+    "effect_desc": "谋攻提升15%；施放战法后，为自身3格范围内其他我方部队回复20点战意。",
+    "taolue": [
+      "提升1.5%谋防",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "孙吴重臣，善辞家。",
+    "stats": {
+      "matk": 15,
+      "mdef": 1.5
+    },
+    "dmg": 0
+  },
+  "1322": {
+    "id": 1322,
+    "name": "诸葛瑾",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1322.png",
+    "effect_name": "叠焰",
+    "effect_desc": "施放主动技策后，固定伤害提升22%，持续2回合；造成固定伤害后，普攻伤害、技策伤害提升22%，持续2回合。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "战斗中提升3%暴击伤害"
+    ],
+    "intro": "曾努力缓和蜀吴关系。",
+    "stats": {
+      "matk": 1.5
+    },
+    "dmg": 22
+  },
+  "1323": {
+    "id": 1323,
+    "name": "周循",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1323.png",
+    "effect_name": "审时",
+    "effect_desc": "击退敌军时，谋攻提升3%、固伤提升2%，可叠加5层，持续2回合。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "被孙权厚爱，迎娶其长女。",
+    "stats": {
+      "matk": 4.5
+    },
+    "dmg": 0
+  },
+  "1324": {
+    "id": 1324,
+    "name": "严颜",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1324.png",
+    "effect_name": "自若",
+    "effect_desc": "主动攻击时，物攻提升6%（最多叠加2层），持续2回合；被动攻击时，物理伤害提升3%（最多叠加4层），持续2回合。",
+    "taolue": [
+      "战斗中提升3%暴击伤害",
+      "提升1.5%物攻"
+    ],
+    "intro": "留典故“严将军头”。",
+    "stats": {
+      "atk": 7.5
+    },
+    "dmg": 3
+  },
+  "1325": {
+    "id": 1325,
+    "name": "高翔",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1325.png",
+    "effect_name": "坚阵",
+    "effect_desc": "防止伤害后，物攻提升10%，物理伤害提升10%，持续2回合，并给自身回复物攻10%的兵力。",
+    "taolue": [
+      "提升1.5%物攻",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "大破司马懿。",
+    "stats": {
+      "atk": 11.5
+    },
+    "dmg": 10
+  },
+  "1326": {
+    "id": 1326,
+    "name": "司马孚",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1326.png",
+    "effect_name": "趁虚",
+    "effect_desc": "造成伤害时，目标每拥有1个减益，暴击率提升3.6%（最多5层），暴击伤害提升3.6%（最多5层）。",
+    "taolue": [
+      "战斗中提升3%暴击伤害",
+      "提升1.5%谋攻"
+    ],
+    "intro": "西晋封安平王、拜太宰。",
+    "stats": {
+      "matk": 1.5
+    },
+    "dmg": 3.6
+  },
+  "1327": {
+    "id": 1327,
+    "name": "司马干",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1327.png",
+    "effect_name": "威逼",
+    "effect_desc": "使目标的减益等级提升后，对该目标造成一次谋攻25%的固定伤害，目标每携带1个贰级减益，该固伤额外提升10%（最多提升3次），目标每携带1个叁级减益，该固伤额外提升20%（最多提升3次）。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "提升1.5%固定伤害"
+    ],
+    "intro": "西晋建立后封平原王。",
+    "stats": {
+      "matk": 1.5
+    },
+    "dmg": 0
+  },
+  "1328": {
+    "id": 1328,
+    "name": "陶谦",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1328.png",
+    "effect_name": "怀仁",
+    "effect_desc": "自身获得增益时，双攻提升6%，攻心提升4%，造成伤害提升6%，持续2回合（上限3层）。",
+    "taolue": [
+      "提升1.5%兵力",
+      "提升1.5%固定伤害"
+    ],
+    "intro": "汉末徐州牧。",
+    "stats": {
+      "hp": 1.5
+    },
+    "dmg": 6
+  },
+  "1329": {
+    "id": 1329,
+    "name": "华佗",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1329.png",
+    "effect_name": "悬壶",
+    "effect_desc": "护盾量提升25%，为我方部队添加护盾时，为其驱散1个减益，并使其下次主动攻击造成伤害提升12%。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "提升1.5%兵力"
+    ],
+    "intro": "最终被曹操下狱处死。",
+    "stats": {
+      "matk": 1.5,
+      "hp": 1.5
+    },
+    "dmg": 12
+  },
+  "1330": {
+    "id": 1330,
+    "name": "张仲景",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1330.png",
+    "effect_name": "济世",
+    "effect_desc": "回复量提升25%，为我方部队添加护盾时，为其回复谋攻15%的兵力，并使其降低12%受到的伤害，持续2回合。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "战斗中受到技能伤害减免1.5%"
+    ],
+    "intro": "撰成《伤寒杂病论》。",
+    "stats": {
+      "matk": 1.5
+    },
+    "dmg": 0
+  },
+  "1331": {
+    "id": 1331,
+    "name": "张绍",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1331.png",
+    "effect_name": "奉玺",
+    "effect_desc": "反击和追击时，暴击率提升15%，物攻提升15%。",
+    "taolue": [
+      "提升1.5%物攻",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "承袭西乡侯爵位。",
+    "stats": {
+      "atk": 16.5
+    },
+    "dmg": 0
+  },
+  "1332": {
+    "id": 1332,
+    "name": "成廉",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1332.png",
+    "effect_name": "驰突",
+    "effect_desc": "范围攻击触发暴击时，暴击伤害提升18%，此次伤害无视敌军18%的防御。",
+    "taolue": [
+      "战斗中提升3%暴击伤害",
+      "提升1.5%物攻"
+    ],
+    "intro": "以骁勇敢战见载。",
+    "stats": {
+      "atk": 1.5
+    },
+    "dmg": 18
+  },
+  "1333": {
+    "id": 1333,
+    "name": "赵俨",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1333.png",
+    "effect_name": "奋势",
+    "effect_desc": "战法伤害增加25%；自身增益被升级时，克制伤害加成提升11%（最多2层），持续2回合。",
+    "taolue": [
+      "克制伤害提升1.5%",
+      "战斗中提升20点运势"
+    ],
+    "intro": "去世前升任至司空。",
+    "stats": {},
+    "dmg": 11
+  },
+  "1334": {
+    "id": 1334,
+    "name": "程普",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1334.png",
+    "effect_name": "固营",
+    "effect_desc": "为我方部队施加护盾后，自身谋攻提升3.2%（上限5层），施加护盾量提升3.2%（上限5层），持续2回合，被施加护盾的我方部队造成伤害提升6%，受到伤害降低6%，持续2回合。",
+    "taolue": [
+      "提升1.5%谋攻",
+      "战斗中受到伤害减免2%"
+    ],
+    "intro": "军中敬称“程公”。",
+    "stats": {
+      "matk": 4.7
+    },
+    "dmg": 6
+  },
+  "1335": {
+    "id": 1335,
+    "name": "董袭",
+    "quality": 2,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1335.png",
+    "effect_name": "历战",
+    "effect_desc": "施放战法后，双攻提升3%（最多叠加4层），持续4回合。",
+    "taolue": [
+      "重击：战斗中伤害提升2%",
+      "强击：战斗中提升3%暴击伤害"
+    ],
+    "intro": "东汉末年孙氏部将，字元代，会稽余姚人。身长八尺，勇力过人，早年追随孙策，后辅佐孙权，官至偏将军。征讨黄祖时，与凌统各率百名敢死士，冒着箭雨突入敌船之间，亲斩缆索，为大军开道。后奉命驻守濡须口，遭遇暴风仍不肯弃守，最终随楼船倾覆而亡。",
+    "stats": {
+      "hp": 19,
+      "atk": 9,
+      "matk": 0
+    },
+    "dmg": 2
+  },
+  "1543": {
+    "id": 1543,
+    "name": "孔融",
+    "quality": 1,
+    "quality_name": "超",
+    "portrait": "res://assets/vice/1543.png",
+    "effect_name": "让梨",
+    "effect_desc": "谋攻提升10%；每回合自身首次获得#「昂扬」#link1、#「奋勇」#link1、#「高级昂扬」#link1、#「高级奋勇」#link1其中任意一个状态时，将该状态对应升级为#「高级昂扬」#link1、#「高级奋勇」#link1、#「特级昂扬」#link1、#「特级奋勇」#link1，随后100%概率将升级后的状态复制给自身3格范围内最近的一个其他我方部队，为自身和该我方部队恢复15%最大兵力并驱散1个减益。",
+    "taolue": [
+      "战斗中受到技能伤害减免1.5%",
+      "提升1.5%谋攻"
+    ],
+    "intro": "为“建安七子”之一。",
+    "stats": {
+      "matk": 11.5
+    },
+    "dmg": 0
+  }
+}

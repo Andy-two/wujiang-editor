@@ -1,0 +1,22 @@
+# Godot 缓存与导入文件（每次打开会重新生成）
+.godot/
+*.translation
+
+# 导出产物
+export/
+build/
+*.exe
+*.pck
+*.zip
+
+# 系统与编辑器
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+
+# 临时文件
+*.tmp
+*.log
+~$*

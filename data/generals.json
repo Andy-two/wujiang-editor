@@ -1,0 +1,2400 @@
+{
+  "lu_bu": {
+    "id": 4002,
+    "name": "吕布",
+    "troop": "轻骑兵",
+    "color": "#3b82f6",
+    "portrait": "res://assets/lu_bu.png",
+    "stats": {
+      "hp": 191,
+      "atk": 121,
+      "def": 39,
+      "matk": 18,
+      "mdef": 19,
+      "luck": 60,
+      "move": 6,
+      "range": 1
+    },
+    "talent": "sanguo_wushuang",
+    "talent_lv": 1,
+    "skills": [
+      "yuanmen",
+      "guiku",
+      "xirao",
+      "liehuo",
+      "tiema",
+      "jianmie"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "三国无双",
+        "desc": "主动攻击后对自身1圈范围内的敌军造成物攻50%的伤害，若该伤害至少击杀一个敌军则为自身回复兵力上限20%的兵力；造成范围伤害后获得1层「斗气」；「斗气」达到3层时移除所有「斗气」并获得「无双」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "对落单的敌军（1格范围内没有友军）造成物理伤害提升15%，受到其伤害降低15%；天赋伤害击杀敌军后重复一次范围攻击（最多重复5次）。"
+      },
+      {
+        "name": "",
+        "desc": "造成范围伤害后获得2层「斗气」；拥有「无双」时造成范围伤害必定暴击。"
+      }
+    ]
+  },
+  "diao_chan": {
+    "id": 1007,
+    "name": "貂蝉",
+    "troop": "女兵",
+    "color": "#ec4899",
+    "portrait": "res://assets/diao_chan.png",
+    "stats": {
+      "hp": 179,
+      "atk": 21,
+      "def": 26,
+      "matk": 87,
+      "mdef": 37,
+      "luck": 30,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "biyue_xiuhua",
+    "talent_lv": 1,
+    "skills": [
+      "pianruo",
+      "wuying",
+      "fuwei",
+      "chenyu",
+      "9140061",
+      "youlian"
+    ],
+    "arm": "盾",
+    "talent_stages": [
+      {
+        "name": "闭月羞花",
+        "desc": "对我方部队施放单体技策时回复能力提升20%并为其回复10点战意。"
+      },
+      {
+        "name": "",
+        "desc": "对我方部队施放群体技策时回复能力提升20%并为其回复10点战意。"
+      },
+      {
+        "name": "",
+        "desc": "对我方部队施放技策时回复能力提升30%，为其回复15点战意。"
+      }
+    ]
+  },
+  "guan_yu": {
+    "name": "关羽",
+    "color": "#22c55e",
+    "troop": "轻骑兵",
+    "stats": {
+      "hp": 195,
+      "atk": 116,
+      "def": 42,
+      "matk": 30,
+      "mdef": 24,
+      "luck": 55,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/guan_yu.png",
+    "talent": "wusheng",
+    "talent_lv": 1,
+    "skills": [
+      "guan_qinglong",
+      "qianli",
+      "guan_tuodao",
+      "guan_weizhen",
+      "guan_zhenfen",
+      "guan_yanyue"
+    ],
+    "arm": "骑",
+    "id": 2002,
+    "talent_stages": [
+      {
+        "name": "武圣",
+        "desc": "主动攻击后获得「再行动」，若未击杀敌军获得「拖刀计」，持续到敌方回合结束（间隔3回合触发）；击杀敌军时获得「武魂」。"
+      },
+      {
+        "name": "",
+        "desc": "对兵力高于80%的敌军造成伤害提升10%，「武魂」层数上限+1。"
+      },
+      {
+        "name": "",
+        "desc": "战斗开始时获得1层「武魂」，「再行动」改为间隔2回合触发。"
+      }
+    ]
+  },
+  "zhang_fei": {
+    "name": "张飞",
+    "color": "#f97316",
+    "troop": "长兵",
+    "stats": {
+      "hp": 205,
+      "atk": 118,
+      "def": 46,
+      "matk": 12,
+      "mdef": 16,
+      "luck": 30,
+      "move": 4,
+      "range": 1
+    },
+    "portrait": "res://assets/zhang_fei.png",
+    "talent": "yifu",
+    "talent_lv": 1,
+    "skills": [
+      "zhang_paoxiao",
+      "wanren",
+      "hengsao",
+      "fei_tannang",
+      "9220071",
+      "off_突刺"
+    ],
+    "arm": "枪",
+    "id": 2003,
+    "talent_stages": [
+      {
+        "name": "一夫当关",
+        "desc": "直线2格「阻挡领域」；自身兵力大于50%反击时「先攻」且反击伤害提升75%。"
+      },
+      {
+        "name": "",
+        "desc": "自身2格范围内每有一个敌军增伤减伤提升5%（最多10%）。"
+      },
+      {
+        "name": "",
+        "desc": "反击和「追击」时无视敌军65%防御。"
+      }
+    ]
+  },
+  "zhao_yun": {
+    "name": "赵云",
+    "color": "#cbd5e1",
+    "troop": "轻骑兵",
+    "stats": {
+      "hp": 185,
+      "atk": 112,
+      "def": 40,
+      "matk": 28,
+      "mdef": 24,
+      "luck": 45,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/zhao_yun.png",
+    "talent": "guasheng",
+    "talent_lv": 1,
+    "skills": [
+      "zhao_didan",
+      "zhao_touwei",
+      "xirao",
+      "zhao_jiuwei",
+      "zhao_beishui",
+      "xingcai_zudi"
+    ],
+    "arm": "骑",
+    "id": 2004,
+    "talent_stages": [
+      {
+        "name": "寡胜众",
+        "desc": "移动时无视敌军阻挡且每经过一个敌军获得1层「龙胆」；回合开始和主动攻击时获得1层「龙胆」；行动结束时若拥有7层「龙胆」，移除所有「龙胆」并获得1层「格挡」；「格挡」后若敌军在自身2格范围内，对其造成物攻100%伤害的「追击」。"
+      },
+      {
+        "name": "",
+        "desc": "主动攻击伤害提升20%；追击伤害增加20%；免疫移动减益。"
+      },
+      {
+        "name": "",
+        "desc": "回合开始和主动攻击时获得2层「龙胆」；自身兵力小于50%时获得1层「格挡」（每局一次）。"
+      }
+    ]
+  },
+  "zhuge_liang": {
+    "name": "诸葛亮",
+    "color": "#a78bfa",
+    "troop": "策士",
+    "stats": {
+      "hp": 165,
+      "atk": 34,
+      "def": 32,
+      "matk": 118,
+      "mdef": 44,
+      "luck": 50,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/zhuge_liang.png",
+    "talent": "liaodi",
+    "talent_lv": 1,
+    "skills": [
+      "off_奇门遁甲",
+      "off_运筹帷幄",
+      "xuanxiang",
+      "liang_chunqiang",
+      "liang_mougong",
+      "liang_dixian"
+    ],
+    "arm": "弓",
+    "id": 2010,
+    "talent_stages": [
+      {
+        "name": "料敌如神",
+        "desc": "直线群体技策可对斜向施放（范围-1）；抵抗每回合首次受到「封技」「嘲讽」「哗变」「混乱」，对来源造成谋攻100%伤害的「追击」并施加「混乱」，持续1回合；自身3格范围内的敌军施放技策前对其造成谋攻100%伤害的「追击」并使自身准备期最长的技策准备期-1；「追击」后对敌军施加「识破」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "受到自身直线范围内的敌军伤害降低20%；对自身非直线范围内的敌军造成伤害提升20%；「追击」时对目标周围1格范围内的敌军额外造成谋攻50%的伤害。"
+      },
+      {
+        "name": "",
+        "desc": "对敌军每施加一个减益或控制额外造成谋攻20%的固定伤害；「识破」改为「高级识破」。"
+      }
+    ]
+  },
+  "liu_bei": {
+    "name": "刘备",
+    "color": "#f59e0b",
+    "troop": "步兵",
+    "stats": {
+      "hp": 190,
+      "atk": 96,
+      "def": 38,
+      "matk": 60,
+      "mdef": 30,
+      "luck": 58,
+      "move": 4,
+      "range": 1
+    },
+    "portrait": "res://assets/liu_bei.png",
+    "talent": "tongxin",
+    "talent_lv": 1,
+    "skills": [
+      "liu_daojian",
+      "yulin",
+      "liu_hongyi",
+      "liu_renxian",
+      "liu_tuotuo",
+      "yuanbing"
+    ],
+    "arm": "盾",
+    "id": 2001,
+    "talent_stages": [
+      {
+        "name": "同心同德",
+        "desc": "为我方部队回复兵力时，使其下次攻击造成伤害提升10%，自身3格范围内的敌军被合击时为参与合击的我方部队回复自身兵力上限10%的兵力。"
+      },
+      {
+        "name": "",
+        "desc": "攻击范围内的敌军被合击时，对其发起物攻50%的「追击」（对每个敌军每回合最多攻击1次）。"
+      },
+      {
+        "name": "",
+        "desc": "合击或「追击」前为自身回复兵力上限10%的兵力。"
+      }
+    ]
+  },
+  "ma_chao": {
+    "name": "马超",
+    "color": "#60a5fa",
+    "troop": "轻骑兵",
+    "stats": {
+      "hp": 188,
+      "atk": 118,
+      "def": 42,
+      "matk": 20,
+      "mdef": 20,
+      "luck": 62,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/ma_chao.png",
+    "talent": "ma_chao_talent",
+    "talent_lv": 1,
+    "skills": [
+      "ma_chao_baiche",
+      "ma_chao_yiqi",
+      "xirao",
+      "ma_chao_xinbu",
+      "jianmie",
+      "ma_zhuixing"
+    ],
+    "arm": "骑",
+    "id": 2013,
+    "talent_stages": [
+      {
+        "name": "神威天将",
+        "desc": "移动时无视「阻挡领域」；位移结束后每移动1格对自身2格范围内的敌军造成物攻10%的固定伤害（最多50%）；造成暴击后自身物攻物防提升3%（最多15%），持续2回合；行动结束时，为自身3格范围内的所有我方部队施加「神威」，持续2回合，之后每有1格未消耗的移动力自身移动力+1（最多+3），持续1回合。"
+      },
+      {
+        "name": "",
+        "desc": "自身2格范围内的敌军移动力-1且物攻物防降低10%；造成暴击后为自身回复兵力上限5%的兵力。"
+      },
+      {
+        "name": "",
+        "desc": "每累计造成3次暴击后，行动结束时自身获得「再行动」（间隔2回合触发）。"
+      }
+    ]
+  },
+  "huang_zhong": {
+    "name": "黄忠",
+    "color": "#fbbf24",
+    "troop": "弓兵",
+    "stats": {
+      "hp": 176,
+      "atk": 112,
+      "def": 38,
+      "matk": 26,
+      "mdef": 24,
+      "luck": 64,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/huang_zhong.png",
+    "talent": "huang_talent",
+    "talent_lv": 1,
+    "skills": [
+      "huang_jintui",
+      "huang_chuanshi",
+      "huang_zhuangtian",
+      "huang_dingjun",
+      "huang_luanjian",
+      "xhy_liushi"
+    ],
+    "arm": "弓",
+    "id": 2014,
+    "talent_stages": [
+      {
+        "name": "先登穿杨",
+        "desc": "主动单体攻击时，为目标敌军施加2层「标定」；主动群体攻击时，为目标敌军施加1层「标定」；攻击时，为自身施加1层「淬锋」，下个我方回合开始时移除。"
+      },
+      {
+        "name": "",
+        "desc": "「攒射」时物攻提升15% ，溢出的暴击率转化为暴击伤害（最多20%）。"
+      },
+      {
+        "name": "",
+        "desc": "「攒射」对目标周围1格范围内的敌军额外造成物攻30%的伤害；主动单体攻击、主动群体攻击时，额外为目标敌军施加1层「标定」。"
+      }
+    ]
+  },
+  "sun_shangxiang": {
+    "name": "孙尚香",
+    "color": "#f472b6",
+    "troop": "弓兵",
+    "stats": {
+      "hp": 172,
+      "atk": 110,
+      "def": 36,
+      "matk": 30,
+      "mdef": 24,
+      "luck": 66,
+      "move": 5,
+      "range": 2
+    },
+    "portrait": "res://assets/sun_shangxiang.png",
+    "talent": "sun_talent",
+    "talent_lv": 1,
+    "skills": [
+      "sun_qianling",
+      "sun_liuguang",
+      "sun_aim",
+      "sun_feiren",
+      "sun_touxi",
+      "huang_luanjian"
+    ],
+    "arm": "弓",
+    "id": 2015,
+    "talent_stages": [
+      {
+        "name": "枭姬",
+        "desc": "施放技策或战法后在身前召唤1个「枭姬卫」；暴击后对敌军额外造成物攻20%的固定伤害并施加1层「撕裂」，持续2回合；对敌军施加「撕裂」时若已拥有5层「撕裂」，移除其所有「撕裂」并对其造成物攻120%的伤害（该伤害无视所有防御且无法施加「撕裂」）。"
+      },
+      {
+        "name": "",
+        "desc": "对非女性敌军造成伤害时暴击率与暴击伤害提升20%；受到非女性敌军伤害降低20%。（枭姬卫继承）"
+      },
+      {
+        "name": "",
+        "desc": "暴击后改为造成物攻40%的固定伤害并对敌军施加2层「撕裂」（枭姬卫继承）；自身3格范围内有枭姬卫时，受到致命伤害后牺牲枭姬卫且自身免疫该次死亡并回复兵力上限50%的兵力（每局一次）。"
+      }
+    ]
+  },
+  "pang_tong": {
+    "name": "庞统",
+    "color": "#a78bfa",
+    "troop": "策士",
+    "stats": {
+      "hp": 165,
+      "atk": 30,
+      "def": 30,
+      "matk": 120,
+      "mdef": 40,
+      "luck": 60,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/pang_tong.png",
+    "talent": "pang_talent",
+    "talent_lv": 1,
+    "skills": [
+      "pang_tiesuo",
+      "pang_shashen",
+      "pang_jixing",
+      "pang_jianyan",
+      "pang_zhenwei",
+      "liang_mougong"
+    ],
+    "arm": "弓",
+    "id": 2016,
+    "talent_stages": [
+      {
+        "name": "浴火涅槃",
+        "desc": "自身4格范围内的敌军行动结束时对其造成谋攻75%的伤害；自身4格范围内的其他我方部队行动结束时为其回复谋攻50%的兵力；受到致命伤害后变为「浴火」形态并获得3层「涅槃」（每局一次）。"
+      },
+      {
+        "name": "",
+        "desc": "自身4格范围内的敌军行动结束时驱散其1个增益；自身4格范围内的我方部队行动结束时驱散其1个减益。"
+      },
+      {
+        "name": "",
+        "desc": "自身4格范围内的敌军受到伤害提升10%；自身4格范围内的我方部队受到伤害降低5%。"
+      }
+    ]
+  },
+  "wei_yan": {
+    "name": "魏延",
+    "color": "#34d399",
+    "troop": "步兵",
+    "stats": {
+      "hp": 196,
+      "atk": 116,
+      "def": 44,
+      "matk": 24,
+      "mdef": 22,
+      "luck": 58,
+      "move": 5,
+      "range": 1
+    },
+    "portrait": "res://assets/wei_yan.png",
+    "talent": "wei_talent",
+    "talent_lv": 1,
+    "skills": [
+      "wei_tiesuo",
+      "wei_juwang",
+      "wei_jianbi",
+      "wei_ziwu",
+      "9220071",
+      "youren_bafang"
+    ],
+    "arm": "盾",
+    "id": 2017,
+    "talent_stages": [
+      {
+        "name": "矜高傲世",
+        "desc": "自身可防止非固定伤害的20%（每个大回合可触发3次）；对敌方施放单体普攻或单体战法时为其施加「缠缚」，敌方场上同时只能存在一个「缠缚」，施加时若敌方已存在自身施加的「缠缚」，则已存在的「缠缚」会被清除；我方部队触发防止伤害时，将该单位的物攻按照其防止伤害的比例，转化为储存伤害（不超过该我方部队300%物攻），下次单体攻击后额外造成100%储存伤害的固定伤害并清空储存值。"
+      },
+      {
+        "name": "",
+        "desc": "自身对「缠缚」目标造成伤害时，物攻提升15%，暴击率提升15%。"
+      },
+      {
+        "name": "",
+        "desc": "自身可防止非固定伤害提升至30%（每个大回合可触发5次）；「缠缚」吸取目标除兵力外的全属性提升至30%。"
+      }
+    ]
+  },
+  "qian_zhao": {
+    "name": "牵招",
+    "color": "#f59e0b",
+    "troop": "步兵",
+    "stats": {
+      "hp": 190,
+      "atk": 112,
+      "def": 46,
+      "matk": 26,
+      "mdef": 24,
+      "luck": 56,
+      "move": 4,
+      "range": 1
+    },
+    "portrait": "res://assets/qian_zhao.png",
+    "talent": "qian_talent",
+    "talent_lv": 1,
+    "skills": [
+      "qian_zhenjun",
+      "qian_jiaosha",
+      "qian_nuhou",
+      "qian_fapan",
+      "9220201",
+      "qian_juxian"
+    ],
+    "arm": "盾",
+    "id": 2018,
+    "talent_stages": [
+      {
+        "name": "威风远振",
+        "desc": "主动攻击后对敌军造成物攻20%的固定伤害并施加1层「撕裂」，持续2回合；行动结束时自身2格范围内的敌军每拥有1层「撕裂」则对其造成物攻15%（最多75%）伤害的「追击」。"
+      },
+      {
+        "name": "",
+        "desc": "对拥有「撕裂」的敌军造成伤害时获得10%的攻心；受到拥有「撕裂」的敌军造成的伤害降低15%。"
+      },
+      {
+        "name": "",
+        "desc": "主动攻击后改为施加2层「撕裂」，持续2回合；对拥有「撕裂」的敌军造成伤害提升10%。"
+      }
+    ]
+  },
+  "ma_yunlu": {
+    "name": "马云禄",
+    "color": "#f87171",
+    "troop": "轻骑兵",
+    "stats": {
+      "hp": 178,
+      "atk": 114,
+      "def": 40,
+      "matk": 20,
+      "mdef": 20,
+      "luck": 66,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/ma_yunlu.png",
+    "talent": "ma_yunlu_talent",
+    "talent_lv": 1,
+    "skills": [
+      "ma_yunlu_takuan",
+      "ma_yunlu_xiaozi",
+      "jipo",
+      "ma_yunlu_hongying",
+      "qiangwu",
+      "xirao"
+    ],
+    "arm": "骑",
+    "id": 2019,
+    "talent_stages": [
+      {
+        "name": "苍啸陇朔",
+        "desc": "主动攻击后对敌军施加「苍引」，持续2回合；主动攻击拥有「苍引」的敌军后获得3格「再行动」（间隔3回合触发）；行动结束时对攻击范围所有拥有「苍引」敌军造成物攻25%伤害的「追击」；对每个敌军每回合的第二次主动攻击或「追击」时无视15%防御；对每个敌军每回合的第三次主动攻击或「追击」时额外造成物攻50%的伤害（无视其所有防御）。"
+      },
+      {
+        "name": "",
+        "desc": "行动结束时额外对攻击范围内最近的1个敌军造成物攻35%伤害的「追击」；拥有「苍引」的敌军被主动攻击或追击暴击后攻击者回复5%伤害的兵力；「苍引」提升至无视10%防御，受到暴击伤害提升10%。"
+      },
+      {
+        "name": "",
+        "desc": "施加「苍引」的时机由主动攻击后改为主动攻击前；主动攻击或「追击」时暴击率和暴击伤害提升10%；受到拥有「苍引」的敌军伤害降低15%。"
+      }
+    ]
+  },
+  "huang_yueying": {
+    "name": "黄月英",
+    "color": "#22d3ee",
+    "troop": "器械",
+    "stats": {
+      "hp": 160,
+      "atk": 50,
+      "def": 30,
+      "matk": 118,
+      "mdef": 40,
+      "luck": 60,
+      "move": 3,
+      "range": 2
+    },
+    "portrait": "res://assets/huang_yueying.png",
+    "talent": "huang_yueying_talent",
+    "talent_lv": 1,
+    "skills": [
+      "huang_jiashe",
+      "huang_qisheng",
+      "huang_zhuangtian",
+      "huang_leiting",
+      "huang_chongci",
+      "huang_sanshe"
+    ],
+    "arm": "盾",
+    "id": 2021,
+    "talent_stages": [
+      {
+        "name": "巧夺天工",
+        "desc": "施放技策或战法后为自身和2格范围内另一个我方器械施加1层「机巧」，之后自身获得「硫硝」；「机巧」被移除时自身回复兵力上限20%的兵力并获得「精工」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "「硫硝」的普攻无视敌军30%防御并对敌军额外施加1层「撕裂」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "施放技策或战法后为自身和2格范围内另一个我方器械施加2层「机巧」；对敌军施加「溃逃」时若已拥有5层额外造成谋攻25%的固定伤害；对敌军施加「撕裂」时若已拥有5层额外造成物攻20%的固定伤害。"
+      }
+    ]
+  },
+  "zhang_xingcai": {
+    "name": "张星彩",
+    "color": "#facc15",
+    "troop": "步兵",
+    "stats": {
+      "hp": 200,
+      "atk": 108,
+      "def": 52,
+      "matk": 24,
+      "mdef": 26,
+      "luck": 58,
+      "move": 4,
+      "range": 1
+    },
+    "portrait": "res://assets/zhang_xingcai.png",
+    "talent": "xingcai_talent",
+    "talent_lv": 1,
+    "skills": [
+      "xingcai_hujia",
+      "xingcai_zhendun",
+      "xingcai_dunji",
+      "xingcai_feizhi",
+      "xingcai_zudi",
+      "xingcai_beitou"
+    ],
+    "arm": "盾",
+    "id": 2022,
+    "talent_stages": [
+      {
+        "name": "凤卫",
+        "desc": "反击射程+1；受到伤害降低20%；自身与自身3格范围内友军，反击或受到反击后，获得张星彩物防40%的护盾，持续2回合，之后获得1层「凤羽」；自身与自身3格范围内的我方部队触发「凤衣」后，「凤衣」施加者对敌军造成自身物攻100%伤害（物攻数值提升自身当前物防的130%）的「追击」。"
+      },
+      {
+        "name": "",
+        "desc": "反击时额外造成物防100%的固定伤害并为自身回复20%伤害量的兵力，「追击」时额外造成物防50%的固定伤害并为自身回复20%伤害量的兵力（目标处于「嘲讽」状态时，该次反击与「追击」造成的额外伤害与回复翻倍）。"
+      },
+      {
+        "name": "",
+        "desc": "回合结束时获得1层「凤羽」；天赋获得的护盾量增加至物防的60%；自身兵力小于50%时获得1层「凤衣」（每局1次）。"
+      }
+    ]
+  },
+  "cao_cao": {
+    "id": 1001,
+    "name": "曹操",
+    "color": "#1d4ed8",
+    "troop": "轻骑兵",
+    "stats": {
+      "hp": 198,
+      "atk": 100,
+      "def": 46,
+      "matk": 104,
+      "mdef": 40,
+      "luck": 52,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/cao_cao.png",
+    "talent": "cao_talent",
+    "talent_lv": 1,
+    "skills": [
+      "cao_weiwu",
+      "wufengzhen",
+      "cao_duanxing",
+      "cao_benxi",
+      "cao_hengshuo",
+      "tiema"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "孟德兵法",
+        "desc": "战斗开始后，为所有我方部队施加「兵法」；与携带「兵法」的我方部队合击时，为双方施加「昂扬」，持续2回合，每回合最多触发1次。"
+      },
+      {
+        "name": "",
+        "desc": "合击时额外为双方施加「严阵」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "每回合触发次数上限+1。"
+      }
+    ]
+  },
+  "xiahou_dun": {
+    "id": 1002,
+    "name": "夏侯惇",
+    "color": "#2563eb",
+    "troop": "轻骑兵",
+    "stats": {
+      "hp": 194,
+      "atk": 112,
+      "def": 44,
+      "matk": 28,
+      "mdef": 24,
+      "luck": 52,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/xiahou_dun.png",
+    "talent": "xhd_talent",
+    "talent_lv": 1,
+    "skills": [
+      "xhd_xuehen",
+      "xhd_hengdao",
+      "xhd_lizhan",
+      "xhd_zhongyong",
+      "xhd_tujin",
+      "tiema"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "刚烈无惧",
+        "desc": "受到主动伤害后，对攻击范围内敌军造成物攻50%的伤害。"
+      },
+      {
+        "name": "",
+        "desc": "刚烈无惧造成伤害时获得18%攻心。"
+      },
+      {
+        "name": "",
+        "desc": "刚烈无惧对伤害来源造成的伤害提升50%。"
+      }
+    ]
+  },
+  "xiahou_yuan": {
+    "id": 1003,
+    "name": "夏侯渊",
+    "color": "#0284c7",
+    "troop": "弩兵",
+    "stats": {
+      "hp": 190,
+      "atk": 110,
+      "def": 42,
+      "matk": 26,
+      "mdef": 22,
+      "luck": 60,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/xiahou_yuan.png",
+    "talent": "xhy_talent",
+    "talent_lv": 1,
+    "skills": [
+      "xhy_hubu",
+      "xhy_zhuandou",
+      "9110411",
+      "xhy_duoshe",
+      "jipo",
+      "huang_luanjian"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "骁将急袭",
+        "desc": "暴击率提升20%，造成暴击伤害时额外回复10战意。"
+      },
+      {
+        "name": "",
+        "desc": "初始战意值增加30。"
+      },
+      {
+        "name": "",
+        "desc": "触发暴击回复战意提升至15点。"
+      }
+    ]
+  },
+  "zhang_liao": {
+    "id": 1015,
+    "name": "张辽",
+    "color": "#1d4ed8",
+    "troop": "轻骑兵",
+    "stats": {
+      "hp": 190,
+      "atk": 115,
+      "def": 44,
+      "matk": 30,
+      "mdef": 24,
+      "luck": 55,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/zhang_liao.png",
+    "talent": "zl_talent",
+    "talent_lv": 1,
+    "skills": [
+      "zl_yongzhe",
+      "zl_quanjun",
+      "zl_tupo",
+      "zl_dangfeng",
+      "tiema",
+      "off_铁壁"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "威风夺势",
+        "desc": "主动造成伤害后自身获得1层「威风」，行动结束时若「威风」达到5层，消除所有「威风」并清除所有技策的准备期，之后获得「夺势」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "行动结束时若「威风」达到5层，对一圈范围内的敌军造成物攻50%的伤害并施加1层「撕裂」，持续2回合 。"
+      },
+      {
+        "name": "",
+        "desc": "对拥有「撕裂」的敌军造成伤害提升20%。"
+      }
+    ]
+  },
+  "xu_chu": {
+    "id": 1017,
+    "name": "许褚",
+    "color": "#b45309",
+    "troop": "步兵",
+    "stats": {
+      "hp": 215,
+      "atk": 118,
+      "def": 48,
+      "matk": 15,
+      "mdef": 15,
+      "luck": 40,
+      "move": 4,
+      "range": 1
+    },
+    "portrait": "res://assets/xu_chu.png",
+    "talent": "xu_talent",
+    "talent_lv": 1,
+    "skills": [
+      "xu_linwei",
+      "xingcai_zudi",
+      "xu_luoyi",
+      "xu_taishan",
+      "hengsao",
+      "xu_zudi"
+    ],
+    "arm": "盾",
+    "talent_stages": [
+      {
+        "name": "樊哙在世",
+        "desc": "造成伤害后自身获得1层「受返」；反击时对目标周围1格敌军额外造成物攻50%的伤害；反击时若「受返」达到3层，改为施放[超强反击]：对目标及周围一圈的敌军造成物攻100%伤害，之后消耗所有「受返」。"
+      },
+      {
+        "name": "",
+        "desc": "回合结束时获得1层「受返」。"
+      },
+      {
+        "name": "",
+        "desc": "施放[超强反击]时若目标周围一圈没有敌军，伤害提升30%。"
+      }
+    ]
+  },
+  "guo_jia": {
+    "id": 1013,
+    "name": "郭嘉",
+    "color": "#7c3aed",
+    "troop": "策士",
+    "stats": {
+      "hp": 160,
+      "atk": 30,
+      "def": 26,
+      "matk": 118,
+      "mdef": 45,
+      "luck": 45,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/guo_jia.png",
+    "talent": "gj_talent",
+    "talent_lv": 1,
+    "skills": [
+      "gj_suanwu",
+      "gj_tiandu",
+      "gj_najiang",
+      "gj_liaodi",
+      "gj_fengzhen",
+      "gj_mougong"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "经天纬地",
+        "desc": "技策射程+1；主动攻击时与敌军每相距1格伤害提升5%，最多20%。"
+      },
+      {
+        "name": "",
+        "desc": "主动攻击时与敌军每相距1格伤害提升10%，最多40%。"
+      },
+      {
+        "name": "",
+        "desc": "施放伤害技策时若与目标相距2格以上，该技策准备期减少2回合。"
+      }
+    ]
+  },
+  "si_ma_yi": {
+    "id": 1021,
+    "name": "司马懿",
+    "color": "#6d28d9",
+    "troop": "策士",
+    "stats": {
+      "hp": 185,
+      "atk": 62,
+      "def": 38,
+      "matk": 120,
+      "mdef": 46,
+      "luck": 50,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/si_ma_yi.png",
+    "talent": "sm_talent",
+    "talent_lv": 1,
+    "skills": [
+      "sm_xumou",
+      "sm_tianluo",
+      "sm_chenhuo",
+      "sm_shice",
+      "sm_lianchou",
+      "off_疑阵"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "鹰视狼顾",
+        "desc": "自身行动结束时，对3格范围内兵力最高的3名敌军施放「鹰视」。"
+      },
+      {
+        "name": "",
+        "desc": "自身行动结束时，「鹰视」目标数提升至4名，且可对同一目标重复施放（优先选择未受到「鹰视」的敌军，同一敌军最多受到2次「鹰视」）；战斗开始时，自身获得7层「深谋」。"
+      },
+      {
+        "name": "",
+        "desc": "自身主动攻击时对敌军施放「鹰视」；「鹰视」使目标身上1个随机减益持续时间延长1回合。"
+      }
+    ]
+  },
+  "zhang_chunhua": {
+    "id": "1031",
+    "name": "张春华",
+    "color": "#8b5cf6",
+    "troop": "策士",
+    "stats": {
+      "hp": 170,
+      "atk": 28,
+      "def": 28,
+      "matk": 120,
+      "mdef": 46,
+      "luck": 50,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/zhang_chunhua.png",
+    "talent": "zch_talent",
+    "talent_lv": 1,
+    "skills": [
+      "zch_jueqing",
+      "zch_choudao",
+      "liang_mougong",
+      "zch_sanghun",
+      "sm_chenhuo",
+      "zch_mougong"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "沉断",
+        "desc": "自身施加减益时，减益持续时间+1；主动攻击后，使目标随机2层可驱散减益的持续时间延长1回合（优先选择持续时间最短的）；回合结束时，对自身3格范围内兵力最高的1名敌军施加2个随机减益，持续1回合。"
+      },
+      {
+        "name": "",
+        "desc": "主动攻击后，延长目标可驱散减益数量提升至4层，将目标身上的随机1层「可升级减益」升1级。"
+      },
+      {
+        "name": "",
+        "desc": "自身施加减益时，减益持续时间提升至+2；回合结束时，施加的随机减益数量提升至3个。"
+      }
+    ]
+  },
+  "zhen_mi": {
+    "id": "1022",
+    "name": "甄宓",
+    "color": "#ec4899",
+    "troop": "女兵",
+    "stats": {
+      "hp": 175,
+      "atk": 20,
+      "def": 26,
+      "matk": 125,
+      "mdef": 48,
+      "luck": 55,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/zhen_mi.png",
+    "talent": "zm_talent",
+    "talent_lv": 1,
+    "skills": [
+      "zm_xinmo",
+      "zm_ningxin",
+      "zm_pozhen",
+      "zm_qinxin",
+      "zm_jueshi",
+      "fuwei"
+    ],
+    "arm": "盾",
+    "talent_stages": [
+      {
+        "name": "洛水惊鸿",
+        "desc": "移动力+1且移动时无视地形对移动力的衰减；技策或战法造成伤害后对敌军施加「牵制·贰」，持续2回合；自身2格范围内的敌军被施加「牵制」时若已拥有「牵制」额外对其施加1层「凝霜」，持续2回合。；受到主动攻击时若敌军拥有「牵制」，伤害前为自身回复谋攻60%的兵力。"
+      },
+      {
+        "name": "",
+        "desc": "受到主动单体攻击前对敌军施加「牵制·贰」，持续2回合；行动结束时对自身2格范围内的敌军造成谋攻60%的伤害并施加「牵制·贰」，持续1回合，为自身2格范围内的我方部队回复谋攻50%的兵力并驱散1个减益。"
+      },
+      {
+        "name": "",
+        "desc": "天赋提升至自身3格范围内；自身3格范围内每有一个拥有「牵制」的敌军自身除兵力外全属性提升10%（最多20%）；自身3格范围内的敌军被施加「牵制」时若已拥有「牵制」额外对其造成谋攻35%的伤害。"
+      }
+    ]
+  },
+  "yue_jin": {
+    "id": "1010",
+    "name": "乐进",
+    "color": "#14b8a6",
+    "troop": "轻骑兵",
+    "stats": {
+      "hp": 185,
+      "atk": 115,
+      "def": 42,
+      "matk": 22,
+      "mdef": 20,
+      "luck": 50,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/yue_jin.png",
+    "talent": "yj_talent",
+    "talent_lv": 1,
+    "skills": [
+      "yj_tianren",
+      "yj_hengsao",
+      "huang_chongci",
+      "yj_yueshi",
+      "hengsao",
+      "off_利刃"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "胆烈",
+        "desc": "普攻击退敌军1格；自身使敌军位移后对其造成物攻20%的固定伤害并施加1层「撕裂」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "若使敌军位移时受到阻挡额外对其造成物攻20%的固定伤害并施加1层「撕裂」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "若使敌军位移时受到阻挡，对其造成所有「撕裂」%的固定伤害。"
+      }
+    ]
+  },
+  "cheng_yu": {
+    "id": "1006",
+    "name": "程昱",
+    "color": "#64748b",
+    "troop": "策士",
+    "stats": {
+      "hp": 180,
+      "atk": 45,
+      "def": 35,
+      "matk": 115,
+      "mdef": 42,
+      "luck": 45,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/cheng_yu.png",
+    "talent": "cy_talent",
+    "talent_lv": 1,
+    "skills": [
+      "cy_juxian",
+      "cy_mingyi",
+      "cy_pozhen",
+      "cy_yishi",
+      "sm_chenhuo",
+      "cy_chenhuo"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "勇冠贲育",
+        "desc": "主动攻击或合击造成伤害后，对敌军施加1个随机的减益状态，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "对拥有减益的敌军造成伤害提升10%，受到伤害降低10%。"
+      },
+      {
+        "name": "",
+        "desc": "释放伤害技策时，伤害前为敌军施加1个随机的减益状态，持续2回合。"
+      }
+    ]
+  },
+  "xun_yu": {
+    "id": "1005",
+    "name": "荀彧",
+    "color": "#a78bfa",
+    "troop": "策士",
+    "stats": {
+      "hp": 170,
+      "atk": 25,
+      "def": 30,
+      "matk": 122,
+      "mdef": 50,
+      "luck": 55,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/xun_yu.png",
+    "talent": "xy_talent",
+    "talent_lv": 1,
+    "skills": [
+      "xy_renzheng",
+      "xy_zhizhi",
+      "fuwei",
+      "xy_huimin",
+      "9140061",
+      "off_献策"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "机鉴先识",
+        "desc": "施放技策、战法或合击后为自身准备期最长的技策减少1回合准备期，并使自身回复能力提升15%，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "提升的回复能力可叠2层。"
+      },
+      {
+        "name": "",
+        "desc": "施放技策、战法或合击后为自身准备期最长的技策减少2回合准备期。"
+      }
+    ]
+  },
+  "cao_ren": {
+    "id": "1004",
+    "name": "曹仁",
+    "color": "#ea580c",
+    "troop": "轻骑兵",
+    "stats": {
+      "hp": 200,
+      "atk": 110,
+      "def": 45,
+      "matk": 30,
+      "mdef": 28,
+      "luck": 50,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/cao_ren.png",
+    "talent": "cr_talent",
+    "talent_lv": 1,
+    "skills": [
+      "cr_tianren",
+      "cr_yiqi",
+      "zl_tupo",
+      "cr_fenwei",
+      "cr_zongheng",
+      "off_鹤翼阵"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "贲育弗加",
+        "desc": "施放技策或战法后为自身及受增益的我方部队施加1层「奋战」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "自身拥有「奋战」时额外获得20%「攻心」。"
+      },
+      {
+        "name": "",
+        "desc": "施放技策或战法后为自身及受增益的我方部队施加2层「奋战」。"
+      }
+    ]
+  },
+  "xu_huang": {
+    "id": "1018",
+    "name": "徐晃",
+    "color": "#d97706",
+    "troop": "重骑",
+    "stats": {
+      "hp": 200,
+      "atk": 112,
+      "def": 45,
+      "matk": 25,
+      "mdef": 22,
+      "luck": 50,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/xu_huang.png",
+    "talent": "10183111",
+    "talent_lv": 1,
+    "skills": [
+      "10184111",
+      "10185111",
+      "9110221",
+      "10184121",
+      "9220071",
+      "xhd_tujin"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "亚夫之风",
+        "desc": "「攻心」提升15%，每损失10%兵力，「攻心」额外提升5%（上限25%）；自身触发「攻心」时，伤害值计算溢出部分；自身反击触发「攻心」时，若兵力回复超出最大上限，则超出部分将按100%比例转化为储存伤害（上限300%攻击力），本次反击消耗全部存储伤害对敌军额外造成等同存储伤害的固定伤害。"
+      },
+      {
+        "name": "",
+        "desc": "反击伤害提升25%；反击时「攻心」提升10%，且会为目标施加「断粮」，持续1回合。"
+      },
+      {
+        "name": "",
+        "desc": "数值提升至超出部分按比例转化为储存伤害（上限380%攻击力），反击时根据场上「镇军」人数提升物攻10%和「攻心」%（上限计算4个「镇军」人数）。"
+      }
+    ]
+  },
+  "zhang_he": {
+    "id": "1019",
+    "name": "张郃",
+    "color": "#0284c7",
+    "troop": "轻骑",
+    "stats": {
+      "hp": 185,
+      "atk": 108,
+      "def": 40,
+      "matk": 35,
+      "mdef": 30,
+      "luck": 55,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/zhang_he.png",
+    "talent": "10193021",
+    "talent_lv": 1,
+    "skills": [
+      "10195021",
+      "10194041",
+      "9110551",
+      "10194031",
+      "9220201",
+      "fuwei"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "巧变",
+        "desc": "主动攻击或追击时克制所有敌军并额外回复25点战意；战意上限增加50点；自身拥有护盾时增伤减伤提升10%；主动攻击<style=red>[勇]</style>性格敌军时为自身施加「高级奋勇」，持续2回合；主动攻击[严]性格敌军时为自身施加「高级坚甲」，持续2回合；主动攻击<style=blue1>[巧]</color>性格敌军时为自身施加「疾行·贰」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "受到谋略伤害时用物防代替谋防承受伤害；对敌军造成伤害时选择其物防和谋防中最低的一项承受攻击。"
+      },
+      {
+        "name": "",
+        "desc": "主动攻击或追击敌军时获得物攻10%的护盾，持续2回合；追击和战法伤害提升30%。"
+      }
+    ]
+  },
+  "yu_jin": {
+    "id": "1011",
+    "name": "于禁",
+    "color": "#0e7490",
+    "troop": "轻骑",
+    "stats": {
+      "hp": 190,
+      "atk": 110,
+      "def": 42,
+      "matk": 32,
+      "mdef": 28,
+      "luck": 52,
+      "move": 6,
+      "range": 1
+    },
+    "portrait": "res://assets/yu_jin.png",
+    "talent": "10113011",
+    "talent_lv": 1,
+    "skills": [
+      "10114021",
+      "10115011",
+      "9110221",
+      "10114011",
+      "9110411",
+      "9110431"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "假节钺",
+        "desc": "暴击率提升30%；自身2格范围内的敌军主动攻击或使用技策前，对其造成物攻50%伤害的「追击」。"
+      },
+      {
+        "name": "",
+        "desc": "自身2格范围内的敌军被合击后，对其造成物攻50%伤害的「追击」（对每个敌军每回合最多攻击1次）"
+      },
+      {
+        "name": "",
+        "desc": "「追击」时暴击率和暴击伤害提升30%。"
+      }
+    ]
+  },
+  "cai_wenji": {
+    "id": "1027",
+    "name": "蔡文姬",
+    "color": "#a78bfa",
+    "troop": "策士",
+    "stats": {
+      "hp": 165,
+      "atk": 30,
+      "def": 28,
+      "matk": 118,
+      "mdef": 50,
+      "luck": 55,
+      "move": 4,
+      "range": 2
+    },
+    "portrait": "res://assets/cai_wenji.png",
+    "talent": "10273011",
+    "talent_lv": 1,
+    "skills": [
+      "10274011",
+      "10274031",
+      "9140091",
+      "10274021",
+      "9140061",
+      "off_扰乱"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "胡笳吟",
+        "desc": "施放技策或战法后自身获得1层「专注」；「专注」被移除时自身获得「凝神」和谋攻50%的护盾，持续2回合；对我方部队施放技策或战法后为其施加1层「清心」，持续2回合；对敌军施放技策或战法后对其施加1层「乱心」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "自身减益小于3时除兵力外全属性提升15%；「清心」触发时改为回复施加者谋攻40%的兵力；「乱心」触发时改为降低20%伤害。"
+      },
+      {
+        "name": "",
+        "desc": "施放技策或战法后改为自身获得2层「专注」；对我方部队施放技策或战法改为施加2层「清心」；对敌军施放技策或战法后改为施加2层「乱心」。"
+      }
+    ]
+  },
+  "sun_quan": {
+    "id": 3007,
+    "name": "孙权",
+    "troop": "幕僚",
+    "color": "#dc2626",
+    "portrait": "res://assets/sun_quan.png",
+    "stats": {
+      "hp": 183,
+      "atk": 26,
+      "def": 30,
+      "matk": 97,
+      "mdef": 41,
+      "luck": 50,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "sun_talent",
+    "talent_lv": 1,
+    "talent_name": "坐断东南",
+    "talent_desc": "自身3格范围内我方部队主动攻击时，获得谋攻15%的护盾，持续3回合（同一我方部队每次行动最多触发1次）；自身3格范围内我方部队受到主动攻击时，获得1层 「 借势 」 （同一我方部队每次行动最多触发1次）。",
+    "skills": [
+      "sun_quan_s3",
+      "sun_quan_s1",
+      "off_迂回",
+      "off_任才尚计",
+      "off_后援",
+      "sun_quan_s2"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "制衡八方",
+        "desc": "自身3格范围内我方部队主动攻击时，获得谋攻15%的护盾，持续3回合（同一我方部队每次行动最多触发1次）；自身3格范围内我方部队受到主动攻击时，获得1层「借势」（同一我方部队每次行动最多触发1次）。"
+      },
+      {
+        "name": "",
+        "desc": "自身3格范围内我方部队主动攻击时，获得的护盾提升至谋攻25%；「借势」主动攻击时，施加的「灼烧」层数增加至2层；对敌军施加「灼烧」时，对其造成谋攻35%的固定伤害，若目标已拥有5层「灼烧」，则对其额外施加「卸势」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "触发制衡八方施加护盾或施加「借势」时，孙权获得1层「权衡」，持续2回合。"
+      }
+    ]
+  },
+  "canglan_cao_cao": {
+    "id": 5101,
+    "name": "沧澜·曹操",
+    "troop": "统领",
+    "color": "#1e3a8a",
+    "portrait": "res://assets/canglan_cao_cao.png",
+    "stats": {
+      "hp": 231,
+      "atk": 99,
+      "def": 39,
+      "matk": 24,
+      "mdef": 26,
+      "luck": 30,
+      "move": 5,
+      "range": 2
+    },
+    "talent": "cao_talent",
+    "talent_lv": 1,
+    "talent_name": "沧海横流",
+    "talent_desc": "施放技策后获得1层 「 将令 」 ； 「 将令 」 5层后，使用战法时，消耗5层 「 将令 」 ，该战法作用于敌方时，战法伤害增加25%、暴击率提升30%，该战法作用于我方部队时，使其随机1层 「 可升级增益 」 升1级，并延长该增益1回合持续时间，随后对其施加 「 新书·壹 」 ，持续4回合，若其已拥有 「 新书 」 ，则提升其等级，并延长1回合时间。",
+    "skills": [
+      "canglan_cao_cao_s3",
+      "canglan_cao_cao_s2",
+      "canglan_cao_cao_s1",
+      "off_沧海横流",
+      "xirao",
+      "sunce_tapo"
+    ],
+    "arm": "枪",
+    "talent_stages": [
+      {
+        "name": "将令蓄势",
+        "desc": "施放技策后获得1层「将令」；「将令」层后，使用战法时，消耗5层「将令」，该战法作用于敌方时，战法伤害增加25%、暴击率提升30%，该战法作用于我方部队时，使其随机1层「可升级增益」升1级，并延长该增益1回合持续时间，随后对其施加「新书·壹」，持续4回合，若其已拥有「新书」，则提升其等级，并延长1回合时间。"
+      },
+      {
+        "name": "",
+        "desc": "战斗开始时获得2层「将令」；我方回合开始时获得2层「将令」；受到致命伤害时，免疫此次死亡，随后每拥有1层「将令」额外回复20%的兵力（每局1次）。"
+      },
+      {
+        "name": "",
+        "desc": "初始战意值增加70；将令5层后，使用战法时，消耗5层将令，获得「继续行动」（间隔1回合）。"
+      }
+    ]
+  },
+  "xiao_qiao": {
+    "id": 3019,
+    "name": "小乔",
+    "troop": "才女",
+    "color": "#f472b6",
+    "portrait": "res://assets/xiao_qiao.png",
+    "stats": {
+      "hp": 183,
+      "atk": 21,
+      "def": 26,
+      "matk": 92,
+      "mdef": 38,
+      "luck": 30,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "biyue_xiuhua",
+    "talent_lv": 1,
+    "talent_name": "国色",
+    "talent_desc": "施放单体技策、单体战法、单体普攻时，移除场上所有 「 印·风旋 」 ，并为目标点3圈范围内与其距离最近的敌军施加 「 印·风旋 」 ；触发风印反应时，为目标施加 「 脆弱 」 ，持续3回合。",
+    "skills": [
+      "xiao_qiao_s3",
+      "xiao_qiao_s2",
+      "off_轻风",
+      "off_曲有误",
+      "xiao_qiao_s1",
+      "fuwei"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "东风辞",
+        "desc": "施放单体技策、单体战法、单体普攻时，移除场上所有「印·风旋」，并为目标点3圈范围内与其距离最近的敌军施加「印·风旋」；触发风印反应时，为目标施加「脆弱」，持续3回合。"
+      },
+      {
+        "name": "",
+        "desc": "触发风印反应时，为目标施加2层「风蚀」；「印·风旋」被触发风印反应移除或死亡移除时，为目标2格范围内「风蚀」层数最少的敌军施加「印·风旋」；对敌方造成击退时，使其碰撞到的敌军也受到谋攻50%的固定伤害。"
+      },
+      {
+        "name": "",
+        "desc": "自身行动结束后，获得「继续移动」；其他我方部队主动攻击带有「风蚀」的敌方后，获得1次「继续移动」（我方部队每个大回合生效1次）；敌军的「印·风旋」被移除时，记录其所有减益效果，下一次施加「印·风旋」时，将记录的减益效果复制到该目标身上。"
+      }
+    ]
+  },
+  "zhou_yu": {
+    "id": 3002,
+    "name": "周瑜",
+    "troop": "幕僚",
+    "color": "#b91c1c",
+    "portrait": "res://assets/zhou_yu.png",
+    "stats": {
+      "hp": 198,
+      "atk": 27,
+      "def": 31,
+      "matk": 106,
+      "mdef": 45,
+      "luck": 50,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "gj_talent",
+    "talent_lv": 1,
+    "talent_name": "雄姿英发",
+    "talent_desc": "根据自身谋防的40%提升周围3格范围其他我方部队的谋防；主动攻击时，对目标施加 「 印·业火 」 ，持续3回合，并施加1层 「 火势 」 ；行动结束时，为4格范围内兵力最高的敌方施加 「 印·业火 」 ，持续3回合，若其存在 「 印·业火 」 则施加1层 「 火势 」 。",
+    "skills": [
+      "zhou_yu_s3",
+      "zhou_yu_s2",
+      "off_焚江",
+      "off_火垣连营",
+      "off_东风",
+      "zhou_yu_s1"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "焚天",
+        "desc": "根据自身谋防的40%提升周围3格范围其他我方部队的谋防；主动攻击时，对目标施加「印·业火」，持续3回合，并施加1层「火势」；行动结束时，为4格范围内兵力最高的敌方施加「印·业火」，持续3回合，若其存在「印·业火」则施加1层「火势」。"
+      },
+      {
+        "name": "",
+        "desc": "普攻射程+1；「火势」伤害提升至25%；自身每次触发印记反应时，获得1层「神机」，持续3回合。"
+      },
+      {
+        "name": "",
+        "desc": "自身触发火印反应时，根据目标的「火势」层数获得等量「妙算」，持续2回合；行动结束时，施加的「火势」层数提升至2层。"
+      }
+    ]
+  },
+  "pang_de": {
+    "id": 1020,
+    "name": "庞德",
+    "troop": "步兵",
+    "color": "#78716c",
+    "portrait": "res://assets/pang_de.png",
+    "stats": {
+      "hp": 247,
+      "atk": 104,
+      "def": 44,
+      "matk": 21,
+      "mdef": 22,
+      "luck": 30,
+      "move": 4,
+      "range": 1
+    },
+    "talent": "ma_chao_talent",
+    "talent_lv": 1,
+    "talent_name": "白马壮节",
+    "talent_desc": "施放技策后，自身获得 「 骁勇 」 。行动结束时，若自身拥有4层 「 骁勇 」 ，则移除4层 「 骁勇 」 ：获得 「 继续行动 」 （间隔3回合）；清空自身所有技策的准备期；自身前方召唤 「 棺椁 」 （耐久度3），持续3回合；庞德自身进入 「 死志 」 状态，持续3回合。",
+    "skills": [
+      "pang_de_s3",
+      "pang_de_s1",
+      "pang_de_s2",
+      "off_策马奔袭",
+      "liu_tuotuo",
+      "fuwei"
+    ],
+    "arm": "盾",
+    "talent_stages": [
+      {
+        "name": "抬棺决死",
+        "desc": "施放技策后，自身获得「骁勇」。行动结束时，若自身拥有4层「骁勇」，则移除4层「骁勇」：获得「继续行动」（间隔3回合）；清空自身所有技策的准备期；自身前方召唤「棺椁」（耐久度3），持续3回合；庞德自身进入「死志」状态，持续3回合。"
+      },
+      {
+        "name": "",
+        "desc": "技策伤害提升15%；庞德自身4格范围内有「棺椁」时，受到致命伤害后自身免疫该次死亡回复40%最大兵力并传送到最近的「棺椁」旁边（间隔6回合触发）。"
+      },
+      {
+        "name": "",
+        "desc": "战斗开始时获得2层「骁勇」；每次施放伤害技策后，对目标造成物攻20%的伤害。"
+      }
+    ]
+  },
+  "da_qiao": {
+    "id": 3011,
+    "name": "大乔",
+    "troop": "舞者",
+    "color": "#f9a8d4",
+    "portrait": "res://assets/da_qiao.png",
+    "stats": {
+      "hp": 185,
+      "atk": 21,
+      "def": 26,
+      "matk": 91,
+      "mdef": 38,
+      "luck": 30,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "biyue_xiuhua",
+    "talent_lv": 1,
+    "talent_name": "国色",
+    "talent_desc": "自身2格范围内的我方部队回复战意时为其回复谋攻40%的兵力；自身2格范围内的我方部队消耗战意时为其施加 「 高级破军 」 ，持续2回合；对我方部队施放技策或战法时为其施加 「 斗志 」 ，持续2回合；被非女性敌军主动攻击或反击时受到伤害降低20%并使自身2格范围内攻击最高的其他我方部队对攻击者造成自身攻击100%的伤害。",
+    "skills": [
+      "da_qiao_s3",
+      "da_qiao_s2",
+      "off_起舞",
+      "off_绝代风华",
+      "off_婀娜",
+      "da_qiao_s1"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "天姿国色",
+        "desc": "自身2格范围内的我方部队回复战意时为其回复谋攻40%的兵力；自身2格范围内的我方部队消耗战意时为其施加「高级破军」，持续2回合；对我方部队施放技策或战法时为其施加「斗志」，持续2回合；被非女性敌军主动攻击或反击时受到伤害降低20%并使自身2格范围内攻击最高的其他我方部队对攻击者造成自身攻击100%的伤害。"
+      },
+      {
+        "name": "",
+        "desc": "初始战意增加50点；天赋范围提升至自身3格；范围内的我方部队回复战意时为其回复谋攻60%的兵力。"
+      },
+      {
+        "name": "",
+        "desc": "「斗志」增加行动结束时回复10点战意；被非女性敌军主动攻击或反击时受到伤害降低30%并使自身3格范围内攻击最高的其他我方部队对攻击造成自身攻击150%的伤害。"
+      }
+    ]
+  },
+  "jia_xu": {
+    "id": 1016,
+    "name": "贾诩",
+    "troop": "道士",
+    "color": "#7c3aed",
+    "portrait": "res://assets/jia_xu.png",
+    "stats": {
+      "hp": 176,
+      "atk": 22,
+      "def": 22,
+      "matk": 111,
+      "mdef": 43,
+      "luck": 50,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "sm_talent",
+    "talent_lv": 1,
+    "talent_name": "毒士",
+    "talent_desc": "对敌军施放技策或战法后对其造成谋攻25%的固定伤害并施加1层 「 中毒 」 和1层 「 溃逃 」 ，持续2回合；对敌军施加 「 中毒 」 时若已拥有3层 「 中毒 」 ，移除其所有 「 中毒 」 并对其造成全部 「 中毒 」 的固定伤害，之后施加 「 混乱 」 ，持续1回合，若该敌军未拥有 「 疑心 」 则施加 「 疑心 」 ，持续2回合。",
+    "skills": [
+      "jia_xu_s3",
+      "jia_xu_s2",
+      "jia_xu_s1",
+      "off_料敌决胜",
+      "sm_chenhuo",
+      "tiema"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "阴诡毒谋",
+        "desc": "对敌军施放技策或战法后对其造成谋攻25%的固定伤害并施加1层「中毒」和1层「溃逃」，持续2回合；对敌军施加「中毒」时若已拥有3层「中毒」，移除其所有「中毒」并对其造成全部「中毒」的固定伤害，之后施加「混乱」，持续1回合，若该敌军未拥有「疑心」则施加「疑心」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "受到主动攻击或反击后对其造成谋攻25%的固定伤害并施加1层「中毒」和1层「溃逃」，持续2回合；敌军每拥有1个减益对自身造成伤害降低5%（最多15%）。"
+      },
+      {
+        "name": "",
+        "desc": "行动结束时对自身直线3格范围内最近的1个敌军造成谋攻25%的固定伤害并施加1层「中毒」和1层「溃逃」，持续2回合；自身3格范围内拥有「中毒」或「溃逃」的敌军造成伤害降低10%。"
+      }
+    ]
+  },
+  "gao_shun": {
+    "id": 4012,
+    "name": "高顺",
+    "troop": "步兵",
+    "color": "#57534e",
+    "portrait": "res://assets/gao_shun.png",
+    "stats": {
+      "hp": 255,
+      "atk": 103,
+      "def": 44,
+      "matk": 20,
+      "mdef": 21,
+      "luck": 30,
+      "move": 4,
+      "range": 1
+    },
+    "talent": "cr_talent",
+    "talent_lv": 1,
+    "talent_name": "陷阵营",
+    "talent_desc": "自身每有1格移动力提升增伤减伤提升5%（最多15%）；主动攻击或施放技策前若移动2格以上本回合伤害提升10%并获得1层 「 陷阵 」 ，可叠加2层，持续3回合；主动攻击或施放技策前若移动4格以上自身获得物防100%的护盾，持续2回合。",
+    "skills": [
+      "gao_shun_s3",
+      "gao_shun_s1",
+      "xhd_lizhan",
+      "off_登锋陷阵",
+      "gao_shun_s2",
+      "tiema"
+    ],
+    "arm": "盾",
+    "talent_stages": [
+      {
+        "name": "陷阵之志",
+        "desc": "自身每有1格移动力提升增伤减伤提升5%（最多15%）；主动攻击或施放技策前若移动2格以上本回合伤害提升10%并获得1层「陷阵」，可叠加2层，持续3回合；主动攻击或施放技策前若移动4格以上自身获得物防100%的护盾，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "行动结束或受到主动攻击后若拥有护盾，对自身一圈范围内的敌军造成物攻50%伤害的「追击」；获得「陷阵」时若已拥有2层「陷阵」，额外获得物防100%的护盾，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "「陷阵」每层额外提升10%物攻；行动结束或受到主动攻击前获得1层「陷阵」（每回合触发1次）。"
+      }
+    ]
+  },
+  "zhang_xiu": {
+    "id": 1025,
+    "name": "张绣",
+    "troop": "长兵",
+    "color": "#0d9488",
+    "portrait": "res://assets/zhang_xiu.png",
+    "stats": {
+      "hp": 224,
+      "atk": 105,
+      "def": 40,
+      "matk": 20,
+      "mdef": 21,
+      "luck": 150,
+      "move": 4,
+      "range": 1
+    },
+    "talent": "xhd_talent",
+    "talent_lv": 1,
+    "talent_name": "北地枪王",
+    "talent_desc": "施放伤害技策时暴击率提升25%；施放单体伤害技策后，对敌军额外造成物攻50%伤害的 「 追击 」 。",
+    "skills": [
+      "zhang_xiu_s3",
+      "zhang_xiu_s2",
+      "off_突刺",
+      "off_百鸟朝凤",
+      "9220071",
+      "zhang_xiu_s1"
+    ],
+    "arm": "枪",
+    "talent_stages": [
+      {
+        "name": "北地枪王",
+        "desc": "施放伤害技策时暴击率提升25%；施放单体伤害技策后，对敌军额外造成物攻50%伤害的「追击」。"
+      },
+      {
+        "name": "",
+        "desc": "「追击」的暴击率和暴击伤害提升25%。"
+      },
+      {
+        "name": "",
+        "desc": "「追击」获得50%攻心。"
+      }
+    ]
+  },
+  "xun_you": {
+    "id": 1014,
+    "name": "荀攸",
+    "troop": "策士",
+    "color": "#8b5cf6",
+    "portrait": "res://assets/xun_you.png",
+    "stats": {
+      "hp": 167,
+      "atk": 22,
+      "def": 22,
+      "matk": 109,
+      "mdef": 41,
+      "luck": 50,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "xy_talent",
+    "talent_lv": 1,
+    "talent_name": "算无遗策",
+    "talent_desc": "施放技策或战法后为自身和2格范围内另一个谋攻最高的我方部队施加1层 「 智 」 （其他我方部队 「 智 」 提升一半谋攻）。",
+    "skills": [
+      "xun_you_s3",
+      "gj_fengzhen",
+      "xun_you_s2",
+      "off_抚宁内外",
+      "liang_mougong",
+      "off_激昂"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "大智若愚",
+        "desc": "施放技策或战法后为自身和2格范围内另一个谋攻最高的我方部队施加1层「智」（其他我方部队「智」提升一半谋攻）。"
+      },
+      {
+        "name": "",
+        "desc": "「智」改为提升10%的谋攻。"
+      },
+      {
+        "name": "",
+        "desc": "回合开始时为自身和2格范围内另一个谋攻最高的我方部队施加1层「智」（其他我方部队「智」提升一半谋攻）。"
+      }
+    ]
+  },
+  "lv_lingqi": {
+    "id": 1029,
+    "name": "吕玲绮",
+    "troop": "轻骑兵",
+    "color": "#ef4444",
+    "portrait": "res://assets/lv_lingqi.png",
+    "stats": {
+      "hp": 171,
+      "atk": 110,
+      "def": 36,
+      "matk": 20,
+      "mdef": 22,
+      "luck": 60,
+      "move": 6,
+      "range": 1
+    },
+    "talent": "wusheng",
+    "talent_lv": 1,
+    "talent_name": "将门虎女",
+    "talent_desc": "主动造成伤害后，行动结束时获得3格 「 再移动 」 ，每累计移动12格，回合结束时获得 「 双击 」 。",
+    "skills": [
+      "lv_lingqi_s3",
+      "lv_lingqi_s1",
+      "9110411",
+      "cao_benxi",
+      "off_弧光掠影",
+      "off_御风"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "风驰电掣",
+        "desc": "主动造成伤害后，行动结束时获得3格「再移动」，每累计移动12格，回合结束时获得「双击」。"
+      },
+      {
+        "name": "",
+        "desc": "移动时无视地形对移动力的衰减。"
+      },
+      {
+        "name": "",
+        "desc": "对移动力低于自身的敌军造成的伤害提升15%。"
+      }
+    ]
+  },
+  "dian_wei": {
+    "id": 1012,
+    "name": "典韦",
+    "troop": "步兵",
+    "color": "#a16207",
+    "portrait": "res://assets/dian_wei.png",
+    "stats": {
+      "hp": 239,
+      "atk": 106,
+      "def": 45,
+      "matk": 18,
+      "mdef": 19,
+      "luck": 30,
+      "move": 4,
+      "range": 1
+    },
+    "talent": "xu_talent",
+    "talent_lv": 1,
+    "talent_name": "万夫不当",
+    "talent_desc": "受到主动单体攻击或反击伤害后若伤害来源在3格范围内，对其造成物攻50%伤害的 「 追击 」 。",
+    "skills": [
+      "dian_wei_s3",
+      "dian_wei_s1",
+      "zhao_beishui",
+      "off_古之恶来",
+      "xingcai_zudi",
+      "dian_wei_s2"
+    ],
+    "arm": "盾",
+    "talent_stages": [
+      {
+        "name": "万夫不当",
+        "desc": "受到主动单体攻击或反击伤害后若伤害来源在3格范围内，对其造成物攻50%伤害的「追击」。"
+      },
+      {
+        "name": "",
+        "desc": "天赋范围+1。"
+      },
+      {
+        "name": "",
+        "desc": "天赋「追击」无视敌军75%防御。"
+      }
+    ]
+  },
+  "chen_qun": {
+    "id": 1032,
+    "name": "陈群",
+    "troop": "文人",
+    "color": "#8b5cf6",
+    "portrait": "res://assets/chen_qun.png",
+    "stats": {
+      "hp": 157,
+      "atk": 19,
+      "def": 22,
+      "matk": 76,
+      "mdef": 31,
+      "luck": 30,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "xy_talent",
+    "talent_lv": 1,
+    "talent_name": "九品官人",
+    "talent_desc": "行动结束时为自身2格范围内谋攻最高的一个我方部队施加 「 妙策 」 ，持续2回合。",
+    "skills": [
+      "chen_qun_s3",
+      "chen_qun_s1",
+      "9140061",
+      "off_督查弹劾",
+      "off_奋勇",
+      "chen_qun_s2"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "知人明理",
+        "desc": "行动结束时为自身2格范围内谋攻最高的一个我方部队施加「妙策」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "合击时为另一个我方部队施加「妙策」，持续2回合（每回合可触发一次）。"
+      },
+      {
+        "name": "",
+        "desc": "改为施加「高级妙策」。"
+      }
+    ]
+  },
+  "liu_ye": {
+    "id": 1023,
+    "name": "刘晔",
+    "troop": "投石车",
+    "color": "#b45309",
+    "portrait": "res://assets/liu_ye.png",
+    "stats": {
+      "hp": 151,
+      "atk": 83,
+      "def": 25,
+      "matk": 60,
+      "mdef": 21,
+      "luck": 30,
+      "move": 3,
+      "range": 2
+    },
+    "talent": "gj_talent",
+    "talent_lv": 1,
+    "talent_name": "霹雳车",
+    "talent_desc": "普攻和战法造成谋略伤害；施放技策或战法后，自身获得 「 蓄势 」 。",
+    "skills": [
+      "liu_ye_s3",
+      "liu_ye_s1",
+      "off_锋势",
+      "off_火弩箭",
+      "huang_chongci",
+      "liu_ye_s2"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "佐世之才",
+        "desc": "普攻和战法造成谋略伤害；施放技策或战法后，自身获得「蓄势」。"
+      },
+      {
+        "name": "",
+        "desc": "「蓄势」的溅射伤害范围提升至一圈。"
+      },
+      {
+        "name": "",
+        "desc": "「蓄势」的普攻与溅射伤害额外提升20%。"
+      }
+    ]
+  },
+  "ji_ling": {
+    "id": 4011,
+    "name": "纪灵",
+    "troop": "轻骑兵",
+    "color": "#dc2626",
+    "portrait": "res://assets/ji_ling.png",
+    "stats": {
+      "hp": 147,
+      "atk": 91,
+      "def": 30,
+      "matk": 15,
+      "mdef": 17,
+      "luck": 60,
+      "move": 6,
+      "range": 1
+    },
+    "talent": "ma_chao_talent",
+    "talent_lv": 1,
+    "talent_name": "三尖两刃",
+    "talent_desc": "行动结束时对自身2格范围内距离最近的敌军施加 「 牵制·贰 」 ，持续1回合。",
+    "skills": [
+      "ji_ling_s3",
+      "ji_ling_s2",
+      "off_奋兵",
+      "off_威慑禁区",
+      "off_摧锋",
+      "cao_benxi"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "成国骁将",
+        "desc": "行动结束时对自身2格范围内距离最近的敌军施加「牵制·贰」，持续1回合。"
+      },
+      {
+        "name": "",
+        "desc": "对拥有「牵制」的敌军主动造成伤害后获得3格「再移动」。"
+      },
+      {
+        "name": "",
+        "desc": "「牵制·贰」改为持续2回合；对拥有「牵制」的敌军主动造成伤害提升10%。"
+      }
+    ]
+  },
+  "gan_mei": {
+    "id": 2009,
+    "name": "甘梅",
+    "troop": "才女",
+    "color": "#f472b6",
+    "portrait": "res://assets/gan_mei.png",
+    "stats": {
+      "hp": 155,
+      "atk": 18,
+      "def": 22,
+      "matk": 73,
+      "mdef": 31,
+      "luck": 30,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "biyue_xiuhua",
+    "talent_lv": 1,
+    "talent_name": "贤内助",
+    "talent_desc": "自身兵力100%时谋攻提升15%；对我方部队施放技策后为其施加 「 疗愈 」 ，持续1回合。",
+    "skills": [
+      "gan_mei_s2",
+      "off_汉家大乐",
+      "9140061",
+      "off_昭烈神思",
+      "off_众心安定",
+      "gan_mei_s1"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "修仁淑慎",
+        "desc": "自身兵力100%时谋攻提升15%；对我方部队施放技策后为其施加「疗愈」，持续1回合。"
+      },
+      {
+        "name": "",
+        "desc": "「疗愈」额外驱散一个减益状态。"
+      },
+      {
+        "name": "",
+        "desc": "「疗愈」增加10%回复兵力。"
+      }
+    ]
+  },
+  "mi_zhu": {
+    "id": 2007,
+    "name": "糜竺",
+    "troop": "军需",
+    "color": "#f59e0b",
+    "portrait": "res://assets/mi_zhu.png",
+    "stats": {
+      "hp": 157,
+      "atk": 18,
+      "def": 21,
+      "matk": 73,
+      "mdef": 31,
+      "luck": 30,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "xy_talent",
+    "talent_lv": 1,
+    "talent_name": "富商",
+    "talent_desc": "施放技策或战法后，为兵力最低的其他我方部队回复谋攻50%的兵力。",
+    "skills": [
+      "mi_zhu_s3",
+      "mi_zhu_s1",
+      "liang_mougong",
+      "off_持筹握算",
+      "off_集思广益",
+      "mi_zhu_s2"
+    ],
+    "arm": "盾",
+    "talent_stages": [
+      {
+        "name": "多财善贾",
+        "desc": "施放技策或战法后，为兵力最低的其他我方部队回复谋攻50%的兵力。"
+      },
+      {
+        "name": "",
+        "desc": "施放伤害技策时谋攻提升8%。"
+      },
+      {
+        "name": "",
+        "desc": "施放技策或战法后，为兵力最低的其他我方部队回复谋攻65%的兵力。"
+      }
+    ]
+  },
+  "jian_yong": {
+    "id": 2006,
+    "name": "简雍",
+    "troop": "弩兵",
+    "color": "#65a30d",
+    "portrait": "res://assets/jian_yong.png",
+    "stats": {
+      "hp": 142,
+      "atk": 74,
+      "def": 21,
+      "matk": 18,
+      "mdef": 24,
+      "luck": 200,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "sun_talent",
+    "talent_lv": 1,
+    "talent_name": "巧舌",
+    "talent_desc": "造成单体伤害前为敌军施加 「 松懈·壹 」 ，持续1回合。",
+    "skills": [
+      "jian_yong_s1",
+      "off_劝降",
+      "jian_yong_s2",
+      "off_谈笑风议",
+      "off_丧心掠魄",
+      "sm_chenhuo"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "雍容辩才",
+        "desc": "造成单体伤害前为敌军施加「松懈·壹」，持续1回合。"
+      },
+      {
+        "name": "",
+        "desc": "主动攻击敌军时每拥有一个减益伤害提升5%，最多15%。"
+      },
+      {
+        "name": "",
+        "desc": "造成伤害前为敌军施加「松懈」，持续2回合。"
+      }
+    ]
+  },
+  "chen_dao": {
+    "id": 2005,
+    "name": "陈到",
+    "troop": "长兵",
+    "color": "#0d9488",
+    "portrait": "res://assets/chen_dao.png",
+    "stats": {
+      "hp": 178,
+      "atk": 85,
+      "def": 32,
+      "matk": 18,
+      "mdef": 18,
+      "luck": 150,
+      "move": 4,
+      "range": 1
+    },
+    "talent": "xhd_talent",
+    "talent_lv": 1,
+    "talent_name": "白毦兵",
+    "talent_desc": "受到主动单体攻击或反击伤害后对伤害来源施加1层 「 撕裂 」 ，持续2回合。",
+    "skills": [
+      "chen_dao_s3",
+      "chen_dao_s1",
+      "off_裂伤",
+      "off_征西御东",
+      "xingcai_zudi",
+      "9110221"
+    ],
+    "arm": "枪",
+    "talent_stages": [
+      {
+        "name": "忠克勇烈",
+        "desc": "受到主动单体攻击或反击伤害后对伤害来源施加1层「撕裂」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "自身2格范围内每有一个拥有「撕裂」的敌军物攻物防提升5%（最多15%）。"
+      },
+      {
+        "name": "",
+        "desc": "受到主动单体攻击或反击伤害后对伤害来源造成物攻20%的固定伤害。"
+      }
+    ]
+  },
+  "chen_deng": {
+    "id": 1028,
+    "name": "陈登",
+    "troop": "道士",
+    "color": "#7c3aed",
+    "portrait": "res://assets/chen_deng.png",
+    "stats": {
+      "hp": 144,
+      "atk": 21,
+      "def": 21,
+      "matk": 86,
+      "mdef": 33,
+      "luck": 50,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "sm_talent",
+    "talent_lv": 1,
+    "talent_name": "智将",
+    "talent_desc": "行动结束时对自身2格范围内的敌军施加1层 「 溃逃 」 ，持续2回合。",
+    "skills": [
+      "chen_deng_s3",
+      "chen_deng_s1",
+      "sm_chenhuo",
+      "off_开屯护民",
+      "off_丧心掠魄",
+      "chen_deng_s2"
+    ],
+    "arm": "弓",
+    "talent_stages": [
+      {
+        "name": "强龙见伏",
+        "desc": "行动结束时对自身2格范围内的敌军施加1层「溃逃」，持续2回合。"
+      },
+      {
+        "name": "",
+        "desc": "自身2格范围内每有一个敌军谋攻提升8%（最多16%）。"
+      },
+      {
+        "name": "",
+        "desc": "「溃逃」改为施加2层。"
+      }
+    ]
+  },
+  "li_dian": {
+    "id": 1009,
+    "name": "李典",
+    "troop": "军需",
+    "color": "#0891b2",
+    "portrait": "res://assets/li_dian.png",
+    "stats": {
+      "hp": 158,
+      "atk": 22,
+      "def": 27,
+      "matk": 74,
+      "mdef": 31,
+      "luck": 30,
+      "move": 4,
+      "range": 2
+    },
+    "talent": "xy_talent",
+    "talent_lv": 1,
+    "talent_name": "钱谷",
+    "talent_desc": "行动结束时为自身一圈范围内的其他我方部队回复自身兵力上限15%的兵力。",
+    "skills": [
+      "li_dian_s3",
+      "li_dian_s2",
+      "off_增援",
+      "off_长者之风",
+      "9110221",
+      "li_dian_s1"
+    ],
+    "arm": "盾",
+    "talent_stages": [
+      {
+        "name": "深明大义",
+        "desc": "行动结束时为自身一圈范围内的其他我方部队回复自身兵力上限15%的兵力。"
+      },
+      {
+        "name": "",
+        "desc": "合击后为自身一圈范围内的其他我方部队回复自身兵力上限15%的兵力（每回合限1次）。"
+      },
+      {
+        "name": "",
+        "desc": "回复范围提升至自身2格。"
+      }
+    ]
+  },
+  "cao_hong": {
+    "id": 1008,
+    "name": "曹洪",
+    "troop": "步兵",
+    "color": "#78716c",
+    "portrait": "res://assets/cao_hong.png",
+    "stats": {
+      "hp": 205,
+      "atk": 83,
+      "def": 36,
+      "matk": 15,
+      "mdef": 16,
+      "luck": 30,
+      "move": 4,
+      "range": 1
+    },
+    "talent": "cr_talent",
+    "talent_lv": 1,
+    "talent_name": "大盾",
+    "talent_desc": "受到伤害降低5%；行动结束时为自身回复兵力上限15%的兵力。",
+    "skills": [
+      "cao_hong_s3",
+      "xingcai_zudi",
+      "cao_hong_s1",
+      "off_献马救主",
+      "dian_wei_s2",
+      "cao_hong_s2"
+    ],
+    "arm": "盾",
+    "talent_stages": [
+      {
+        "name": "白鹄",
+        "desc": "受到伤害降低5%；行动结束时为自身回复兵力上限15%的兵力。"
+      },
+      {
+        "name": "",
+        "desc": "兵力大于50%时造成伤害提升10%。"
+      },
+      {
+        "name": "",
+        "desc": "兵力小于50%时，受到的回复效果提升25%。"
+      }
+    ]
+  },
+  "sun_ce": {
+    "id": 3001,
+    "name": "孙策",
+    "troop": "轻骑兵",
+    "color": "#dc2626",
+    "portrait": "res://assets/sun_ce.png",
+    "stats": {
+      "hp": 194,
+      "atk": 121,
+      "def": 42,
+      "matk": 66,
+      "mdef": 38,
+      "luck": 92,
+      "move": 4,
+      "range": 1
+    },
+    "talent": "sun_ce_talent",
+    "talent_lv": 1,
+    "talent_name": "虎定江东",
+    "talent_desc": "自身十字1格「阻挡领域」，受到伤害降低20%，移动力+1；战意上限提升100点；自身提升等同50%物攻值的谋攻；自身行动结束时，对2格范围内距离最近（按朝向顺时针排序）的敌军施放「酣战」（每个大回合最多施放2次）。",
+    "skills": [
+      "sunce_linzhen",
+      "sunce_hengjiang",
+      "sunce_tapo",
+      "sunce_zhixi",
+      "dian_wei_s2",
+      "off_武韬阵"
+    ],
+    "arm": "骑",
+    "talent_stages": [
+      {
+        "name": "虎定江东",
+        "desc": "自身十字1格「阻挡领域」，受到伤害降低20%，移动力+1；战意上限提升100点；自身提升等同50%物攻值的谋攻；自身行动结束时，对2格范围内距离最近（按朝向顺时针排序）的敌军施放「酣战」（每个大回合最多施放2次）。"
+      },
+      {
+        "name": "",
+        "desc": "初始战意额外提升100点；主动攻击后额外造成50%谋攻的伤害；我方回合开始时驱散自身受到的2个控制效果；自身每拥有10点战意受到的伤害降低5%（最多降低30%）。"
+      },
+      {
+        "name": "",
+        "desc": "「阻挡领域」提升为菱形2格；对处于「阻挡领域」的敌军造成伤害提升35%；「酣战」每个大回合最多施放4次。"
+      }
+    ]
+  }
+}
