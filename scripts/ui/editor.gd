@@ -3199,7 +3199,42 @@ func _clear_art() -> void:
 func _load_tex(path: String) -> Texture2D:
 	if path == "" or data == null:
 		return null
-	return data.load_tex(path)
+	var tex: Texture2D = data.load_tex(path)
+	if tex != null:
+		return tex
+	# 图片文件不存在（例如美术素材未随仓库分发）→ 返回占位图，避免界面空白
+	return _placeholder_tex()
+
+
+# 生成一张「图片未找到」占位图（程序绘制，无版权问题）
+var _ph_tex: Texture2D = null
+func _placeholder_tex() -> Texture2D:
+	if _ph_tex != null:
+		return _ph_tex
+	var w := 128
+	var h := 128
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0.13, 0.15, 0.20, 1.0))
+	# 画一个虚线边框
+	var c := Color(0.35, 0.40, 0.50, 1.0)
+	for x in w:
+		if (x / 8) % 2 == 0:
+			img.set_pixel(x, 0, c)
+			img.set_pixel(x, h - 1, c)
+	for y in h:
+		if (y / 8) % 2 == 0:
+			img.set_pixel(0, y, c)
+			img.set_pixel(w - 1, y, c)
+	# 画一个斜杠表示「缺失」
+	for i in range(1, h - 1):
+		var x2: int = int(float(i) * float(w - 1) / float(h - 1))
+		if x2 >= 0 and x2 < w:
+			img.set_pixel(x2, i, c)
+			if x2 + 1 < w:
+				img.set_pixel(x2 + 1, i, c)
+	_ph_tex = ImageTexture.create_from_image(img)
+	return _ph_tex
+
 func _art_slot(parent: HBoxContainer, title: String, sz: Vector2) -> TextureRect:
 	var v := VBoxContainer.new()
 	v.add_child(THEME.label(title, 13, THEME.MUTED))

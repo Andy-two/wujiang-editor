@@ -473,10 +473,15 @@ func _test_anims(data) -> void:
 		_check("导入攻击图成功", bool(r2.get("ok", false)), str(r2.get("msg", "")))
 		_check("识别出 12 帧", int(r2.get("total_frames", 0)) == 12, "共 %d 帧" % int(r2.get("total_frames", 0)))
 		_check("三张图记录里 atk 已填", data.sheet_path(g, "atk") != "")
-	# 一次导入多张
-	var allr = data.import_all_sheets(["res://assets/units/lu_bu/mov64.png", "res://assets/units/lu_bu/spc64.png"], "lu_bu")
-	_check("批量导入识别 mov/spc", bool(allr.get("ok", false)), str(allr.get("msg", "")))
-	_check("mov/spc 都已记录", data.sheet_path(g, "mov") != "" and data.sheet_path(g, "spc") != "")
+	# 一次导入多张（美术素材未随仓库分发时跳过）
+	var mov_p := "res://assets/units/lu_bu/mov64.png"
+	var spc_p := "res://assets/units/lu_bu/spc64.png"
+	if FileAccess.file_exists(mov_p) and FileAccess.file_exists(spc_p):
+		var allr = data.import_all_sheets([mov_p, spc_p], "lu_bu")
+		_check("批量导入识别 mov/spc", bool(allr.get("ok", false)), str(allr.get("msg", "")))
+		_check("mov/spc 都已记录", data.sheet_path(g, "mov") != "" and data.sheet_path(g, "spc") != "")
+	else:
+		print("  （跳过：assets/units 素材未随仓库分发）")
 	# 战斗中：朝向随移动/攻击切换
 	var bt = EdBattle.new(13, 11)
 	bt.bind_data({"lu_bu": g}, data.skills, data.talents)
