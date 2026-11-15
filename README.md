@@ -3,10 +3,23 @@
 > 输入武将信息 → 在里面随便改 → 在里面测 → 导出给你的战棋游戏。
 > 兵种、技能、天赋、属性、五维、技能范围、等级、星级、头像、立绘、精灵图全部可改，改完能立刻测出效果和升级变化。
 
-- 工程目录：`F:\dsh-output\wujiang_editor\`
-- 引擎：Godot 4.7.2 stable（路径 `F:\Migrated\Desktop\Godot_v4.7.2-stable_win64.exe`）
-- 打开方式：Godot 项目管理器 → 导入 → 选 `F:\dsh-output\wujiang_editor\project.godot` → 运行（F5）
-- 自带数据：沿用 `sango_wsz_proto`（旧战棋原型）的 **56 名武将 / 294 条技策 / 35 个天赋 / 109 名副将**，并补齐了兵种与五维
+## 快速开始
+
+```bash
+git clone <本仓库地址> wujiang_editor
+```
+
+然后用 **Godot 4.7+** 打开：
+
+1. 启动 Godot 项目管理器 → **导入**
+2. 选择克隆下来的 `project.godot`
+3. 打开后按 **F5** 运行
+
+> 首次打开会自动导入 `assets/` 下的图片资源（约 30 秒），之后秒开。
+> `.godot/` 缓存已加入 `.gitignore`，无需提交。
+
+- 引擎版本：Godot **4.7.2 stable**（4.6+ 一般也可，但建议用 4.7）
+- 自数据来源：沿用 `sango_wsz_proto`（旧战棋原型）的 **56 名武将 / 294 条技策 / 35 个天赋 / 109 名副将**，并补齐了兵种与五维
 
 ---
 
