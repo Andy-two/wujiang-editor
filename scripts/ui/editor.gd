@@ -1757,6 +1757,38 @@ func refresh_skill_list() -> void:
 		xb.pressed.connect(func() -> void: _remove_skill(sid))
 		row.add_child(xb)
 		skill_list.add_child(panel)
+		# 组合技：在下方逐个列出子技能，可单独编辑效果与范围
+		if data.is_group(sid):
+			for kid in data.group_children(sid):
+				var ksid := String(kid)
+				var kd: Dictionary = data.get_skill(ksid)
+				var krow := HBoxContainer.new()
+				krow.add_theme_constant_override("separation", 6)
+				skill_list.add_child(krow)
+				krow.add_child(THEME.label("      ↳", 12, THEME.MUTED))
+				# 子技能图标
+				var ktex := _load_tex(String(kd.get("icon", "")))
+				if ktex != null:
+					var kic := TextureRect.new()
+					kic.texture = ktex
+					kic.custom_minimum_size = Vector2(20, 20)
+					kic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+					kic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+					krow.add_child(kic)
+				var klbl := THEME.label("子技能：%s  [%s]" % [
+					data.skill_name(ksid), _skill_kind_name(String(kd.get("kind", "")))], 12, THEME.ACCENT)
+				klbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+				krow.add_child(klbl)
+				var keb := THEME.button("编辑效果", 11)
+				keb.pressed.connect(func() -> void: _show_skill_edit(ksid))
+				krow.add_child(keb)
+				var krb := THEME.button("范围…", 11)
+				krb.pressed.connect(func() -> void:
+					tabs.current_tab = 7
+					_range_ctx["owner"] = cur_key
+					_range_ctx["sid"] = ksid
+					_refresh_range_page())
+				krow.add_child(krb)
 	_show_skill_edit(String(sids[0]))
 func _move_skill(sid: String, d: int) -> void:
 	if cur_key == "":
@@ -2930,13 +2962,12 @@ func _page_range() -> Control:
 	range_skill_opt = OptionButton.new()
 	range_skill_opt.custom_minimum_size = Vector2(240, 0)
 	range_skill_opt.item_selected.connect(func(i: int) -> void:
-		var g: Dictionary = data.generals.get(str(_range_ctx.get("owner", "")), {})
-		if i == 0:
+		if i <= 0:
 			_range_ctx["sid"] = "basic"
 		else:
-			var sids: Array = g.get("skills", [])
-			if i - 1 < sids.size():
-				_range_ctx["sid"] = String(sids[i - 1])
+			var md = range_skill_opt.get_item_metadata(i)
+			if md != null:
+				_range_ctx["sid"] = String(md)
 		_refresh_range_page())
 	head.add_child(range_skill_opt)
 	var layer_row := HBoxContainer.new()
@@ -3119,12 +3150,42 @@ func _refresh_range_page() -> void:
 	var g: Dictionary = data.generals.get(owner, {})
 	range_skill_opt.clear()
 	range_skill_opt.add_item("普攻（射程形状）")
+	# 构建范围页可选技能列表：武将技能 + 组合技的子技能
+	var range_sids: Array = []
+	var seen_r := {}
 	for sid in (g.get("skills", []) as Array):
-		range_skill_opt.add_item("%s%s" % [data.skill_name(String(sid)),
-			"（被动）" if String(data.get_skill(String(sid)).get("kind", "")) == "passive" else ""])
+		var ss := String(sid)
+		range_sids.append(ss)
+		seen_r[ss] = true
+	# 把组合技的子技能也加进来（子技能可单独编辑范围）
+	for sid in (g.get("skills", []) as Array):
+		var ss2 := String(sid)
+		if not data.is_group(ss2):
+			continue
+		for kid in data.group_children(ss2):
+			var kk := String(kid)
+			if seen_r.has(kk):
+				continue
+			seen_r[kk] = true
+			range_sids.append(kk)
+	for sid in range_sids:
+		var ss3 := String(sid)
+		var d3: Dictionary = data.get_skill(ss3)
+		var note := ""
+		if String(d3.get("kind", "")) == "passive":
+			note = "（被动）"
+		elif data.is_group(ss3):
+			note = "〔组合〕"
+		else:
+			# 若是某个组合的子技能，标注出来
+			for hs in (g.get("skills", []) as Array):
+				if data.is_group(String(hs)) and data.group_children(String(hs)).has(ss3):
+					note = "〔子技能〕"
+					break
+		range_skill_opt.add_item("%s%s" % [data.skill_name(ss3), note])
+		range_skill_opt.set_item_metadata(range_skill_opt.item_count - 1, ss3)
 	var sid := str(_range_ctx.get("sid", ""))
-	var sids: Array = g.get("skills", [])
-	var si := sids.find(sid)
+	var si := range_sids.find(sid)
 	range_skill_opt.selected = 0 if (sid == "basic" or si < 0) else si + 1
 	if si < 0 and sid != "basic":
 		_range_ctx["sid"] = "basic"
