@@ -577,12 +577,14 @@ const SFX_LIFELINK := "lifelink"      # 伤害分摊
 const SFX_COPY_BUFF := "copy_buff"    # 复制目标增益
 const SFX_STEAL_BUFF := "steal_buff"  # 偷取目标增益
 const SFX_FIXED := "fixed"            # 固伤（无视防御与常规增伤）
+const SFX_NO_COUNTER := "no_counter"  # 本次攻击无法被反击
 
 const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_DISPEL, SFX_SELF_DISPEL, SFX_SELF_HEAL, SFX_CD_DOWN, SFX_EXTRA_MOVE,
 	SFX_DRAIN, SFX_SHIELD, SFX_DOT, SFX_HOT, SFX_STUN, SFX_TAUNT,
 	SFX_SILENCE, SFX_DISARM, SFX_SUMMON, SFX_TELEPORT, SFX_EXTRA_TURN,
-	SFX_REVIVE, SFX_CRIT_UP, SFX_LIFELINK, SFX_COPY_BUFF, SFX_STEAL_BUFF, SFX_FIXED]
+	SFX_REVIVE, SFX_CRIT_UP, SFX_LIFELINK, SFX_COPY_BUFF, SFX_STEAL_BUFF, SFX_FIXED,
+	SFX_NO_COUNTER]
 const SFX_LABELS := {
 	SFX_DAMAGE: "造成伤害", SFX_HEAL: "治疗友军", SFX_DEBUFF: "施加减益状态",
 	SFX_BUFF: "施加增益状态", SFX_PUSH: "击退", SFX_DISPEL: "驱散敌方增益",
@@ -595,6 +597,7 @@ const SFX_LABELS := {
 	SFX_CRIT_UP: "提升暴击率", SFX_LIFELINK: "伤害分摊", SFX_COPY_BUFF: "复制目标增益",
 	SFX_STEAL_BUFF: "偷取目标增益",
 	SFX_FIXED: "固定伤害（无视防御）",
+	SFX_NO_COUNTER: "本次攻击无法被反击",
 }
 # 常用状态名（可自由输入其它名字）
 const COMMON_STATUS := ["低迷", "虚弱", "定身", "眩晕", "撕裂", "溃逃", "缴械", "封技",
@@ -716,6 +719,8 @@ static func sfx_text(fx: Dictionary) -> String:
 			return "偷取目标 1 个增益"
 		SFX_FIXED:
 			return "固定伤害 %d（无视防御）" % int(fx.get("value", 100))
+		SFX_NO_COUNTER:
+			return "本次攻击无法被反击"
 	return t
 
 

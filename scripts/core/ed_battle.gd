@@ -428,7 +428,9 @@ func basic_attack(attacker, target) -> Dictionary:
 		_kill(target, attacker)
 	else:
 		# 反击：目标若在自己的普攻范围内且是近战则反击（简化规则：普攻范围覆盖攻击者即反击）
-		if attack_area(target).has(attacker["pos"] - target["pos"]) and attacker["alive"]:
+		# 若攻击方带「无法被反击」标记（技能 Lv3 等），则跳过反击
+		var no_counter := bool(attacker.get("no_counter", false))
+		if not no_counter and attack_area(target).has(attacker["pos"] - target["pos"]) and attacker["alive"]:
 			_face_towards(target, attacker["pos"])
 			var back := RULEZ.roll_damage(target, attacker, RULEZ.get_f("mult_counter"),
 				RULEZ.arm_multiplier(String(target["arm"]), String(attacker["arm"])), {})
@@ -581,7 +583,10 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 				_emit("  → %s 的所有技策准备期 -%d" % [u["name"], int(fx.get("value", 1))], "info")
 			RULEZ.SFX_EXTRA_MOVE:
 				u["done"] = false
-				_emit("  → %s 获得再移动" % u["name"], "info")
+				_emit("  → %s 获得再移动" % [u["name"]], "info")
+			RULEZ.SFX_NO_COUNTER:
+				u["no_counter"] = true
+				_emit("  → 本次攻击无法被反击", "info")
 			RULEZ.SFX_FIXED:
 				# 固伤：无视防御与常规增减伤，只吃固伤增伤
 				for tgt_f in foes:
@@ -674,6 +679,8 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 					break
 	_emit("  作用格：%d" % cells.size(), "info")
 	changed.emit()
+	# 「无法被反击」只对本次攻击有效，用完即清
+	u["no_counter"] = false
 	return {"ok": true, "hits": hits}
 
 

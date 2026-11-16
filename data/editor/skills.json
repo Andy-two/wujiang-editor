@@ -1633,6 +1633,12 @@
         "value": "高级昂扬",
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "shield",
+        "value": 25.0,
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -1769,6 +1775,11 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "dispel",
+        "value": 2.0,
+        "min_lv": 2.0
       }
     ],
     "range": 3.0,
@@ -1905,6 +1916,16 @@
         "value": "高级坚甲",
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "self_dispel",
+        "value": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "heal",
+        "value": 0.4,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -2171,6 +2192,12 @@
         "turns": 1.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "damage",
+        "value": 1.5,
+        "ignore_def": 0.1,
+        "min_lv": 3.0
       }
     ],
     "range": 2.0,
@@ -2263,6 +2290,12 @@
         "turns": 1.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "虚弱·壹",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "radius": 1.0
@@ -2347,6 +2380,17 @@
         "type": "damage",
         "value": 1.4,
         "min_lv": 1.0
+      },
+      {
+        "type": "disarm",
+        "value": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "奋兵·壹",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -2403,6 +2447,12 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "虚弱·壹",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "radius": 1.0,
@@ -2520,6 +2570,10 @@
         "value": "八阵图",
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -2635,6 +2689,10 @@
         "value": "浓雾",
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -2682,6 +2740,16 @@
         "magic": true,
         "times": 3.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "extra_move",
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "溃逃",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "radius": 1.0,
@@ -2764,6 +2832,10 @@
         "type": "push",
         "value": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "extra_move",
+        "min_lv": 2.0
       }
     ],
     "radius": 1.0,
@@ -2804,6 +2876,15 @@
         "type": "heal",
         "value": 0.3,
         "min_lv": 1.0
+      },
+      {
+        "type": "self_heal",
+        "value": 0.15,
+        "min_lv": 2.0
+      },
+      {
+        "type": "no_counter",
+        "min_lv": 3.0
       }
     ],
     "range": 1.0,
@@ -2838,6 +2919,28 @@
         "type": "heal",
         "value": 0.2,
         "min_lv": 1.0
+      },
+      {
+        "type": "dispel",
+        "value": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "胆怯·壹",
+        "turns": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "self_dispel",
+        "value": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "buff",
+        "value": "严阵·壹",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "range": 2.0
@@ -3147,6 +3250,12 @@
         "type": "damage",
         "value": 0.5,
         "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "寒步",
+        "turns": 3.0,
+        "min_lv": 2.0
       }
     ],
     "range": 3.0,
@@ -3618,6 +3727,11 @@
         "turns": 1.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "damage",
+        "value": 0.8,
+        "min_lv": 2.0
       }
     ],
     "range": 3.0,
@@ -3733,6 +3847,11 @@
         "type": "damage",
         "value": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "damage",
+        "value": 0.5,
+        "min_lv": 2.0
       }
     ],
     "range": 3.0,
@@ -3849,6 +3968,12 @@
         "turns": 1.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "撕裂",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -4024,6 +4149,11 @@
         "turns": 2.0,
         "stacks": 30.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "stun",
+        "value": 1.0,
+        "min_lv": 2.0
       }
     ],
     "range": 3.0,
@@ -4233,6 +4363,12 @@
         "value": "严阵·贰",
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "严守",
+        "turns": 2.0,
+        "min_lv": 2.0
       }
     ],
     "range": 3.0,
@@ -6726,6 +6862,16 @@
         "type": "heal",
         "value": 0.25,
         "min_lv": 1.0
+      },
+      {
+        "type": "self_dispel",
+        "value": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "heal",
+        "value": 0.35,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -6925,6 +7071,12 @@
         "value": "高级奋勇",
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "胆怯·壹",
+        "turns": 2.0,
+        "min_lv": 2.0
       }
     ],
     "range": 2.0,
@@ -7023,6 +7175,11 @@
         "turns": 1.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "stun",
+        "value": 1.0,
+        "min_lv": 2.0
       }
     ],
     "range": 1.0,
@@ -7090,6 +7247,12 @@
       {
         "type": "extra_move",
         "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "格挡",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -9742,6 +9905,18 @@
         "value": 1.5,
         "magic": true,
         "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "虚弱",
+        "turns": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "破绽",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "range": 2.0,
@@ -9929,6 +10104,10 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 2.0
       }
     ],
     "range": 2.0,
@@ -12686,6 +12865,11 @@
         "turns": 1.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "silence",
+        "value": 1.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -15141,6 +15325,18 @@
         "turns": 1.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "胆怯·壹",
+        "turns": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "失智·壹",
+        "turns": 2.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -15166,6 +15362,18 @@
         "magic": true,
         "times": 3.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "dispel",
+        "value": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "damage",
+        "value": 0.4,
+        "magic": true,
+        "times": 4.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -15229,7 +15437,19 @@
       "为范围内的其他我方部队额外解除1个控制并驱散2个减益。",
       "为范围内的其他我方部队额外施加「疾行·壹」，持续2回合。"
     ],
-    "from_official": true
+    "from_official": true,
+    "ed_fx_list": [
+      {
+        "type": "heal",
+        "value": 0.8,
+        "min_lv": 1.0
+      },
+      {
+        "type": "self_dispel",
+        "value": 1.0,
+        "min_lv": 1.0
+      }
+    ]
   },
   "canglan_cao_cao_s2_1": {
     "name": "突阵",
@@ -15860,6 +16080,17 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "dispel",
+        "value": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "龙胆",
+        "turns": 2.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -15880,6 +16111,17 @@
       {
         "type": "extra_turn",
         "min_lv": 1.0
+      },
+      {
+        "type": "heal",
+        "value": 0.2,
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "严阵·壹",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -15909,6 +16151,12 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "格挡",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -15937,6 +16185,18 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "破甲·贰",
+        "turns": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "牵制·肆",
+        "turns": 1.0,
+        "min_lv": 3.0
       }
     ]
   }
