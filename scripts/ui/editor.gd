@@ -1695,6 +1695,16 @@ func refresh_skill_list() -> void:
 		var row := HBoxContainer.new()
 		row.add_theme_constant_override("separation", 6)
 		panel.add_child(row)
+		# 技能图标
+		var icon_tex := _load_tex(String(d.get("icon", "")))
+		if icon_tex != null:
+			var ic := TextureRect.new()
+			ic.texture = icon_tex
+			ic.custom_minimum_size = Vector2(28, 28)
+			ic.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+			ic.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			ic.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+			row.add_child(ic)
 		var kind := String(d.get("kind", "?"))
 		var grp_info := ""
 		if data.is_group(sid):
@@ -1778,6 +1788,46 @@ func _add_skill(sid: String) -> void:
 	data.generals[cur_key]["ed_skill_lv"][sid] = 1
 	_mark_dirty()
 	refresh_skill_list()
+# 为技能导入图标：复制到 assets/icons/skills/ 并写入 icon 字段
+func _open_icon_picker(sid: String) -> void:
+	var dlg := FileDialog.new()
+	dlg.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	dlg.access = FileDialog.ACCESS_FILESYSTEM
+	dlg.filters = PackedStringArray(["*.png ; PNG 图片", "*.jpg, *.jpeg ; JPG 图片", "*.webp ; WEBP 图片"])
+	dlg.title = "选择技能图标：%s" % data.skill_name(sid)
+	add_child(dlg)
+	dlg.file_selected.connect(func(path: String) -> void:
+		var dst_dir := "res://assets/icons/skills/"
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(dst_dir))
+		var base := path.get_file()
+		var dst := dst_dir + "%s_%s" % [sid, base]
+		var src_f := FileAccess.open(path, FileAccess.READ)
+		if src_f == null:
+			status("无法读取图片：" + path)
+			dlg.queue_free()
+			return
+		var buf := src_f.get_buffer(src_f.get_length())
+		src_f.close()
+		var out_f := FileAccess.open(ProjectSettings.globalize_path(dst), FileAccess.WRITE)
+		if out_f == null:
+			status("无法写入：" + dst)
+			dlg.queue_free()
+			return
+		out_f.store_buffer(buf)
+		out_f.close()
+		var dd: Dictionary = data.get_skill(sid)
+		dd["icon"] = dst
+		data.skills[sid] = dd
+		data.dirty = true
+		_mark_dirty()
+		refresh_skill_list()
+		_show_skill_edit(sid)
+		status("已设置「%s」的图标" % data.skill_name(sid))
+		dlg.queue_free())
+	dlg.canceled.connect(func() -> void: dlg.queue_free())
+	dlg.popup_centered_ratio(0.6)
+
+
 func _show_skill_edit(sid: String) -> void:
 	_fx_editing_sid = sid
 	for c in skill_edit_box.get_children():
@@ -1789,8 +1839,30 @@ func _show_skill_edit(sid: String) -> void:
 	var lv := int((g.get("ed_skill_lv", {}) as Dictionary).get(sid, 1))
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation", 4)
+	# 顶部：技能大图标 + 名称
+	var head_row := HBoxContainer.new()
+	head_row.add_theme_constant_override("separation", 10)
+	box.add_child(head_row)
+	var big_icon := _load_tex(String(d.get("icon", "")))
+	if big_icon != null:
+		var bg := PanelContainer.new()
+		var bi := TextureRect.new()
+		bi.texture = big_icon
+		bi.custom_minimum_size = Vector2(64, 64)
+		bi.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		bi.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		bg.add_child(bi)
+		head_row.add_child(bg)
+	var head_col := VBoxContainer.new()
+	head_col.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	head_row.add_child(head_col)
 	var head := THEME.label("编辑技能：%s（%s）" % [data.skill_name(sid), sid], 15, THEME.ORANGE)
-	box.add_child(head)
+	head_col.add_child(head)
+	var icon_btn := THEME.button("导入图标…", 11)
+	icon_btn.tooltip_text = "为该技能导入一张图标（PNG/JPG）"
+	icon_btn.pressed.connect(func() -> void:
+		_open_icon_picker(sid))
+	head_col.add_child(icon_btn)
 	var grid := VBoxContainer.new()
 	box.add_child(grid)
 	_form_line(grid, "技能名", func(t: String) -> void:
