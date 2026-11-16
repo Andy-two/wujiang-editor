@@ -2026,26 +2026,20 @@
     "kind": "passive",
     "cd": 1.0,
     "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin8cedc3d8f00747d98f5f14e9dc400da1UI/UIRes/Texture/IconSkill/sk_1007401.png",
-    "desc": "施放技策或战法后，为3格范围内一名兵力最低的我方部队回复谋攻60%的兵力并使其一个减益状态持续回合减1。",
+    "desc": "施放技策或战法后，为3格范围内一名兵力最低的我方部队回复谋攻60%的兵力，驱散2个减益并使其一个减益状态持续回合减1；额外降低3格范围内一名战意最高的敌军10点战意并使其一个增益状态持续回合减1；貂蝉获得「继续移动」。",
     "lv": [
-      "施放技策或战法后，为3格范围内一名兵力最低的我方部队回复谋攻60%的兵力并使其一个减益状态持续回合减1。",
-      "施放技策或战法后，为3格范围内兵力最低的我方部队回复谋攻60%的兵力，并使其1个减益持续回合-1。",
-      "施放技策或战法后，为3格范围内兵力最低的我方部队回复谋攻60%的兵力，并使其1个减益持续回合-1。"
+      "施放技策或战法后，为3格范围内一名兵力最低的我方部队回复谋攻60%的兵力，驱散2个减益并使其一个减益状态持续回合减1；额外降低3格范围内一名战意最高的敌军10点战意并使其一个增益状态持续回合减1；貂蝉获得「继续移动」。",
+      "施放技策或战法后，降低3格范围内一名战意最高的敌军10点战意并使其一个增益状态持续回合减1。",
+      "将降低的战意转移至我方部队身上。"
     ],
-    "from_official": true
-  },
-  "youlian": {
-    "name": "犹怜",
-    "kind": "passive",
-    "cd": 0.0,
-    "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin11a62d2977604f09be9c28fbb92fc5d4UI/UIRes/Texture/IconSkill/sk_10010.png",
-    "desc": "兵力等于100%时，受到伤害降低25%。",
-    "lv": [
-      "兵力等于100%时，受到伤害降低25%。",
-      "兵力等于100%时，受到伤害降低25%。",
-      "兵力等于100%时，受到伤害降低25%。"
+    "from_official": true,
+    "ed_fx_list": [],
+    "ed_merged_passives": [
+      "犹怜"
     ],
-    "from_official": true
+    "ed_merged_from": [
+      "youlian"
+    ]
   },
   "pianruo": {
     "name": "翩若惊鸿",
@@ -2099,11 +2093,11 @@
     "radius": 1.0,
     "heal": 0.6,
     "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin3f28b88026834918904945deb5cf0c74UI/UIRes/Texture/IconSkill/sk_1007501.png",
-    "desc": "为范围内的我方部队回复谋攻60%的兵力，并回复10点战意。",
+    "desc": "为范围内的我方部队回复谋攻60%的兵力，并回复10点战意；降低范围内敌军10点战意并使其所有增益状态持续回合减1。",
     "lv": [
-      "为范围内的我方部队回复谋攻60%的兵力，并回复10点战意。",
-      "为范围内我方部队回复谋攻60%的兵力，并回复10点战意。",
-      "为范围内我方部队回复谋攻60%的兵力，并回复10点战意。"
+      "为范围内的我方部队回复谋攻60%的兵力，并回复10点战意；降低范围内敌军10点战意并使其所有增益状态持续回合减1。",
+      "降低范围内敌军10点战意并使其所有增益状态持续回合减1。",
+      "技策范围+1。"
     ],
     "from_official": true,
     "ed_fx_list": [
@@ -2111,7 +2105,10 @@
         "type": "heal",
         "value": 0.6
       }
-    ]
+    ],
+    "ed_range_bonus": {
+      "lv_3": 1.0
+    }
   },
   "yuanbing": {
     "name": "援兵",
@@ -4074,7 +4071,7 @@
   },
   "pang_jianyan": {
     "name": "建言献策",
-    "kind": "support",
+    "kind": "group",
     "cd": 4.0,
     "desc": "在「星夜奇袭」、「设伏擒将」、「别图后举」中选择一个技策使用。",
     "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin2e2d35251fda4e53a4b3b39ff90645afUI/UIRes/Texture/IconSkill/sk_2016402.png",
@@ -4145,6 +4142,11 @@
         "type": "heal",
         "value": 0.8
       }
+    ],
+    "ed_group": [
+      "pang_jianyan_1",
+      "pang_jianyan_2",
+      "pang_jianyan_3"
     ]
   },
   "pang_zhenwei": {
@@ -6854,7 +6856,7 @@
     "name": "唇枪舌剑",
     "kind": "group",
     "cd": 3.0,
-    "desc": "在「舌战群儒」和「武侯怒斥」中选择一个技策使用。",
+    "desc": "在「舌战群儒」、「武侯怒斥」中选择一个技策使用。",
     "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin3bd3a82e4b8941438abbf5ac42156820UI/UIRes/Texture/IconSkill/sk_2010401.png",
     "cast": [
       [
@@ -7013,9 +7015,9 @@
       ]
     ],
     "lv": [
-      "在「舌战群儒」和「武侯怒斥」中选择一个技策使用。",
-      "在「舌战群儒」和「武侯怒斥」中选择一个技策使用。",
-      "在「舌战群儒」和「武侯怒斥」中选择一个技策使用。"
+      "在「舌战群儒」、「武侯怒斥」中选择一个技策使用。",
+      "在「舌战群儒」、「武侯怒斥」中选择一个技策使用。",
+      "在「舌战群儒」、「武侯怒斥」中选择一个技策使用。"
     ],
     "from_official": true,
     "ed_group": [
@@ -11790,15 +11792,15 @@
   },
   "canglan_cao_cao_s2": {
     "name": "碣石遣将",
-    "kind": "support",
+    "kind": "group",
     "cd": 2.0,
     "range": 3.0,
     "radius": 0.0,
-    "desc": "在「突阵」「奋阵」「列阵」中选择一个技策使用。",
+    "desc": "在「突阵」、「奋阵」、「列阵」中选择一个技策使用。",
     "lv": [
-      "在「突阵」「奋阵」「列阵」中选择一个技策使用。",
-      "在「突阵」「奋阵」「列阵」中选择一个技策使用。。",
-      "在「突阵」「奋阵」「列阵」中选择一个技策使用。。"
+      "在「突阵」、「奋阵」、「列阵」中选择一个技策使用。",
+      "在「突阵」、「奋阵」、「列阵」中选择一个技策使用。",
+      "在「突阵」、「奋阵」、「列阵」中选择一个技策使用。"
     ],
     "generic": true,
     "mult": 1.0,
@@ -11810,6 +11812,11 @@
         "type": "heal",
         "value": 1.0
       }
+    ],
+    "ed_group": [
+      "canglan_cao_cao_s2_1",
+      "canglan_cao_cao_s2_2",
+      "canglan_cao_cao_s2_3"
     ]
   },
   "xiao_qiao_s1": {
@@ -12406,15 +12413,15 @@
   },
   "canglan_cao_cao_s3": {
     "name": "临海扬旗",
-    "kind": "support",
+    "kind": "group",
     "cd": 3.0,
     "range": 3.0,
     "radius": 0.0,
-    "desc": "在「展旗令」「擂鼓令」「鸣金令」中选择一个技策使用。",
+    "desc": "在「展旗令」、「擂鼓令」、「鸣金令」中选择一个技策使用。",
     "lv": [
-      "在「展旗令」「擂鼓令」「鸣金令」中选择一个技策使用。",
-      "在「展旗令」「擂鼓令」「鸣金令」中选择一个技策使用。 展旗令 施法范围 作用范围 范围内我方部队获得 「 展旗·壹 」 「 疾行·壹 」 ，持续3回合，若已拥有 「 展旗 」 ，则将 「 展旗 」 提升1级，并延长其2回合时间；拥有 「 展旗 」 的我方部队自身每累计移动、主动位移、换位6格后触发，令该我方部队 「 展旗 」 升1级、 「 疾行 」 升1级，并延长其1回合持续时间，曹操自身获得同样效果，并额外获得1层 「 将令 」 。",
-      "在「展旗令」「擂鼓令」「鸣金令」中选择一个技策使用。 展旗令 施法范围 作用范围 范围内我方部队获得 「 展旗·壹 」 「 疾行·壹 」 ，持续3回合，若已拥有 「 展旗 」 ，则将 「 展旗 」 提升1级，并延长其2回合时间；拥有 「 展旗 」 的我方部队自身每累计移动、主动位移、换位6格后触发，令该我方部队 「 展旗 」 升1级、 「 疾行 」 升1级，并延长其1回合持续时间，曹操自身获得同样效果，并额外获得1层 「 将令 」 。"
+      "在「展旗令」、「擂鼓令」、「鸣金令」中选择一个技策使用。",
+      "在「展旗令」、「擂鼓令」、「鸣金令」中选择一个技策使用。",
+      "在「展旗令」、「擂鼓令」、「鸣金令」中选择一个技策使用。"
     ],
     "generic": true,
     "mult": 1.0,
@@ -12426,6 +12433,11 @@
         "type": "heal",
         "value": 1.0
       }
+    ],
+    "ed_group": [
+      "canglan_cao_cao_s3_1",
+      "canglan_cao_cao_s3_2",
+      "canglan_cao_cao_s3_3"
     ]
   },
   "xiao_qiao_s3": {
@@ -13452,18 +13464,17 @@
     "range": 2.0,
     "radius": 0.0,
     "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admincecabbd8fb2e4fb08ec7e5536af15f1aUI/UIRes/Texture/IconSkill/sk_2010407.png",
-    "desc": "在「石兵八阵」和「雾锁江天」中选择一个技策使用。",
+    "desc": "在「石兵八阵」、「雾锁江天」中选择一个技策使用。",
     "lv": [
-      "在「石兵八阵」和「雾锁江天」中选择一个技策使用。",
-      "在「石兵八阵」和「雾锁江天」中选择一个技策使用。",
-      "在「石兵八阵」和「雾锁江天」中选择一个技策使用。"
+      "在「石兵八阵」、「雾锁江天」中选择一个技策使用。",
+      "在「石兵八阵」、「雾锁江天」中选择一个技策使用。",
+      "在「石兵八阵」、「雾锁江天」中选择一个技策使用。"
     ],
     "generic": false,
     "from_official": true,
     "ed_group": [
       "zhuge_shibing",
-      "zhuge_wusuo",
-      "zhuge_xushi"
+      "zhuge_wusuo"
     ],
     "ed_fx_list": [
       {
@@ -13477,16 +13488,16 @@
   },
   "off_运筹帷幄": {
     "name": "运筹帷幄",
-    "kind": "single",
+    "kind": "group",
     "cd": 3.0,
     "range": 2.0,
     "radius": 0.0,
     "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_adminf46f910155be48388aa394128bb90b1dUI/UIRes/Texture/IconSkill/sk_2010404.png",
-    "desc": "在「虚势慑敌」和「鼓风煽焰」中选择一个技策使用。",
+    "desc": "在「虚势慑敌」、「鼓风煽焰」中选择一个技策使用。",
     "lv": [
-      "在「虚势慑敌」和「鼓风煽焰」中选择一个技策使用。",
-      "在「虚势慑敌」和「鼓风煽焰」中选择一个技策使用。",
-      "在「虚势慑敌」和「鼓风煽焰」中选择一个技策使用。"
+      "在「虚势慑敌」、「鼓风煽焰」中选择一个技策使用。",
+      "在「虚势慑敌」、「鼓风煽焰」中选择一个技策使用。",
+      "在「虚势慑敌」、「鼓风煽焰」中选择一个技策使用。"
     ],
     "generic": false,
     "from_official": true,
@@ -13498,6 +13509,10 @@
         "times": 1.0,
         "ignore_def": 0.0
       }
+    ],
+    "ed_group": [
+      "zhuge_xushi",
+      "zhuge_gufeng"
     ]
   },
   "off_铁壁": {
@@ -14622,5 +14637,149 @@
         "ignore_def": 0.0
       }
     ]
+  },
+  "pang_jianyan_1": {
+    "name": "星夜奇袭",
+    "kind": "single",
+    "cd": 2.0,
+    "range": 2.0,
+    "radius": 0.0,
+    "mult": 1.0,
+    "desc": "【待补】官方原版中「星夜奇袭」的效果尚未收录，请在编辑器里补全效果与范围。",
+    "lv": [
+      "【待补】星夜奇袭",
+      "【待补】星夜奇袭",
+      "【待补】星夜奇袭"
+    ],
+    "from_official": false,
+    "ed_placeholder": true
+  },
+  "pang_jianyan_2": {
+    "name": "设伏擒将",
+    "kind": "single",
+    "cd": 2.0,
+    "range": 2.0,
+    "radius": 0.0,
+    "mult": 1.0,
+    "desc": "【待补】官方原版中「设伏擒将」的效果尚未收录，请在编辑器里补全效果与范围。",
+    "lv": [
+      "【待补】设伏擒将",
+      "【待补】设伏擒将",
+      "【待补】设伏擒将"
+    ],
+    "from_official": false,
+    "ed_placeholder": true
+  },
+  "pang_jianyan_3": {
+    "name": "别图后举",
+    "kind": "single",
+    "cd": 2.0,
+    "range": 2.0,
+    "radius": 0.0,
+    "mult": 1.0,
+    "desc": "【待补】官方原版中「别图后举」的效果尚未收录，请在编辑器里补全效果与范围。",
+    "lv": [
+      "【待补】别图后举",
+      "【待补】别图后举",
+      "【待补】别图后举"
+    ],
+    "from_official": false,
+    "ed_placeholder": true
+  },
+  "canglan_cao_cao_s2_1": {
+    "name": "突阵",
+    "kind": "single",
+    "cd": 2.0,
+    "range": 2.0,
+    "radius": 0.0,
+    "mult": 1.0,
+    "desc": "【待补】官方原版中「突阵」的效果尚未收录，请在编辑器里补全效果与范围。",
+    "lv": [
+      "【待补】突阵",
+      "【待补】突阵",
+      "【待补】突阵"
+    ],
+    "from_official": false,
+    "ed_placeholder": true
+  },
+  "canglan_cao_cao_s2_2": {
+    "name": "奋阵",
+    "kind": "single",
+    "cd": 2.0,
+    "range": 2.0,
+    "radius": 0.0,
+    "mult": 1.0,
+    "desc": "【待补】官方原版中「奋阵」的效果尚未收录，请在编辑器里补全效果与范围。",
+    "lv": [
+      "【待补】奋阵",
+      "【待补】奋阵",
+      "【待补】奋阵"
+    ],
+    "from_official": false,
+    "ed_placeholder": true
+  },
+  "canglan_cao_cao_s2_3": {
+    "name": "列阵",
+    "kind": "single",
+    "cd": 2.0,
+    "range": 2.0,
+    "radius": 0.0,
+    "mult": 1.0,
+    "desc": "【待补】官方原版中「列阵」的效果尚未收录，请在编辑器里补全效果与范围。",
+    "lv": [
+      "【待补】列阵",
+      "【待补】列阵",
+      "【待补】列阵"
+    ],
+    "from_official": false,
+    "ed_placeholder": true
+  },
+  "canglan_cao_cao_s3_1": {
+    "name": "展旗令",
+    "kind": "single",
+    "cd": 2.0,
+    "range": 2.0,
+    "radius": 0.0,
+    "mult": 1.0,
+    "desc": "【待补】官方原版中「展旗令」的效果尚未收录，请在编辑器里补全效果与范围。",
+    "lv": [
+      "【待补】展旗令",
+      "【待补】展旗令",
+      "【待补】展旗令"
+    ],
+    "from_official": false,
+    "ed_placeholder": true
+  },
+  "canglan_cao_cao_s3_2": {
+    "name": "擂鼓令",
+    "kind": "single",
+    "cd": 2.0,
+    "range": 2.0,
+    "radius": 0.0,
+    "mult": 1.0,
+    "desc": "【待补】官方原版中「擂鼓令」的效果尚未收录，请在编辑器里补全效果与范围。",
+    "lv": [
+      "【待补】擂鼓令",
+      "【待补】擂鼓令",
+      "【待补】擂鼓令"
+    ],
+    "from_official": false,
+    "ed_placeholder": true
+  },
+  "canglan_cao_cao_s3_3": {
+    "name": "鸣金令",
+    "kind": "single",
+    "cd": 2.0,
+    "range": 2.0,
+    "radius": 0.0,
+    "mult": 1.0,
+    "desc": "【待补】官方原版中「鸣金令」的效果尚未收录，请在编辑器里补全效果与范围。",
+    "lv": [
+      "【待补】鸣金令",
+      "【待补】鸣金令",
+      "【待补】鸣金令"
+    ],
+    "from_official": false,
+    "ed_placeholder": true
   }
 }

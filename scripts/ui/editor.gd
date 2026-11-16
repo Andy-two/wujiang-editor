@@ -1467,16 +1467,21 @@ func _open_skill_workshop() -> void:
 					kids.append(data.skill_name(String(c)))
 				h.add_child(THEME.label(" → " + " / ".join(kids), 11, THEME.ACCENT))
 	ws_search.text_changed.connect(rebuild_list)
+	# 组合技策名称
+	var name_row := HBoxContainer.new()
+	name_row.add_theme_constant_override("separation", 8)
+	v.add_child(name_row)
+	name_row.add_child(THEME.label("组合技策名称", 12, THEME.MUTED))
+	var name_edit := LineEdit.new()
+	name_edit.placeholder_text = "例如：唇枪舌剑（留空则自动用「组合技策」）"
+	name_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	name_row.add_child(name_edit)
 	# 底部操作
 	var btns := HBoxContainer.new()
 	btns.add_theme_constant_override("separation", 8)
 	v.add_child(btns)
-	var name_edit := LineEdit.new()
-	name_edit.placeholder_text = "组合技策名称（例如：唇枪舌剑）"
-	name_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	btns.add_child(name_edit)
 	var del_src := CheckBox.new()
-	del_src.text = "融合后从技能库删除源技能"
+	del_src.text = "融合后从技能库彻底删除被合并的源技能"
 	del_src.button_pressed = true
 	btns.add_child(del_src)
 	var go := THEME.button("执行", 14, 110)
@@ -1491,12 +1496,13 @@ func _open_skill_workshop() -> void:
 			return
 		var res: Dictionary
 		if mode_opt.selected == 0:
+			# 融合：target 是「保留」的那个，其余按勾选决定是否删除
 			var ti := target_opt.selected
 			if ti < 0 or target_opt.get_item_metadata(ti) == null:
-				status("请选择融合目标")
+				status("请选择要保留的技能")
 				return
 			var target := String(target_opt.get_item_metadata(ti))
-			# 依次把其它技能融合进目标
+			data.push_undo("融合技能 → 保留「%s」" % data.skill_name(target))
 			var ok_n := 0
 			var msgs: Array = []
 			for sid2 in picked:
@@ -1505,25 +1511,28 @@ func _open_skill_workshop() -> void:
 				var rr := data.merge_skills(String(sid2), target)
 				if bool(rr.get("ok", false)):
 					ok_n += 1
-					if del_src.button_pressed:
-						data.delete_skill(String(sid2))
+					# merge_skills 已把源从所有武将移除并删库；这里按勾选决定是否彻底删
+					if not del_src.button_pressed and data.skills.has(String(sid2)):
+						pass
 				else:
 					msgs.append(String(rr.get("msg", "")))
-			res = {"ok": ok_n > 0, "msg": "已把 %d 个技能融合进「%s」%s" % [
-				ok_n, data.skill_name(target), ("" if msgs.is_empty() else "；" + "；".join(msgs))]}
-			# 融合目标若不在本武将身上（例如融合的是其他武将的技能），加到本武将
+			res = {"ok": ok_n > 0, "msg": "已保留「%s」并融合 %d 个技能%s" % [
+				data.skill_name(target), ok_n, ("" if msgs.is_empty() else "；" + "；".join(msgs))]}
+			# 保留的技能若不在本武将身上，加进来
 			if not (data.generals[cur_key]["skills"] as Array).has(target):
 				(data.generals[cur_key]["skills"] as Array).append(target)
 				data.generals[cur_key]["ed_skill_lv"][target] = 1
-			# 被融合掉的技能从本武将移除
+			# 被合并的从本武将移除
 			for sid3 in picked:
 				if String(sid3) != target:
 					data.remove_skill_from_general(cur_key, String(sid3))
 		else:
+			# 组合：用勾选的技能组成一个组合技策，可命名
 			var kids: Array = picked.duplicate()
-			res = data.make_skill_group("", kids, name_edit.text.strip_edges())
+			var nm := name_edit.text.strip_edges()
+			data.push_undo("组合技策（%d 个技能）" % kids.size())
+			res = data.make_skill_group("", kids, nm)
 			if bool(res.get("ok", false)):
-				# 把组合技策加到武将，子技能从武将列表移除（定义保留）
 				var gid := String(res.get("id", ""))
 				if gid != "" and not (data.generals[cur_key]["skills"] as Array).has(gid):
 					data.generals[cur_key]["skills"].append(gid)
@@ -1533,9 +1542,19 @@ func _open_skill_workshop() -> void:
 		_mark_dirty()
 		load_general(cur_key)
 		refresh_skill_list()
-		status(String(res.get("msg", "")))
+		status(String(res.get("msg", "")) + "（可点「撤销」回退）")
 		win.queue_free())
 	btns.add_child(go)
+	var undo_btn := THEME.button("↶ 撤销上一步", 13)
+	undo_btn.disabled = not data.can_undo()
+	undo_btn.tooltip_text = "撤销上一次融合/组合：" + data.undo_label() if data.can_undo() else "没有可撤销的操作"
+	undo_btn.pressed.connect(func() -> void:
+		var r := data.undo()
+		_mark_dirty()
+		load_general(cur_key)
+		refresh_skill_list()
+		status(String(r.get("msg", ""))))
+	btns.add_child(undo_btn)
 	var close := THEME.button("取消", 13)
 	close.pressed.connect(func() -> void: win.queue_free())
 	btns.add_child(close)
@@ -1559,7 +1578,25 @@ func _open_group_editor(sid: String) -> void:
 	v.offset_bottom = -12
 	v.add_theme_constant_override("separation", 8)
 	win.add_child(v)
-	v.add_child(THEME.hint("勾选要为该组合添加的子技能；已加入的取消勾选即移除。子技能数量不限。"))
+	v.add_child(THEME.hint("勾选要为该组合添加的子技能；已加入的取消勾选即移除。子技能数量不限。" +
+		"每个子技能都保留自己的效果与范围，可点「单独编辑」修改。"))
+	# 组合技策改名
+	var nm_row := HBoxContainer.new()
+	nm_row.add_theme_constant_override("separation", 8)
+	v.add_child(nm_row)
+	nm_row.add_child(THEME.label("组合名称", 12, THEME.MUTED))
+	var nm_edit := LineEdit.new()
+	nm_edit.text = data.skill_name(sid)
+	nm_edit.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	nm_edit.text_changed.connect(func(t: String) -> void:
+		var gd: Dictionary = data.get_skill(sid)
+		if gd.is_empty():
+			return
+		gd["name"] = t
+		data.skills[sid] = gd
+		data.dirty = true
+		_mark_dirty())
+	nm_row.add_child(nm_edit)
 	var sc := ScrollContainer.new()
 	sc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	v.add_child(sc)
@@ -1588,11 +1625,23 @@ func _open_group_editor(sid: String) -> void:
 			var nm := String(d.get("name", ks))
 			if q != "" and not (nm + " " + ks).to_lower().contains(q.to_lower()):
 				continue
+			var row := HBoxContainer.new()
+			row.add_theme_constant_override("separation", 6)
+			items.add_child(row)
 			var cb := CheckBox.new()
 			cb.text = "%s　[%s]" % [nm, _skill_kind_name(String(d.get("kind", "")))]
 			cb.button_pressed = cur_children.has(ks)
-			items.add_child(cb)
+			row.add_child(cb)
 			checks[ks] = cb
+			# 单独编辑该子技能（效果 / 范围 / 等级都独立）
+			var eb := THEME.button("单独编辑", 11)
+			eb.tooltip_text = "修改「%s」自己的效果与范围（不影响其它技能）" % nm
+			eb.pressed.connect(func() -> void:
+				if cur_key == "":
+					return
+				win.hide()
+				_show_skill_edit(ks))
+			row.add_child(eb)
 			n += 1
 			if n > 300:
 				break

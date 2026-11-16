@@ -198,6 +198,58 @@ func load_all() -> bool:
 	return true
 
 
+# ------------------------------------------------------------
+# 撤销：技能合并 / 组合前保存快照，可回退
+# ------------------------------------------------------------
+var _undo_stack: Array = []
+
+
+func push_undo(label: String) -> void:
+	var snap := {
+		"label": label,
+		"generals": JSON.stringify(generals),
+		"skills": JSON.stringify(skills),
+		"talents": JSON.stringify(talents),
+		"order": order.duplicate(),
+	}
+	_undo_stack.append(snap)
+	# 最多保留 20 步
+	if _undo_stack.size() > 20:
+		_undo_stack.remove_at(0)
+
+
+func can_undo() -> bool:
+	return not _undo_stack.is_empty()
+
+
+func undo_label() -> String:
+	if _undo_stack.is_empty():
+		return ""
+	return String((_undo_stack[-1] as Dictionary).get("label", ""))
+
+
+# 回退一步，返回被撤销操作的说明
+func undo() -> Dictionary:
+	if _undo_stack.is_empty():
+		return {"ok": false, "msg": "没有可撤销的操作"}
+	var snap: Dictionary = _undo_stack.pop_back()
+	var g = JSON.parse_string(String(snap["generals"]))
+	var s = JSON.parse_string(String(snap["skills"]))
+	var t = JSON.parse_string(String(snap["talents"]))
+	if not (g is Dictionary) or not (s is Dictionary):
+		return {"ok": false, "msg": "快照损坏，无法撤销"}
+	generals.clear()
+	order.clear()
+	for k in (snap["order"] as Array):
+		var kk := String(k)
+		generals[kk] = _normalize_general(kk, (g as Dictionary).get(kk, {}))
+		order.append(kk)
+	skills = s
+	talents = t if t is Dictionary else {}
+	dirty = true
+	return {"ok": true, "msg": "已撤销：%s" % String(snap.get("label", ""))}
+
+
 func save_all() -> bool:
 	var ok := true
 	ok = _save_generals() and ok
