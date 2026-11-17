@@ -84,6 +84,11 @@ func add_unit(t: Dictionary, pos: Vector2i, side: int) -> Dictionary:
 		"wushuang": 0,
 		"zhanyi": 0,             # 战意（0~战意上限）
 		"zhanyi_max": 100,       # 战意上限
+		"counter_mul": 0.0,      # 反击伤害加成（+0.2 = +20%）
+		"counter_cut": 0.0,      # 受反击伤害减免
+		"counter_per_round": 1,  # 每回合可反击次数
+		"counter_used": 0,       # 本回合已反击次数
+		"form_state": {},        # 技能形态状态 {原技能id: 当前形态id}
 		"moved_tiles": 0,
 		"face": "down",          # 当前朝向
 		"anim": "idle",          # 当前动作
@@ -438,11 +443,19 @@ func basic_attack(attacker, target) -> Dictionary:
 		# 反击：目标若在自己的普攻范围内且是近战则反击（简化规则：普攻范围覆盖攻击者即反击）
 		# 若攻击方带「无法被反击」标记（技能 Lv3 等），则跳过反击
 		var no_counter := bool(attacker.get("no_counter", false))
-		if not no_counter and attack_area(target).has(attacker["pos"] - target["pos"]) and attacker["alive"]:
+		# 每回合反击次数限制
+		var can_counter := int(target.get("counter_used", 0)) < int(target.get("counter_per_round", 1))
+		if not no_counter and can_counter and attack_area(target).has(attacker["pos"] - target["pos"]) and attacker["alive"]:
 			_face_towards(target, attacker["pos"])
-			var back := RULEZ.roll_damage(target, attacker, RULEZ.get_f("mult_counter"),
+			target["counter_used"] = int(target.get("counter_used", 0)) + 1
+			# 反击增强：倍率加成
+			var c_mul := RULEZ.get_f("mult_counter") * (1.0 + float(target.get("counter_mul", 0.0)))
+			var back := RULEZ.roll_damage(target, attacker, c_mul,
 				RULEZ.arm_multiplier(String(target["arm"]), String(attacker["arm"])), {})
-			var bd := _apply_incoming(attacker, _apply_outgoing(target, int(back["dmg"])))
+			# 被反击方可能带减伤
+			var raw_bd := _apply_outgoing(target, int(back["dmg"]))
+			raw_bd = int(round(float(raw_bd) * (1.0 - float(attacker.get("counter_cut", 0.0)))))
+			var bd := _apply_incoming(attacker, raw_bd)
 			bd = mini(bd, int(attacker["hp"]))
 			attacker["hp"] = int(attacker["hp"]) - bd
 			_set_anim(target, "attack", String(target["face"]))
@@ -450,6 +463,9 @@ func basic_attack(attacker, target) -> Dictionary:
 			_set_anim(attacker, "hurt")
 			attacker["anim_hold"] = 0.35
 			_emit("%s 反击 %s：%d 伤害" % [target["name"], attacker["name"], bd], "hit")
+			# 反击时触发被动
+			passive_on("on_counter", target, {"target": attacker})
+			passive_on("on_be_countered", attacker, {"source": target})
 			if int(attacker["hp"]) <= 0:
 				_kill(attacker, target)
 	changed.emit()
@@ -614,6 +630,13 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 				for tgt_p in p_tgts:
 					if tgt_p["alive"]:
 						do_pursuit(u, tgt_p, fx)
+			RULEZ.SFX_COUNTER_UP:
+				# 反击增强：倍率/减伤/次数
+				counter_boost(u, float(fx.get("mul", 0.0)), float(fx.get("cut", 0.0)),
+					int(fx.get("per_round", 0)))
+			RULEZ.SFX_SWITCH:
+				# 技能形态切换
+				switch_form(u, sid, str(fx.get("to", "")))
 			RULEZ.SFX_ZHANYI:
 				# 战意：正数回复自身；负数降低敌军（作用范围内的敌军，无命中时取目标点单位）
 				var zv := int(fx.get("value", 10))
@@ -990,6 +1013,7 @@ func start_side(side: int) -> void:
 	for u in units:
 		if int(u["side"]) == side and u["alive"]:
 			u["done"] = false
+			u["counter_used"] = 0
 			for sid in (u["cd"] as Dictionary).keys():
 				u["cd"][sid] = maxi(0, int(u["cd"][sid]) - 1)
 			_tick_statuses(u)
@@ -1138,6 +1162,88 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 						_emit("  「%s」触发：%s 受到 %d 固定伤害" % [src, tgt["name"], fdmg], "hit")
 						if int(tgt["hp"]) <= 0:
 							_kill(tgt, u)
+
+
+# 反击增强（便捷入口，效果块与被动都会走这里）
+func counter_boost(u, mul: float = 0.0, cut: float = 0.0, per_round: int = 0) -> void:
+	if u == null or not u["alive"]:
+		return
+	if mul != 0.0:
+		u["counter_mul"] = float(u.get("counter_mul", 0.0)) + mul
+	if cut != 0.0:
+		u["counter_cut"] = clampf(float(u.get("counter_cut", 0.0)) + cut, 0.0, 1.0)
+	if per_round > 0:
+		u["counter_per_round"] = per_round
+	_emit("  → %s 反击增强（倍率%+.0f%%，受反击减伤%.0f%%，每回合%d次）" % [
+		u["name"], float(u.get("counter_mul", 0.0)) * 100.0,
+		float(u.get("counter_cut", 0.0)) * 100.0, int(u.get("counter_per_round", 1))], "info")
+
+
+# ------------------------------------------------------------
+# 技能形态切换（切换为 / 升级至）
+#   form_state: { 原始技能id: 当前形态id }
+#   switch_skill() 记录当前形态；skill_def_for() 取当前形态的定义
+# ------------------------------------------------------------
+func switch_form(u, from_sid: String, to_sid: String) -> void:
+	if u == null or not u["alive"]:
+		return
+	if to_sid == "":
+		return
+	var fs: Dictionary = u.get("form_state", {})
+	fs["_cur"] = to_sid
+	u["form_state"] = fs
+	var td: Dictionary = skill_def(to_sid)
+	_emit("  → %s 的技能切换为「%s」" % [u["name"], String(td.get("name", to_sid))], "info")
+
+
+# 取技能当前实际生效的定义（考虑了形态切换）
+#   单位只记录一个「当前形态」_cur；若 _cur 与 sid 属于同一条形态链，则用 _cur 的定义
+func skill_def_for(u, sid: String) -> Dictionary:
+	var fs: Dictionary = u.get("form_state", {}) if u.get("form_state") is Dictionary else {}
+	var cur := String(fs.get("_cur", ""))
+	if cur != "" and cur != sid and _same_form_chain(cur, sid):
+		var dc := skill_def(cur)
+		if not dc.is_empty():
+			return dc
+	var d0 := skill_def(sid)
+	return d0
+
+
+# 判断两个技能是否属于同一条形态链（直接或间接通过 switch_skill 相连）
+func _same_form_chain(a: String, b: String) -> bool:
+	if a == b:
+		return true
+	if _switch_target(a) == b or _switch_target(b) == a:
+		return true
+	# 两跳：a→x→b 或 b→x→a
+	var ta := _switch_target(a)
+	var tb := _switch_target(b)
+	if ta != "" and _switch_target(ta) == b:
+		return true
+	if tb != "" and _switch_target(tb) == a:
+		return true
+	# 同一基础链：都以同一个前缀开头（如 骁姿绝尘/·杰/·超）
+	var pa := a.split("_")[0]
+	var pb := b.split("_")[0]
+	if pa == pb and ("_jie" in a or "_chao" in a or "_jie" in b or "_chao" in b):
+		return true
+	return false
+
+
+func _switch_target(sid: String) -> String:
+	var d := skill_def(sid)
+	for f in RULEZ.skill_effects(d):
+		var fd: Dictionary = f
+		if str(fd.get("type", "")) == RULEZ.SFX_SWITCH:
+			return str(fd.get("to", ""))
+	return ""
+
+
+# 新回合开始时重置反击次数与形态（可保留形态，这里只重置反击次数）
+func _reset_turn_state(side: int) -> void:
+	for u in units:
+		if int(u["side"]) == side and u["alive"]:
+			u["counter_used"] = 0
 
 
 func next_side() -> void:

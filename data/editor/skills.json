@@ -1588,6 +1588,11 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "poshi_rulei",
+        "min_lv": 1.0
       }
     ],
     "range": 2.0,
@@ -3171,6 +3176,11 @@
         "value": "奋兵·壹",
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "zhao_zhanqianjun",
+        "min_lv": 1.0
       }
     ],
     "range": 3.0,
@@ -3233,6 +3243,11 @@
         "value": "虚弱·壹",
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "zhao_yundanu",
+        "min_lv": 1.0
       }
     ],
     "radius": 1.0,
@@ -4081,6 +4096,11 @@
         "type": "damage",
         "value": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_chao_baiche_jie",
+        "min_lv": 1.0
       }
     ],
     "range": 2.0,
@@ -4219,6 +4239,11 @@
         "turns": 1.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_chao_yiqi_jie",
+        "min_lv": 1.0
       }
     ],
     "range": 2.0,
@@ -4253,6 +4278,12 @@
         "type": "revive",
         "value": 0.5,
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_chao_xinbu_jie",
+        "min_lv": 1.0,
+        "trigger": "on_turn_end"
       }
     ]
   },
@@ -6936,6 +6967,12 @@
         "type": "damage",
         "value": 0.5,
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_yunlu_takuan_jie",
+        "min_lv": 1.0,
+        "trigger": "on_turn_end"
       }
     ],
     "range": 2.0,
@@ -6971,6 +7008,12 @@
         "value": "疾行·壹",
         "turns": 99.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_yunlu_xiaozi_jie",
+        "min_lv": 1.0,
+        "trigger": "on_turn_end"
       }
     ]
   },
@@ -6999,6 +7042,12 @@
         "value": "闪避",
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_yunlu_hongying_jie",
+        "min_lv": 1.0,
+        "trigger": "on_turn_end"
       }
     ]
   },
@@ -7068,6 +7117,11 @@
         "type": "buff",
         "value": "架设",
         "turns": 3.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "huang_zhengzhuang",
         "min_lv": 1.0
       }
     ],
@@ -7508,6 +7562,12 @@
         "min_lv": 1.0,
         "ignore_def": 0.0,
         "trigger": "on_hit"
+      },
+      {
+        "type": "switch_skill",
+        "to": "xingcai_fange",
+        "min_lv": 1.0,
+        "trigger": "on_turn_end"
       }
     ]
   },
@@ -7530,6 +7590,12 @@
         "turns": 1.0,
         "trigger": "on_hurt",
         "min_lv": 1.0
+      },
+      {
+        "type": "counter_up",
+        "min_lv": 1.0,
+        "mul": 0.1,
+        "trigger": "start"
       }
     ]
   },
@@ -9586,6 +9652,11 @@
         "value": "格挡",
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "zhao_deshenggui",
+        "min_lv": 1.0
       }
     ],
     "range": 3.0,
@@ -18093,6 +18164,12 @@
         "type": "self_heal",
         "value": 0.3,
         "min_lv": 3.0
+      },
+      {
+        "mul": 0.1,
+        "type": "counter_up",
+        "min_lv": 1.0,
+        "trigger": "start"
       }
     ]
   },
@@ -19349,6 +19426,12 @@
         "value": "疾行·壹",
         "turns": 99.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "counter_up",
+        "min_lv": 1.0,
+        "cut": 0.3,
+        "trigger": "start"
       }
     ]
   },
@@ -20488,6 +20571,12 @@
         "min_lv": 1.0,
         "ignore_def": 0.0,
         "trigger": "on_hit"
+      },
+      {
+        "type": "switch_skill",
+        "to": "xingcai_zhendun",
+        "min_lv": 1.0,
+        "trigger": "on_turn_end"
       }
     ]
   },
@@ -20514,6 +20603,11 @@
       {
         "type": "extra_move",
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "huang_jiashe",
+        "min_lv": 1.0
       }
     ]
   },
@@ -20536,6 +20630,12 @@
         "value": "闪避",
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_yunlu_hongying_chao",
+        "min_lv": 1.0,
+        "trigger": "on_turn_end"
       }
     ]
   },
@@ -20587,6 +20687,12 @@
         "min_lv": 1.0,
         "ignore_def": 0.0,
         "trigger": "on_hit"
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_yunlu_takuan_chao",
+        "min_lv": 1.0,
+        "trigger": "on_turn_end"
       }
     ]
   },
@@ -20638,6 +20744,12 @@
         "value": "疾行·壹",
         "turns": 99.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_yunlu_xiaozi_chao",
+        "min_lv": 1.0,
+        "trigger": "on_turn_end"
       }
     ]
   },
@@ -20723,6 +20835,11 @@
         "type": "damage",
         "value": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_chao_baiche_chao",
+        "min_lv": 1.0
       }
     ]
   },
@@ -20765,6 +20882,12 @@
         "type": "revive",
         "value": 0.5,
         "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_chao_xinbu_chao",
+        "min_lv": 1.0,
+        "trigger": "on_turn_end"
       }
     ]
   },
@@ -20826,6 +20949,11 @@
         "value": "破甲·贰",
         "turns": 1.0,
         "stacks": 1.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "ma_chao_yiqi_chao",
         "min_lv": 1.0
       }
     ]
@@ -20906,6 +21034,11 @@
         "value": "龙胆",
         "turns": 2.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "zhao_didan",
+        "min_lv": 1.0
       }
     ]
   },
@@ -20937,6 +21070,11 @@
         "value": "严阵·壹",
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "zhao_jiuwei",
+        "min_lv": 1.0
       }
     ]
   },
@@ -20972,6 +21110,11 @@
         "value": "格挡",
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "switch_skill",
+        "to": "zhao_touwei",
+        "min_lv": 1.0
       }
     ]
   },

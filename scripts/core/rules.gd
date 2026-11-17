@@ -581,13 +581,16 @@ const SFX_NO_COUNTER := "no_counter"  # 本次攻击无法被反击
 # —— P0 机制 ——
 const SFX_PURSUIT := "pursuit"        # 追击（附加一次额外伤害，不触发合击/反击）
 const SFX_ZHANYI := "zhanyi"          # 战意回复（正）/ 降低（负）
+# —— P1 机制 ——
+const SFX_COUNTER_UP := "counter_up"  # 反击增强（倍率/减伤/次数）
+const SFX_SWITCH := "switch_skill"    # 技能形态切换（切换为 / 升级至）
 
 const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_DISPEL, SFX_SELF_DISPEL, SFX_SELF_HEAL, SFX_CD_DOWN, SFX_EXTRA_MOVE,
 	SFX_DRAIN, SFX_SHIELD, SFX_DOT, SFX_HOT, SFX_STUN, SFX_TAUNT,
 	SFX_SILENCE, SFX_DISARM, SFX_SUMMON, SFX_TELEPORT, SFX_EXTRA_TURN,
 	SFX_REVIVE, SFX_CRIT_UP, SFX_LIFELINK, SFX_COPY_BUFF, SFX_STEAL_BUFF, SFX_FIXED,
-	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI]
+	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI, SFX_COUNTER_UP, SFX_SWITCH]
 const SFX_LABELS := {
 	SFX_DAMAGE: "造成伤害", SFX_HEAL: "治疗友军", SFX_DEBUFF: "施加减益状态",
 	SFX_BUFF: "施加增益状态", SFX_PUSH: "击退", SFX_DISPEL: "驱散敌方增益",
@@ -603,6 +606,8 @@ const SFX_LABELS := {
 	SFX_NO_COUNTER: "本次攻击无法被反击",
 	SFX_PURSUIT: "追击（附加一次伤害）",
 	SFX_ZHANYI: "战意变化",
+	SFX_COUNTER_UP: "反击增强",
+	SFX_SWITCH: "技能形态切换",
 }
 # 常用状态名（可自由输入其它名字）
 const COMMON_STATUS := ["低迷", "虚弱", "定身", "眩晕", "撕裂", "溃逃", "缴械", "封技",
@@ -757,6 +762,20 @@ static func sfx_text(fx: Dictionary) -> String:
 		SFX_ZHANYI:
 			var zv := int(fx.get("value", 10))
 			return ("回复 %d 点战意" % zv) if zv >= 0 else ("降低 %d 点战意" % -zv)
+		SFX_COUNTER_UP:
+			var parts: Array = []
+			var mul := float(fx.get("mul", 0.0))
+			if mul != 0.0:
+				parts.append("反击伤害%s%.0f%%" % ["+" if mul > 0.0 else "", mul * 100.0])
+			var cut := float(fx.get("cut", 0.0))
+			if cut != 0.0:
+				parts.append("受反击伤害-%.0f%%" % (cut * 100.0))
+			var per := int(fx.get("per_round", 0))
+			if per > 0:
+				parts.append("每回合可反击%d次" % per)
+			return "反击增强：" + ("、".join(parts) if not parts.is_empty() else "（无参数）")
+		SFX_SWITCH:
+			return "切换技能形态为「%s」" % String(fx.get("to", ""))
 	return t
 
 
