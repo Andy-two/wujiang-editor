@@ -1711,7 +1711,7 @@ func refresh_skill_list() -> void:
 			var kids: Array = []
 			for c in data.group_children(sid):
 				kids.append(data.skill_name(String(c)))
-			grp_info = "　⇄ 可选：" + " / ".join(kids)
+			grp_info = "　⇄ 可选：" + " / ".join(kids) + "　（升阶时子技能同步升级）"
 		var merged_info := ""
 		var name_lbl := THEME.label("%s  [%s%s]%s" % [
 			data.skill_name(sid), _skill_kind_name(kind),

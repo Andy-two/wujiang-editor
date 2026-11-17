@@ -469,6 +469,10 @@ func cast_skill(u, sid: String, target: Vector2i, choice: String = "") -> Dictio
 				"msg": "请在「%s」的子技能中选择一个" % String(d.get("name", sid))}
 		if not children.has(choice):
 			return {"ok": false, "msg": "所选技能不在该组内"}
+		# 组合技升阶 = 子技能同步升级：组本体的等级作为子技能等级下限
+		var host_lv := int(u["skill_lv"].get(sid, 1))
+		if host_lv > int(u["skill_lv"].get(choice, 1)):
+			u["skill_lv"][choice] = host_lv
 		# 用子技能执行：CD 记在子技能上
 		return _cast_one(u, choice, target, sid)
 	if String(d.get("kind", "")) == "passive":
