@@ -11580,19 +11580,47 @@
     ],
     "lv": [
       "对范围内的敌军造成物攻70%的伤害并施加「重创」和「断粮」，持续2回合。",
-      "对范围内的敌军造成物攻70%的伤害并施加「重创」和「断粮」，持续2回合。",
-      "对范围内的敌军造成物攻70%的伤害并施加「重创」和「断粮」，持续2回合。"
+      "对拥有「撕裂」的敌军额外施加「破甲·壹」，持续2回合。",
+      "「重创」和「断粮」改为持续3回合。"
     ],
     "from_official": true,
     "ed_fx_list": [
       {
         "type": "damage",
-        "value": 1.0,
-        "magic": false,
-        "times": 1.0,
-        "ignore_def": 0.0
+        "value": 0.7,
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "重创",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "断粮",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "破甲·壹",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "重创",
+        "turns": 3.0,
+        "stacks": 1.0,
+        "min_lv": 3.0
       }
-    ]
+    ],
+    "range": 2.0,
+    "radius": 1.0
   },
   "yj_pofu": {
     "name": "横扫",
@@ -16187,24 +16215,43 @@
     "name": "弧光掠影",
     "kind": "aoe",
     "cd": 3.0,
-    "range": 2.0,
+    "range": 3.0,
     "radius": 1.0,
     "icon": "res://assets/icons/skills/sk_1029402.png",
     "desc": "向前突进并达到技能范围最远的位置，对范围内的敌军造成物攻60%的伤害，并施加「牵制·贰」，持续2回合。",
     "lv": [
       "向前突进并达到技能范围最远的位置，对范围内的敌军造成物攻60%的伤害，并施加「牵制·贰」，持续2回合。",
-      "向前突进并达到技能范围最远的位置，对范围内的敌军造成物攻60%的伤害，并施加「牵制·贰」，持续2回合。",
-      "向前突进并达到技能范围最远的位置，对范围内的敌军造成物攻60%的伤害，并施加「牵制·贰」，持续2回合。"
+      "造成伤害前对敌军施加「破甲·壹」，持续2回合。",
+      "对带有「牵制」的敌军额外施加「牵制·肆」，持续1回合。"
     ],
     "generic": false,
     "from_official": true,
     "ed_fx_list": [
       {
         "type": "damage",
-        "value": 1.0,
-        "magic": false,
-        "times": 1.0,
-        "ignore_def": 0.0
+        "value": 0.6,
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "牵制·贰",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "破甲·壹",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "牵制·肆",
+        "turns": 1.0,
+        "stacks": 1.0,
+        "min_lv": 3.0
       }
     ]
   },
