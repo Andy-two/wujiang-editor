@@ -584,13 +584,21 @@ const SFX_ZHANYI := "zhanyi"          # 战意回复（正）/ 降低（负）
 # —— P1 机制 ——
 const SFX_COUNTER_UP := "counter_up"  # 反击增强（倍率/减伤/次数）
 const SFX_SWITCH := "switch_skill"    # 技能形态切换（切换为 / 升级至）
+# —— P2 机制 ——
+const SFX_RESOURCE := "resource"      # 资源层数（智/深谋/斗气/机巧/备战/武魂…）
+const SFX_CONSUME := "consume"        # 消耗资源
+const SFX_ZOC := "zoc"                # 阻挡领域（ZOC）
 
 const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_DISPEL, SFX_SELF_DISPEL, SFX_SELF_HEAL, SFX_CD_DOWN, SFX_EXTRA_MOVE,
 	SFX_DRAIN, SFX_SHIELD, SFX_DOT, SFX_HOT, SFX_STUN, SFX_TAUNT,
 	SFX_SILENCE, SFX_DISARM, SFX_SUMMON, SFX_TELEPORT, SFX_EXTRA_TURN,
 	SFX_REVIVE, SFX_CRIT_UP, SFX_LIFELINK, SFX_COPY_BUFF, SFX_STEAL_BUFF, SFX_FIXED,
-	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI, SFX_COUNTER_UP, SFX_SWITCH]
+	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI, SFX_COUNTER_UP, SFX_SWITCH,
+	SFX_RESOURCE, SFX_CONSUME, SFX_ZOC]
+
+# 资源名（用于层数系统）
+const RESOURCES := ["智", "深谋", "斗气", "机巧", "备战", "武魂", "凤羽", "凤衣", "威严", "被动层数"]
 const SFX_LABELS := {
 	SFX_DAMAGE: "造成伤害", SFX_HEAL: "治疗友军", SFX_DEBUFF: "施加减益状态",
 	SFX_BUFF: "施加增益状态", SFX_PUSH: "击退", SFX_DISPEL: "驱散敌方增益",
@@ -608,6 +616,9 @@ const SFX_LABELS := {
 	SFX_ZHANYI: "战意变化",
 	SFX_COUNTER_UP: "反击增强",
 	SFX_SWITCH: "技能形态切换",
+	SFX_RESOURCE: "资源层数",
+	SFX_CONSUME: "消耗资源",
+	SFX_ZOC: "阻挡领域",
 }
 # 常用状态名（可自由输入其它名字）
 const COMMON_STATUS := ["低迷", "虚弱", "定身", "眩晕", "撕裂", "溃逃", "缴械", "封技",
@@ -689,6 +700,16 @@ static func default_sfx(type: String) -> Dictionary:
 			return {"type": type, "value": 0.5, "magic": false, "ignore_def": 0.0}
 		SFX_ZHANYI:
 			return {"type": type, "value": 10}
+		SFX_COUNTER_UP:
+			return {"type": type, "mul": 0.1, "cut": 0.0, "per_round": 0}
+		SFX_SWITCH:
+			return {"type": type, "to": ""}
+		SFX_RESOURCE:
+			return {"type": type, "name": "", "value": 1, "max": 99}
+		SFX_CONSUME:
+			return {"type": type, "name": ""}
+		SFX_ZOC:
+			return {"type": type, "value": 1}
 		_:
 			return {"type": type, "value": 0}
 
@@ -776,6 +797,14 @@ static func sfx_text(fx: Dictionary) -> String:
 			return "反击增强：" + ("、".join(parts) if not parts.is_empty() else "（无参数）")
 		SFX_SWITCH:
 			return "切换技能形态为「%s」" % String(fx.get("to", ""))
+		SFX_RESOURCE:
+			var rn := String(fx.get("name", ""))
+			var rv := int(fx.get("value", 1))
+			return ("获得 %d 层「%s」" % [rv, rn]) if rv >= 0 else ("失去 %d 层「%s」" % [-rv, rn])
+		SFX_CONSUME:
+			return "消耗所有「%s」" % String(fx.get("name", ""))
+		SFX_ZOC:
+			return "获得 %d 格「阻挡领域」" % int(fx.get("value", 1))
 	return t
 
 

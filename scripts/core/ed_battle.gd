@@ -89,6 +89,8 @@ func add_unit(t: Dictionary, pos: Vector2i, side: int) -> Dictionary:
 		"counter_per_round": 1,  # 每回合可反击次数
 		"counter_used": 0,       # 本回合已反击次数
 		"form_state": {},        # 技能形态状态 {原技能id: 当前形态id}
+		"res": {},               # 资源层数 {"智": 0, "深谋": 0, ...}
+		"zoc": 0,                # 阻挡领域格数（0=无）
 		"moved_tiles": 0,
 		"face": "down",          # 当前朝向
 		"anim": "idle",          # 当前动作
@@ -385,7 +387,20 @@ func effect_cells_at(u, sid: String, target: Vector2i) -> Array:
 func move_cells(u) -> Dictionary:
 	var occ := occupied()
 	occ.erase(u["pos"])
-	return RULEZ.reachable(u["pos"], int(u["move"]), occ)
+	var cells := RULEZ.reachable(u["pos"], int(u["move"]), occ)
+	# 阻挡领域（ZOC）：进入敌方 ZOC 的格子会消耗全部剩余移动力（该格可进，但不能再往外走）
+	if not cells.is_empty():
+		var side := int(u["side"])
+		var z_blocks := {}
+		for cell in cells.keys():
+			if is_in_enemy_zoc(cell, side):
+				z_blocks[cell] = true
+		if not z_blocks.is_empty():
+			# 重新计算：ZOC 格子可达但代价视为最大
+			var max_cost := int(u["move"])
+			for zc in z_blocks.keys():
+				cells[zc] = maxi(int(cells.get(zc, max_cost)), max_cost)
+	return cells
 
 
 func try_move(u, dest: Vector2i) -> Dictionary:
@@ -401,6 +416,9 @@ func try_move(u, dest: Vector2i) -> Dictionary:
 	_set_anim(u, "walk", String(u["face"]))
 	u["anim_hold"] = 0.5
 	_emit("%s 移动到 (%d,%d)" % [u["name"], dest.x, dest.y], "info")
+	if is_in_enemy_zoc(dest, int(u["side"])):
+		_emit("  → 进入敌方「阻挡领域」，移动力耗尽", "info")
+	passive_on("on_move", u, {"tiles": int(u["moved_tiles"])})
 	return {"ok": true}
 
 
@@ -637,6 +655,20 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 			RULEZ.SFX_SWITCH:
 				# 技能形态切换
 				switch_form(u, sid, str(fx.get("to", "")))
+			RULEZ.SFX_RESOURCE:
+				# 资源层数
+				var rname := str(fx.get("name", ""))
+				var rval := int(fx.get("value", 1))
+				var rmax := int(fx.get("max", 99))
+				if rname != "":
+					add_resource(u, rname, rval, rmax)
+			RULEZ.SFX_CONSUME:
+				var cname := str(fx.get("name", ""))
+				if cname != "":
+					consume_resource(u, cname)
+			RULEZ.SFX_ZOC:
+				u["zoc"] = maxi(int(u.get("zoc", 0)), int(fx.get("value", 1)))
+				_emit("  → %s 获得 %d 格「阻挡领域」" % [u["name"], int(u["zoc"])], "info")
 			RULEZ.SFX_ZHANYI:
 				# 战意：正数回复自身；负数降低敌军（作用范围内的敌军，无命中时取目标点单位）
 				var zv := int(fx.get("value", 10))
@@ -1177,6 +1209,75 @@ func counter_boost(u, mul: float = 0.0, cut: float = 0.0, per_round: int = 0) ->
 	_emit("  → %s 反击增强（倍率%+.0f%%，受反击减伤%.0f%%，每回合%d次）" % [
 		u["name"], float(u.get("counter_mul", 0.0)) * 100.0,
 		float(u.get("counter_cut", 0.0)) * 100.0, int(u.get("counter_per_round", 1))], "info")
+
+
+# ------------------------------------------------------------
+# 资源层数系统（智 / 深谋 / 斗气 / 机巧 / 备战 / 武魂 …）
+#   单位 res: {"智": 2, "深谋": 7, ...}
+# ------------------------------------------------------------
+func add_resource(u, name: String, delta: int, max_n: int = 99) -> void:
+	if u == null or not u["alive"] or name == "":
+		return
+	var r: Dictionary = u.get("res", {}) if u.get("res") is Dictionary else {}
+	var old := int(r.get(name, 0))
+	var nv := clampi(old + int(delta), 0, maxi(1, max_n))
+	r[name] = nv
+	u["res"] = r
+	if nv != old:
+		_emit("  → %s「%s」%+d（现 %d 层）" % [u["name"], name, nv - old, nv], "info")
+	if delta > 0 and nv != old:
+		passive_on("on_resource", u, {"res": name, "value": nv})
+
+
+func get_resource(u, name: String) -> int:
+	if u == null:
+		return 0
+	var r: Dictionary = u.get("res", {}) if u.get("res") is Dictionary else {}
+	return int(r.get(name, 0))
+
+
+func consume_resource(u, name: String) -> int:
+	var n := get_resource(u, name)
+	if n <= 0:
+		return 0
+	var r: Dictionary = u.get("res", {})
+	r[name] = 0
+	u["res"] = r
+	_emit("  → %s 消耗所有「%s」（%d 层）" % [u["name"], name, n], "info")
+	return n
+
+
+# ------------------------------------------------------------
+# 阻挡领域（ZOC）
+#   zoc = N 表示周围 N 格内敌军移动进入时会被拦截（消耗全部移动力）
+# ------------------------------------------------------------
+func zoc_cells_of(u) -> Array:
+	var n := int(u.get("zoc", 0))
+	if n <= 0 or not u["alive"]:
+		return []
+	var out: Array = []
+	var p: Vector2i = u["pos"]
+	for dy in range(-n, n + 1):
+		for dx in range(-n, n + 1):
+			if dx == 0 and dy == 0:
+				continue
+			if absi(dx) + absi(dy) <= n:
+				out.append(p + Vector2i(dx, dy))
+	return out
+
+
+# 某格是否处于任一敌军的阻挡领域内
+func is_in_enemy_zoc(pos: Vector2i, mover_side: int) -> bool:
+	for u in units:
+		if not u["alive"] or int(u["side"]) == mover_side:
+			continue
+		if int(u.get("zoc", 0)) <= 0:
+			continue
+		var d: Vector2i = pos - u["pos"]
+		if absi(d.x) + absi(d.y) <= int(u["zoc"]):
+			if d != Vector2i.ZERO:
+				return true
+	return false
 
 
 # ------------------------------------------------------------

@@ -558,6 +558,11 @@
         "value": "坚壁",
         "turns": 99.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -898,6 +903,14 @@
         "type": "self_heal",
         "value": 0.15,
         "min_lv": 3.0
+      },
+      {
+        "type": "resource",
+        "name": "威严",
+        "value": 1.0,
+        "max": 99.0,
+        "min_lv": 1.0,
+        "trigger": "on_hit"
       }
     ]
   },
@@ -1743,6 +1756,11 @@
       {
         "type": "extra_turn",
         "min_lv": 3.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
+        "min_lv": 1.0
       }
     ],
     "range": 3.0,
@@ -2709,6 +2727,13 @@
       {
         "type": "damage",
         "value": 0.9,
+        "min_lv": 1.0
+      },
+      {
+        "type": "resource",
+        "name": "斗气",
+        "value": 2.0,
+        "max": 99.0,
         "min_lv": 1.0
       }
     ]
@@ -4517,6 +4542,11 @@
         "value": "寒步",
         "turns": 3.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
+        "min_lv": 1.0
       }
     ],
     "range": 3.0,
@@ -6540,6 +6570,11 @@
         "value": "坚壁",
         "turns": 99.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -7520,6 +7555,13 @@
         "value": "嘲讽",
         "turns": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "resource",
+        "name": "凤羽",
+        "value": 1.0,
+        "max": 99.0,
+        "min_lv": 1.0
       }
     ],
     "range": 3.0,
@@ -7739,6 +7781,11 @@
         "type": "buff",
         "value": "坚壁",
         "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
         "min_lv": 1.0
       }
     ]
@@ -9513,6 +9560,11 @@
         "value": "坚壁",
         "turns": 99.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -10939,6 +10991,11 @@
         "type": "buff",
         "value": "坚壁",
         "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
         "min_lv": 1.0
       }
     ]
@@ -12555,6 +12612,14 @@
         "turns": 99.0,
         "stacks": 3.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "resource",
+        "name": "深谋",
+        "value": 3.0,
+        "max": 99.0,
+        "min_lv": 1.0,
+        "trigger": "on_hit"
       }
     ]
   },
@@ -16529,6 +16594,11 @@
         "type": "push",
         "value": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -16698,6 +16768,11 @@
       {
         "type": "extra_move",
         "min_lv": 3.0
+      },
+      {
+        "type": "consume",
+        "name": "智",
+        "min_lv": 1.0
       }
     ]
   },
@@ -18334,6 +18409,14 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "resource",
+        "name": "备战",
+        "value": 1.0,
+        "max": 99.0,
+        "min_lv": 1.0,
+        "trigger": "on_hit"
       }
     ],
     "range": 2.0,
@@ -18393,6 +18476,11 @@
         "value": "灼烧",
         "turns": 2.0,
         "stacks": 1.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
         "min_lv": 1.0
       }
     ]
@@ -19333,6 +19421,11 @@
         "type": "stun",
         "value": 1.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "consume",
+        "name": "智",
+        "min_lv": 1.0
       }
     ]
   },
@@ -19644,6 +19737,11 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -20577,6 +20675,14 @@
         "to": "xingcai_zhendun",
         "min_lv": 1.0,
         "trigger": "on_turn_end"
+      },
+      {
+        "type": "resource",
+        "name": "凤羽",
+        "value": 1.0,
+        "max": 99.0,
+        "min_lv": 1.0,
+        "trigger": "on_hit"
       }
     ]
   },
@@ -21200,6 +21306,14 @@
         "type": "crit_up",
         "turns": 3.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "resource",
+        "name": "深谋",
+        "value": 3.0,
+        "max": 99.0,
+        "min_lv": 1.0,
+        "trigger": "on_hit"
       }
     ]
   },
