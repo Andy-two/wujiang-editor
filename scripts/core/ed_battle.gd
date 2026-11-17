@@ -82,6 +82,8 @@ func add_unit(t: Dictionary, pos: Vector2i, side: int) -> Dictionary:
 		"extra_action": false,
 		"douqi": 0,
 		"wushuang": 0,
+		"zhanyi": 0,             # 战意（0~战意上限）
+		"zhanyi_max": 100,       # 战意上限
 		"moved_tiles": 0,
 		"face": "down",          # 当前朝向
 		"anim": "idle",          # 当前动作
@@ -602,6 +604,43 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 			RULEZ.SFX_NO_COUNTER:
 				u["no_counter"] = true
 				_emit("  → 本次攻击无法被反击", "info")
+			RULEZ.SFX_PURSUIT:
+				# 追击：对作用范围内的敌军追加一次伤害（不触发反击）
+				var p_tgts: Array = foes if not foes.is_empty() else []
+				if p_tgts.is_empty() and target != Vector2i(-1, -1):
+					var pt = unit_at(target)
+					if pt != null:
+						p_tgts = [pt]
+				for tgt_p in p_tgts:
+					if tgt_p["alive"]:
+						do_pursuit(u, tgt_p, fx)
+			RULEZ.SFX_ZHANYI:
+				# 战意：正数回复自身；负数降低敌军（作用范围内的敌军，无命中时取目标点单位）
+				var zv := int(fx.get("value", 10))
+				if zv >= 0:
+					add_zhanyi(u, zv)
+				else:
+					var z_tgts: Array = foes if not foes.is_empty() else []
+					if z_tgts.is_empty() and target != Vector2i(-1, -1):
+						var zt = unit_at(target)
+						if zt != null:
+							z_tgts = [zt]
+					if z_tgts.is_empty():
+						# 仍未命中则取全场最近的敌军
+						var near = null
+						var nd := 99
+						for t2 in units:
+							if not t2["alive"] or int(t2["side"]) == int(u["side"]):
+								continue
+							var dd := absi(t2["pos"].x - target.x) + absi(t2["pos"].y - target.y)
+							if dd < nd:
+								nd = dd
+								near = t2
+						if near != null:
+							z_tgts = [near]
+					for tgt_z in z_tgts:
+						if tgt_z["alive"]:
+							add_zhanyi(tgt_z, zv)
 			RULEZ.SFX_FIXED:
 				# 固伤：无视防御与常规增减伤，只吃固伤增伤
 				for tgt_f in foes:
@@ -715,6 +754,67 @@ func _find_dead_ally(side: int):
 		if not u["alive"] and int(u["side"]) == side:
 			return u
 	return null
+
+
+# ------------------------------------------------------------
+# 战意系统
+# ------------------------------------------------------------
+func add_zhanyi(u, delta: int) -> void:
+	if u == null or not u["alive"]:
+		return
+	var old := int(u.get("zhanyi", 0))
+	var mx := int(u.get("zhanyi_max", 100))
+	u["zhanyi"] = clampi(old + int(delta), 0, mx)
+	var now := int(u["zhanyi"])
+	if now == old:
+		return
+	if delta > 0:
+		_emit("  → %s 战意 +%d（%d/%d）" % [u["name"], now - old, now, mx], "info")
+	else:
+		_emit("  → %s 战意 %d（%d/%d）" % [u["name"], now - old, now, mx], "info")
+	# 获得战意时的被动触发（如「临阵决机」每获得10点战意得1层备战）
+	if delta > 0:
+		passive_on("on_zhanyi", u, {"delta": delta})
+
+
+# 对范围内战意最高的敌军吸战意
+func steal_zhanyi_from(u, amount: int) -> void:
+	if u == null or not u["alive"]:
+		return
+	var best = null
+	var best_z := -1
+	for t in units:
+		if not t["alive"] or int(t["side"]) == int(u["side"]):
+			continue
+		if int(t.get("zhanyi", 0)) > best_z:
+			best_z = int(t["zhanyi"])
+			best = t
+	if best == null:
+		return
+	add_zhanyi(best, -amount)
+	add_zhanyi(u, amount)
+
+
+# ------------------------------------------------------------
+# 追击：附加一次伤害，不触发反击/合击，可叠加多段
+# ------------------------------------------------------------
+func do_pursuit(u, tgt, fx: Dictionary) -> int:
+	if u == null or tgt == null or not u["alive"] or not tgt["alive"]:
+		return 0
+	var magic := bool(fx.get("magic", false))
+	var am := RULEZ.arm_multiplier(String(u["arm"]), String(tgt["arm"]))
+	var res := RULEZ.roll_damage(u, tgt, float(fx.get("value", 0.5)), am, {
+		"magic": magic, "ignore_def": float(fx.get("ignore_def", 0.0)),
+		"no_counter": true,
+	})
+	var dmg := _apply_incoming(tgt, _apply_outgoing(u, int(res["dmg"])))
+	dmg = mini(dmg, int(tgt["hp"]))
+	tgt["hp"] = int(tgt["hp"]) - dmg
+	_emit("  → 追击 %s：%d 伤害%s" % [tgt["name"], dmg, "（暴击）" if res["crit"] else ""], "hit")
+	if int(tgt["hp"]) <= 0:
+		_kill(tgt, u)
+		passive_on("on_kill", u, {"target": tgt})
+	return dmg
 
 
 func _apply_outgoing(u, dmg: int) -> int:
