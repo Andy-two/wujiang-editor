@@ -153,5 +153,6 @@
     "mei": 1.0,
     "cap": 100.0
   },
-  "fortune_per_mei": 1.0
+  "fortune_per_mei": 1.0,
+  "max_skill_lv": 4.0
 }

@@ -1722,7 +1722,7 @@ func refresh_skill_list() -> void:
 		row.add_child(name_lbl)
 		var lv_sp := SpinBox.new()
 		lv_sp.min_value = 1
-		lv_sp.max_value = 3
+		lv_sp.max_value = RULEZ.max_skill_lv()
 		lv_sp.value = int((g.get("ed_skill_lv", {}) as Dictionary).get(sid, 1))
 		lv_sp.custom_minimum_size = Vector2(70, 0)
 		lv_sp.prefix = "Lv"
@@ -1954,32 +1954,38 @@ func _show_skill_edit(sid: String) -> void:
 		_mark_dirty())
 	box.add_child(desc)
 	var lv_row := HBoxContainer.new()
-	lv_row.add_child(THEME.label("升级文案（Lv1 / Lv2 / Lv3）", 13, THEME.MUTED))
+	var max_lv := RULEZ.max_skill_lv()
+	var lv_names: Array = []
+	for i2 in max_lv:
+		lv_names.append("Lv%d" % (i2 + 1))
+	lv_row.add_child(THEME.label("升级文案（%s）" % " / ".join(lv_names), 13, THEME.MUTED))
 	box.add_child(lv_row)
 	var lvs: Array = d.get("lv", [])
 	if not (lvs is Array):
 		lvs = []
-	for i in 3:
+	for i in max_lv:
 		var e := LineEdit.new()
-		e.placeholder_text = "Lv%d 效果说明" % (i + 1)
+		e.placeholder_text = "Lv%d 效果说明%s" % [i + 1, "（四阶预留，留空则沿用三阶）" if i >= 3 else ""]
 		e.text = String(lvs[i]) if i < lvs.size() else ""
+		var idx_i := i
 		e.text_changed.connect(func() -> void:
 			var arr: Array = d.get("lv", [])
-			while arr.size() < 3:
+			while arr.size() <= idx_i:
 				arr.append("")
-			arr[i] = e.text
+			arr[idx_i] = e.text
 			d["lv"] = arr
 			_mark_dirty())
 		box.add_child(e)
 	box.add_child(THEME.sep())
-	# 升阶文案是累积生效的：Lv2 的说明对 2/3 级都有效，Lv3 的只在 3 级
+	# 升阶文案是累积生效的：Lv2 的说明对 2 级及以上都有效
 	var sum := THEME.label("当前 Lv%d 生效（逐级累积）：\n%s" % [lv, _lv_text_stack(d, lv)], 13, THEME.GOOD)
 	sum.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(sum)
-	var sum2 := THEME.label("升级到 Lv%d 后新增：%s" % [mini(lv + 1, 3), _lv_text(d, mini(lv + 1, 3))], 13, THEME.ORANGE)
+	var nxt := mini(lv + 1, max_lv)
+	var sum2 := THEME.label("升级到 Lv%d 后新增：%s" % [nxt, _lv_text(d, nxt)], 13, THEME.ORANGE)
 	sum2.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	box.add_child(sum2)
-	box.add_child(THEME.hint("升阶规则：Lv2 写的内容对 2、3 级都生效；Lv3 写的只对 3 级生效。技能范围同理（Lv2 画的范围 2/3 级共用，Lv3 单独画才只在 3 级生效）。"))
+	box.add_child(THEME.hint("升阶规则：写在哪一级，就从那一级起一直生效到满级。当前技能等级上限 Lv%d（可在「⑪ 全局设定」调整，四阶为预留位）。" % max_lv))
 	var range_sum := THEME.hint(_range_summary(sid))
 	box.add_child(range_sum)
 	# ---------- 效果块编辑器（真正改效果，而不只是改描述） ----------
@@ -2498,7 +2504,7 @@ func _lv_text_stack(d: Dictionary, lv: int) -> String:
 	var base := String(d.get("desc", ""))
 	if base != "" and not lvs.is_empty():
 		lines.append("· Lv1：%s" % base)
-	for i in range(1, mini(lv, 3)):
+	for i in range(1, mini(lv, RULEZ.max_skill_lv())):
 		if i < lvs.size():
 			var t := String(lvs[i])
 			# Lv1 那一行是完整描述，从 Lv2 起才是"升阶新增"
@@ -2508,10 +2514,8 @@ func _lv_text_stack(d: Dictionary, lv: int) -> String:
 
 
 func _lv_text(d: Dictionary, lv: int) -> String:
-	var lvs: Array = d.get("lv", [])
-	if lv - 1 < lvs.size() and lv - 1 >= 0:
-		return String(lvs[lv - 1])
-	return String(d.get("desc", ""))
+	return RULEZ.skill_text_at(d, lv)
+
 func _grid_line(grid: Control, label: String, value: String) -> void:
 	var l := THEME.label(value, 13, THEME.MUTED)
 	l.clip_text = true
@@ -4157,6 +4161,7 @@ func _page_settings() -> Control:
 	var g1 := VBoxContainer.new()
 	s1.add_child(g1)
 	_set_spin(g1, "等级上限", "max_level", 1, 200)
+	_set_spin(g1, "技能等级上限（4=启用四阶预留）", "max_skill_lv", 1, 9)
 	_set_spin(g1, "星级上限", "max_star", 1, 20)
 	_set_spin(g1, "每星全属性 %", "star_stat_pct", 0, 100, 0.01, true)
 	_set_spin(g1, "每星额外兵力", "star_hp_bonus", 0, 500)

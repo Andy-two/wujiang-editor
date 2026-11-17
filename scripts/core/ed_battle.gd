@@ -424,8 +424,14 @@ func basic_attack(attacker, target) -> Dictionary:
 	_set_anim(target, "hurt")
 	target["anim_hold"] = 0.35
 	_emit("%s 普攻 %s：%d 伤害%s" % [attacker["name"], target["name"], dmg, "（暴击）" if res["crit"] else ""], "hit")
+	# 被动触发：暴击 / 造成伤害 / 受击
+	if bool(res["crit"]):
+		passive_on("on_crit", attacker, {"target": target})
+	passive_on("on_hit", attacker, {"target": target})
+	passive_on("on_hurt", target, {"source": attacker})
 	if int(target["hp"]) <= 0:
 		_kill(target, attacker)
+		passive_on("on_kill", attacker, {"target": target})
 	else:
 		# 反击：目标若在自己的普攻范围内且是近战则反击（简化规则：普攻范围覆盖攻击者即反击）
 		# 若攻击方带「无法被反击」标记（技能 Lv3 等），则跳过反击
@@ -543,8 +549,13 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 							tgt["anim_hold"] = 0.35
 						_emit("%s 施放「%s」，%s 受到 %d 伤害%s" % [u["name"], sname, tgt["name"], dmg,
 							"（暴击）" if res["crit"] else ""], "hit")
+						# 被动触发（技能伤害同样触发）
+						if bool(res["crit"]):
+							passive_on("on_crit", u, {"target": tgt})
+						passive_on("on_hurt", tgt, {"source": u})
 						if int(tgt["hp"]) <= 0:
 							_kill(tgt, u)
+							passive_on("on_kill", u, {"target": tgt})
 			RULEZ.SFX_HEAL:
 				var pool2: Array = allies if not allies.is_empty() else [u]
 				for tgt2 in pool2:
@@ -871,10 +882,11 @@ func start_side(side: int) -> void:
 	ended = false
 	result = ""
 	turn_side = side
-	# 第 1 回合开始：应用天赋效果（按天赋等级过滤）
+	# 第 1 回合开始：应用天赋效果（按天赋等级过滤）+ 被动技能开局效果
 	if round_no == 1 and side == 0 and not _talent_applied:
 		_talent_applied = true
 		_apply_talent_effects()
+		_apply_passive_startup()
 	for u in units:
 		if int(u["side"]) == side and u["alive"]:
 			u["done"] = false
@@ -919,6 +931,113 @@ func _apply_talent_effects() -> void:
 		if not fx_list.is_empty():
 			_emit("%s 的天赋「%s」(Lv%d) 生效：%d 个效果" % [u["name"],
 				String(td.get("name", tid)), lv, fx_list.size()], "info")
+
+# ============================================================
+# 被动技能系统
+#   被动技能的 ed_fx_list 会被收集为「常驻被动」，按类型分三种处理：
+#   ① 开局型（buff/shield）：战斗开始时对自身生效
+#   ② 属性型（passive_stat）：直接加成到面板（在 unit_template 里算）
+#   ③ 触发型：由引擎在各个时机调用 passive_on(event, u, ctx)
+# ============================================================
+var _passive_cache: Dictionary = {}
+
+
+# 收集某单位的全部被动效果（按技能等级过滤）
+func unit_passives(u) -> Array:
+	var key := "%s|%d" % [String(u.get("key", "")), int(u.get("id", 0))]
+	if _passive_cache.has(key):
+		return _passive_cache[key]
+	var out: Array = []
+	for sid in (u.get("skills", []) as Array):
+		var d := skill_def(String(sid))
+		if d.is_empty() or String(d.get("kind", "")) != "passive":
+			continue
+		var lv := int(u["skill_lv"].get(String(sid), 1))
+		for fx in RULEZ.effects_for_level(RULEZ.skill_effects(d), lv):
+			var fd: Dictionary = fx
+			var cp := fd.duplicate(true)
+			cp["_from"] = String(d.get("name", sid))
+			out.append(cp)
+	_passive_cache[key] = out
+	return out
+
+
+# 战斗开始时应用「开局型」被动
+func _apply_passive_startup() -> void:
+	for u in units:
+		if not u["alive"]:
+			continue
+		var ps := unit_passives(u)
+		var n := 0
+		for fx in ps:
+			var fd: Dictionary = fx
+			var t := str(fd.get("type", ""))
+			match t:
+				RULEZ.SFX_BUFF:
+					var bn := str(fd.get("value", ""))
+					if bn != "":
+						_add_buff(u, bn, int(fd.get("turns", 99)), int(fd.get("stacks", 1)))
+						n += 1
+				RULEZ.SFX_SHIELD:
+					_add_buff(u, "护盾", int(fd.get("turns", 99)), int(fd.get("value", 50)))
+					n += 1
+				RULEZ.SFX_CRIT_UP:
+					_add_buff(u, "强运", int(fd.get("turns", 99)), 1)
+					n += 1
+				RULEZ.SFX_SELF_HEAL:
+					var sh := int(round(float(u["max_hp"]) * float(fd.get("value", 0.1))))
+					u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + sh)
+					n += 1
+		if n > 0:
+			_emit("%s 的被动生效：%d 项（开局型）" % [u["name"], n], "info")
+
+
+# 触发型被动：在指定时机检查并执行
+#   event: "on_crit"(暴击后) / "on_hit"(造成伤害后) / "on_hurt"(受伤后)
+#          / "on_kill"(击杀后) / "on_turn_end"(行动结束) / "on_move"(移动后)
+func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
+	if u == null or not u["alive"]:
+		return
+	for fx in unit_passives(u):
+		var fd: Dictionary = fx
+		var trig := str(fd.get("trigger", ""))
+		if trig != event:
+			continue
+		var t := str(fd.get("type", ""))
+		var src := str(fd.get("_from", ""))
+		match t:
+			RULEZ.SFX_SELF_HEAL:
+				var sh := int(round(float(u["max_hp"]) * float(fd.get("value", 0.1))))
+				u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + sh)
+				_emit("  「%s」触发：%s 回复 %d 兵力" % [src, u["name"], sh], "heal")
+			RULEZ.SFX_BUFF:
+				var bn := str(fd.get("value", ""))
+				if bn != "":
+					_add_buff(u, bn, int(fd.get("turns", 2)), int(fd.get("stacks", 1)))
+					_emit("  「%s」触发：%s 获得「%s」" % [src, u["name"], bn], "info")
+			RULEZ.SFX_CD_DOWN:
+				for k in (u["cd"] as Dictionary).keys():
+					u["cd"][k] = maxi(0, int(u["cd"][k]) - int(fd.get("value", 1)))
+				_emit("  「%s」触发：准备期 -%d" % [src, int(fd.get("value", 1))], "info")
+			RULEZ.SFX_SHIELD:
+				_add_buff(u, "护盾", int(fd.get("turns", 2)), int(fd.get("value", 50)))
+				_emit("  「%s」触发：获得护盾" % src, "info")
+			_:
+				# 对目标施加的被动（如 on_hit 施加减益）
+				var tgt = ctx.get("target", null)
+				if tgt != null and tgt["alive"]:
+					if t == RULEZ.SFX_DEBUFF:
+						var dn := str(fd.get("value", ""))
+						if dn != "":
+							_add_debuff(tgt, dn, int(fd.get("turns", 2)), u)
+							_emit("  「%s」触发：%s 被施加「%s」" % [src, tgt["name"], dn], "info")
+					elif t == RULEZ.SFX_FIXED:
+						var fdmg := int(round(float(fd.get("value", 20))))
+						fdmg = mini(fdmg, int(tgt["hp"]))
+						tgt["hp"] = int(tgt["hp"]) - fdmg
+						_emit("  「%s」触发：%s 受到 %d 固定伤害" % [src, tgt["name"], fdmg], "hit")
+						if int(tgt["hp"]) <= 0:
+							_kill(tgt, u)
 
 
 func next_side() -> void:

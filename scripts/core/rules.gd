@@ -761,6 +761,53 @@ static func skill_effects_at(d: Dictionary, lv: int) -> Array:
 	return effects_for_level(skill_effects(d), lv)
 
 
+# ============================================================
+# 技能等级上限
+#   max=3 时是当前的 Lv1~Lv3；设为 4 即启用「四阶」预留位
+#   四阶还没录入内容时，Lv4 沿用 Lv3 的效果（不会崩、不会变弱）
+# ============================================================
+static func max_skill_lv() -> int:
+	return clampi(int(settings.get("max_skill_lv", 4)), 1, 9)
+
+
+static func skill_lv_label(lv: int) -> String:
+	match int(lv):
+		1:
+			return "一阶"
+		2:
+			return "二阶"
+		3:
+			return "三阶"
+		4:
+			return "四阶"
+		5:
+			return "五阶"
+	return "Lv%d" % int(lv)
+
+
+# 取某技能在某级下的描述文字；超出已录入的等级时沿用最后一级
+static func skill_text_at(d: Dictionary, lv: int) -> String:
+	var lvs: Array = d.get("lv", []) if d.get("lv") is Array else []
+	var idx := clampi(int(lv), 1, maxi(1, lvs.size())) - 1
+	if idx >= 0 and idx < lvs.size():
+		var t := String(lvs[idx])
+		if t != "":
+			return t
+	# 回退：取最后一条非空的
+	for i in range(lvs.size() - 1, -1, -1):
+		var s := String(lvs[i])
+		if s != "":
+			return s
+	return String(d.get("desc", ""))
+
+
+# 该技能最多能升到几级（已录入的有效等级数，至少 3）
+static func skill_lv_cap(d: Dictionary) -> int:
+	var lvs: Array = d.get("lv", []) if d.get("lv") is Array else []
+	var n := maxi(3, lvs.size())
+	return clampi(n, 1, max_skill_lv())
+
+
 # 解析技能效果块：没有 ed_fx_list 的旧技能，按 kind 生成等效的默认效果块
 static func skill_effects(d: Dictionary) -> Array:
 	var lst = d.get("ed_fx_list", [])
