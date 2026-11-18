@@ -66,6 +66,8 @@
   "mult_counter": 0.8,
   "mult_combo": 0.5,
   "mult_pursuit": 1.0,
+  "max_combo_per_round": 2.0,
+  "combo_need_adjacent": 1.0,
   "heal_mult_default": 0.8,
   "douqi_per_stack": 0.05,
   "wushuang_mult": 1.15,

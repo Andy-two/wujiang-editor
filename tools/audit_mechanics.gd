@@ -34,6 +34,15 @@ const MECHANISMS := {
 	"准备期": ["cd_down"],
 	"复活": ["revive"],
 	"重复": ["damage(times)"],
+	# —— P3 机制 ——
+	"先攻": ["priority"],
+	"格挡": ["block"],
+	"闪避": ["dodge"],
+	"合击": ["combo"],
+	"免疫控制": ["immunity(控制)"],
+	"免疫属性减益": ["immunity(属性减益)"],
+	"免疫移动减益": ["immunity(移动减益)"],
+	"免疫地形减益": ["immunity(地形减益)"],
 }
 
 

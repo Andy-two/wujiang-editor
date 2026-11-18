@@ -1,4 +1,4 @@
-﻿extends SceneTree
+extends SceneTree
 const ED = preload("res://scripts/core/ed_data.gd")
 const RULEZ = preload("res://scripts/core/rules.gd")
 

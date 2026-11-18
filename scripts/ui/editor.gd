@@ -2394,6 +2394,167 @@ func _build_effect_editor(box: Control, sid: String, d: Dictionary) -> void:
 						data.dirty = true
 						_mark_dirty())
 					row.add_child(v3)
+				RULEZ.SFX_PRIORITY:
+					row.add_child(THEME.label("层数", 12, THEME.MUTED))
+					var pv := SpinBox.new()
+					pv.min_value = 1
+					pv.max_value = 9
+					pv.custom_minimum_size = Vector2(70, 0)
+					pv.value = int(fx.get("value", 1))
+					pv.value_changed.connect(func(x: float) -> void:
+						fx["value"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(pv)
+				RULEZ.SFX_BLOCK, RULEZ.SFX_DODGE:
+					row.add_child(THEME.label("比率", 12, THEME.MUTED))
+					var rv := SpinBox.new()
+					rv.min_value = 0.0
+					rv.max_value = 1.0
+					rv.step = 0.05
+					rv.custom_minimum_size = Vector2(70, 0)
+					rv.value = float(fx.get("value", 0.2))
+					rv.value_changed.connect(func(x: float) -> void:
+						fx["value"] = x
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(rv)
+					row.add_child(THEME.label("回合", 12, THEME.MUTED))
+					var rt := SpinBox.new()
+					rt.min_value = 1
+					rt.max_value = 9
+					rt.custom_minimum_size = Vector2(60, 0)
+					rt.value = int(fx.get("turns", 2))
+					rt.value_changed.connect(func(x: float) -> void:
+						fx["turns"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(rt)
+				RULEZ.SFX_IMMUNITY, RULEZ.SFX_RESIST:
+					var ik := LineEdit.new()
+					ik.custom_minimum_size = Vector2(110, 0)
+					ik.placeholder_text = ("控制/属性减益/移动减益/地形减益" if t == RULEZ.SFX_IMMUNITY
+						else "眩晕/缴械/牵制/定身")
+					ik.text = String(fx.get("value", "控制" if t == RULEZ.SFX_IMMUNITY else "眩晕"))
+					ik.text_changed.connect(func(x: String) -> void:
+						fx["value"] = x
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(ik)
+					row.add_child(THEME.label("回合", 12, THEME.MUTED))
+					var it := SpinBox.new()
+					it.min_value = 1
+					it.max_value = 9
+					it.custom_minimum_size = Vector2(60, 0)
+					it.value = int(fx.get("turns", 2))
+					it.value_changed.connect(func(x: float) -> void:
+						fx["turns"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(it)
+				RULEZ.SFX_SPLASH:
+					row.add_child(THEME.label("倍率", 12, THEME.MUTED))
+					var spv := SpinBox.new()
+					spv.min_value = 0.0
+					spv.max_value = 3.0
+					spv.step = 0.05
+					spv.custom_minimum_size = Vector2(80, 0)
+					spv.value = float(fx.get("value", 0.5))
+					spv.value_changed.connect(func(x: float) -> void:
+						fx["value"] = x
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(spv)
+					row.add_child(THEME.label("圈", 12, THEME.MUTED))
+					var spr := SpinBox.new()
+					spr.min_value = 1
+					spr.max_value = 5
+					spr.custom_minimum_size = Vector2(60, 0)
+					spr.value = int(fx.get("radius", 1))
+					spr.value_changed.connect(func(x: float) -> void:
+						fx["radius"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(spr)
+					row.add_child(THEME.label("形状", 12, THEME.MUTED))
+					var ssp := OptionButton.new()
+					ssp.custom_minimum_size = Vector2(96, 0)
+					ssp.add_item("方形一圈")
+					ssp.add_item("十字")
+					ssp.selected = 0 if String(fx.get("shape", "circle")) == "circle" else 1
+					ssp.item_selected.connect(func(i3: int) -> void:
+						fx["shape"] = "circle" if i3 == 0 else "diamond"
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(ssp)
+				RULEZ.SFX_TRANSFER:
+					row.add_child(THEME.label("战意", 12, THEME.MUTED))
+					var tv := SpinBox.new()
+					tv.min_value = 1
+					tv.max_value = 99
+					tv.custom_minimum_size = Vector2(70, 0)
+					tv.value = int(fx.get("value", 10))
+					tv.value_changed.connect(func(x: float) -> void:
+						fx["value"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(tv)
+					row.add_child(THEME.label("半径", 12, THEME.MUTED))
+					var tr := SpinBox.new()
+					tr.min_value = 1
+					tr.max_value = 9
+					tr.custom_minimum_size = Vector2(60, 0)
+					tr.value = int(fx.get("radius", 3))
+					tr.value_changed.connect(func(x: float) -> void:
+						fx["radius"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(tr)
+				RULEZ.SFX_FACILITY:
+					var fn := LineEdit.new()
+					fn.custom_minimum_size = Vector2(90, 0)
+					fn.placeholder_text = "设施名"
+					fn.text = String(fx.get("value", "粮仓"))
+					fn.text_changed.connect(func(x: String) -> void:
+						fx["value"] = x
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(fn)
+					row.add_child(THEME.label("回合", 12, THEME.MUTED))
+					var ft := SpinBox.new()
+					ft.min_value = 1
+					ft.max_value = 9
+					ft.custom_minimum_size = Vector2(60, 0)
+					ft.value = int(fx.get("turns", 3))
+					ft.value_changed.connect(func(x: float) -> void:
+						fx["turns"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(ft)
+					row.add_child(THEME.label("次数", 12, THEME.MUTED))
+					var fu := SpinBox.new()
+					fu.min_value = 1
+					fu.max_value = 9
+					fu.custom_minimum_size = Vector2(60, 0)
+					fu.value = int(fx.get("uses", 2))
+					fu.value_changed.connect(func(x: float) -> void:
+						fx["uses"] = int(x)
+						fx["max_uses"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(fu)
+					row.add_child(THEME.label("回复%", 12, THEME.MUTED))
+					var fh := SpinBox.new()
+					fh.min_value = 0
+					fh.max_value = 1.0
+					fh.step = 0.05
+					fh.custom_minimum_size = Vector2(70, 0)
+					fh.value = float(fx.get("heal_pct", 0.15))
+					fh.value_changed.connect(func(x: float) -> void:
+						fx["heal_pct"] = x
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(fh)
 				_:
 					pass
 			# 生效等级：从第几级开始生效

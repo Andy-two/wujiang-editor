@@ -4,7 +4,7 @@
     "name": "吕布",
     "troop": "轻骑兵",
     "color": "#3b82f6",
-    "portrait": "",
+    "portrait": "res://assets/lu_bu.png",
     "stats": {
       "hp": 191.0,
       "atk": 121.0,
@@ -94,7 +94,7 @@
       "jianmie": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/lu_bu.png",
       "illust_path": "",
       "sprite_path": "res://assets/imported/sprite/lu_bu_1794574672746.png",
       "sheet_type": "strip",
@@ -467,7 +467,7 @@
     "name": "貂蝉",
     "troop": "女兵",
     "color": "#ec4899",
-    "portrait": "",
+    "portrait": "res://assets/diao_chan.png",
     "stats": {
       "hp": 179.0,
       "atk": 21.0,
@@ -557,7 +557,7 @@
       "9140061": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/diao_chan.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -939,7 +939,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/guan_yu.png",
     "talent": "wusheng",
     "talent_lv": 1.0,
     "skills": [
@@ -1024,7 +1024,7 @@
       "guan_yanyue": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/guan_yu.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -1406,7 +1406,7 @@
       "move": 4.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/zhang_fei.png",
     "talent": "yifu",
     "talent_lv": 1.0,
     "skills": [
@@ -1491,7 +1491,7 @@
       "off_突刺": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/zhang_fei.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -1873,7 +1873,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/zhao_yun.png",
     "talent": "guasheng",
     "talent_lv": 1.0,
     "skills": [
@@ -1957,7 +1957,7 @@
       "xingcai_zudi": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/zhao_yun.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -2339,7 +2339,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/zhuge_liang.png",
     "talent": "liaodi",
     "talent_lv": 1.0,
     "skills": [
@@ -2424,7 +2424,7 @@
       "liang_dixian": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/zhuge_liang.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -2806,7 +2806,7 @@
       "move": 4.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/liu_bei.png",
     "talent": "tongxin",
     "talent_lv": 1.0,
     "skills": [
@@ -2891,7 +2891,7 @@
       "yuanbing": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/liu_bei.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -3273,7 +3273,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/ma_chao.png",
     "talent": "ma_chao_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -3357,7 +3357,7 @@
       "ma_zhuixing": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/ma_chao.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -3739,7 +3739,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/huang_zhong.png",
     "talent": "huang_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -3824,7 +3824,7 @@
       "xhy_liushi": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/huang_zhong.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -4206,7 +4206,7 @@
       "move": 5.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/sun_shangxiang.png",
     "talent": "sun_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -4291,7 +4291,7 @@
       "huang_luanjian": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/sun_shangxiang.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -4673,7 +4673,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/pang_tong.png",
     "talent": "pang_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -4758,7 +4758,7 @@
       "liang_mougong": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/pang_tong.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -5140,7 +5140,7 @@
       "move": 5.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/wei_yan.png",
     "talent": "wei_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -5225,7 +5225,7 @@
       "youren_bafang": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/wei_yan.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -5607,7 +5607,7 @@
       "move": 4.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/qian_zhao.png",
     "talent": "qian_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -5692,7 +5692,7 @@
       "qian_juxian": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/qian_zhao.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -6074,7 +6074,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/ma_yunlu.png",
     "talent": "ma_yunlu_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -6158,7 +6158,7 @@
       "qiangwu": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/ma_yunlu.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -6540,7 +6540,7 @@
       "move": 3.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/huang_yueying.png",
     "talent": "huang_yueying_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -6625,7 +6625,7 @@
       "huang_sanshe": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/huang_yueying.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -7007,7 +7007,7 @@
       "move": 4.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/zhang_xingcai.png",
     "talent": "xingcai_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -7092,7 +7092,7 @@
       "xingcai_beitou": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/zhang_xingcai.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -7475,7 +7475,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/cao_cao.png",
     "talent": "cao_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -7559,7 +7559,7 @@
       "tiema": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/cao_cao.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -7942,7 +7942,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/xiahou_dun.png",
     "talent": "xhd_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -8026,7 +8026,7 @@
       "tiema": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/xiahou_dun.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -8409,7 +8409,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/xiahou_yuan.png",
     "talent": "xhy_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -8493,7 +8493,7 @@
       "huang_luanjian": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/xiahou_yuan.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -8876,7 +8876,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/zhang_liao.png",
     "talent": "zl_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -8960,7 +8960,7 @@
       "off_铁壁": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/zhang_liao.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -9343,7 +9343,7 @@
       "move": 4.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/xu_chu.png",
     "talent": "xu_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -9427,7 +9427,7 @@
       "xu_zudi": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/xu_chu.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -9810,7 +9810,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/guo_jia.png",
     "talent": "gj_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -9894,7 +9894,7 @@
       "gj_mougong": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/guo_jia.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -10277,7 +10277,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/si_ma_yi.png",
     "talent": "sm_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -10361,7 +10361,7 @@
       "off_疑阵": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/si_ma_yi.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -10744,7 +10744,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/zhang_chunhua.png",
     "talent": "zch_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -10828,7 +10828,7 @@
       "zch_mougong": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/zhang_chunhua.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -11211,7 +11211,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/zhen_mi.png",
     "talent": "zm_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -11295,7 +11295,7 @@
       "fuwei": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/zhen_mi.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -11678,7 +11678,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/yue_jin.png",
     "talent": "yj_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -11762,7 +11762,7 @@
       "off_利刃": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/yue_jin.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -12145,7 +12145,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/cheng_yu.png",
     "talent": "cy_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -12229,7 +12229,7 @@
       "cy_chenhuo": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/cheng_yu.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -12612,7 +12612,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/xun_yu.png",
     "talent": "xy_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -12696,7 +12696,7 @@
       "off_献策": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/xun_yu.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -13079,7 +13079,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/cao_ren.png",
     "talent": "cr_talent",
     "talent_lv": 1.0,
     "skills": [
@@ -13163,7 +13163,7 @@
       "off_鹤翼阵": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/cao_ren.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -13546,7 +13546,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/xu_huang.png",
     "talent": "10183111",
     "talent_lv": 1.0,
     "skills": [
@@ -13630,7 +13630,7 @@
       "xhd_tujin": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/xu_huang.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -14013,7 +14013,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/zhang_he.png",
     "talent": "10193021",
     "talent_lv": 1.0,
     "skills": [
@@ -14097,7 +14097,7 @@
       "fuwei": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/zhang_he.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -14480,7 +14480,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "portrait": "",
+    "portrait": "res://assets/yu_jin.png",
     "talent": "10113011",
     "talent_lv": 1.0,
     "skills": [
@@ -14564,7 +14564,7 @@
       "9110431": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/yu_jin.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -14947,7 +14947,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "portrait": "",
+    "portrait": "res://assets/cai_wenji.png",
     "talent": "10273011",
     "talent_lv": 1.0,
     "skills": [
@@ -15031,7 +15031,7 @@
       "off_扰乱": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/cai_wenji.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -15404,7 +15404,7 @@
     "name": "孙权",
     "troop": "幕僚",
     "color": "#dc2626",
-    "portrait": "",
+    "portrait": "res://assets/sun_quan.png",
     "stats": {
       "hp": 183.0,
       "atk": 26.0,
@@ -15500,7 +15500,7 @@
       "sun_quan_s2": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/sun_quan.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -15873,7 +15873,7 @@
     "name": "沧澜·曹操",
     "troop": "统领",
     "color": "#1e3a8a",
-    "portrait": "",
+    "portrait": "res://assets/canglan_cao_cao.png",
     "stats": {
       "hp": 231.0,
       "atk": 99.0,
@@ -15968,7 +15968,7 @@
       "sunce_tapo": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/canglan_cao_cao.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -16341,7 +16341,7 @@
     "name": "小乔",
     "troop": "才女",
     "color": "#f472b6",
-    "portrait": "",
+    "portrait": "res://assets/xiao_qiao.png",
     "stats": {
       "hp": 183.0,
       "atk": 21.0,
@@ -16437,7 +16437,7 @@
       "fuwei": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/xiao_qiao.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -16810,7 +16810,7 @@
     "name": "周瑜",
     "troop": "幕僚",
     "color": "#b91c1c",
-    "portrait": "",
+    "portrait": "res://assets/zhou_yu.png",
     "stats": {
       "hp": 198.0,
       "atk": 27.0,
@@ -16906,7 +16906,7 @@
       "zhou_yu_s1": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/zhou_yu.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -17279,7 +17279,7 @@
     "name": "庞德",
     "troop": "步兵",
     "color": "#78716c",
-    "portrait": "",
+    "portrait": "res://assets/pang_de.png",
     "stats": {
       "hp": 247.0,
       "atk": 104.0,
@@ -17375,7 +17375,7 @@
       "fuwei": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/pang_de.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -17748,7 +17748,7 @@
     "name": "大乔",
     "troop": "舞者",
     "color": "#f9a8d4",
-    "portrait": "",
+    "portrait": "res://assets/da_qiao.png",
     "stats": {
       "hp": 185.0,
       "atk": 21.0,
@@ -17844,7 +17844,7 @@
       "da_qiao_s1": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/da_qiao.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -18217,7 +18217,7 @@
     "name": "贾诩",
     "troop": "道士",
     "color": "#7c3aed",
-    "portrait": "",
+    "portrait": "res://assets/jia_xu.png",
     "stats": {
       "hp": 176.0,
       "atk": 22.0,
@@ -18313,7 +18313,7 @@
       "tiema": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/jia_xu.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -18686,7 +18686,7 @@
     "name": "高顺",
     "troop": "步兵",
     "color": "#57534e",
-    "portrait": "",
+    "portrait": "res://assets/gao_shun.png",
     "stats": {
       "hp": 255.0,
       "atk": 103.0,
@@ -18782,7 +18782,7 @@
       "tiema": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/gao_shun.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -19155,7 +19155,7 @@
     "name": "张绣",
     "troop": "长兵",
     "color": "#0d9488",
-    "portrait": "",
+    "portrait": "res://assets/zhang_xiu.png",
     "stats": {
       "hp": 224.0,
       "atk": 105.0,
@@ -19251,7 +19251,7 @@
       "zhang_xiu_s1": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/zhang_xiu.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -19624,7 +19624,7 @@
     "name": "荀攸",
     "troop": "策士",
     "color": "#8b5cf6",
-    "portrait": "",
+    "portrait": "res://assets/xun_you.png",
     "stats": {
       "hp": 167.0,
       "atk": 22.0,
@@ -19720,7 +19720,7 @@
       "off_激昂": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/xun_you.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -20093,7 +20093,7 @@
     "name": "吕玲绮",
     "troop": "轻骑兵",
     "color": "#ef4444",
-    "portrait": "",
+    "portrait": "res://assets/lv_lingqi.png",
     "stats": {
       "hp": 171.0,
       "atk": 110.0,
@@ -20189,7 +20189,7 @@
       "off_御风": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/lv_lingqi.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -20562,7 +20562,7 @@
     "name": "典韦",
     "troop": "步兵",
     "color": "#a16207",
-    "portrait": "",
+    "portrait": "res://assets/dian_wei.png",
     "stats": {
       "hp": 239.0,
       "atk": 106.0,
@@ -20658,7 +20658,7 @@
       "dian_wei_s2": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/dian_wei.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -21031,7 +21031,7 @@
     "name": "陈群",
     "troop": "文人",
     "color": "#8b5cf6",
-    "portrait": "",
+    "portrait": "res://assets/chen_qun.png",
     "stats": {
       "hp": 157.0,
       "atk": 19.0,
@@ -21127,7 +21127,7 @@
       "chen_qun_s2": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/chen_qun.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -21500,7 +21500,7 @@
     "name": "刘晔",
     "troop": "投石车",
     "color": "#b45309",
-    "portrait": "",
+    "portrait": "res://assets/liu_ye.png",
     "stats": {
       "hp": 151.0,
       "atk": 83.0,
@@ -21596,7 +21596,7 @@
       "liu_ye_s2": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/liu_ye.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -21969,7 +21969,7 @@
     "name": "纪灵",
     "troop": "轻骑兵",
     "color": "#dc2626",
-    "portrait": "",
+    "portrait": "res://assets/ji_ling.png",
     "stats": {
       "hp": 147.0,
       "atk": 91.0,
@@ -22065,7 +22065,7 @@
       "cao_benxi": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/ji_ling.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -22438,7 +22438,7 @@
     "name": "甘梅",
     "troop": "才女",
     "color": "#f472b6",
-    "portrait": "",
+    "portrait": "res://assets/gan_mei.png",
     "stats": {
       "hp": 155.0,
       "atk": 18.0,
@@ -22534,7 +22534,7 @@
       "gan_mei_s1": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/gan_mei.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -22907,7 +22907,7 @@
     "name": "糜竺",
     "troop": "军需",
     "color": "#f59e0b",
-    "portrait": "",
+    "portrait": "res://assets/mi_zhu.png",
     "stats": {
       "hp": 157.0,
       "atk": 18.0,
@@ -23003,7 +23003,7 @@
       "mi_zhu_s2": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/mi_zhu.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -23376,7 +23376,7 @@
     "name": "简雍",
     "troop": "弩兵",
     "color": "#65a30d",
-    "portrait": "",
+    "portrait": "res://assets/jian_yong.png",
     "stats": {
       "hp": 142.0,
       "atk": 74.0,
@@ -23472,7 +23472,7 @@
       "sm_chenhuo": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/jian_yong.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -23845,7 +23845,7 @@
     "name": "陈到",
     "troop": "长兵",
     "color": "#0d9488",
-    "portrait": "",
+    "portrait": "res://assets/chen_dao.png",
     "stats": {
       "hp": 178.0,
       "atk": 85.0,
@@ -23941,7 +23941,7 @@
       "9110221": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/chen_dao.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -24314,7 +24314,7 @@
     "name": "陈登",
     "troop": "道士",
     "color": "#7c3aed",
-    "portrait": "",
+    "portrait": "res://assets/chen_deng.png",
     "stats": {
       "hp": 144.0,
       "atk": 21.0,
@@ -24410,7 +24410,7 @@
       "chen_deng_s2": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/chen_deng.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -24783,7 +24783,7 @@
     "name": "李典",
     "troop": "军需",
     "color": "#0891b2",
-    "portrait": "",
+    "portrait": "res://assets/li_dian.png",
     "stats": {
       "hp": 158.0,
       "atk": 22.0,
@@ -24879,7 +24879,7 @@
       "li_dian_s1": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/li_dian.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -25252,7 +25252,7 @@
     "name": "曹洪",
     "troop": "步兵",
     "color": "#78716c",
-    "portrait": "",
+    "portrait": "res://assets/cao_hong.png",
     "stats": {
       "hp": 205.0,
       "atk": 83.0,
@@ -25348,7 +25348,7 @@
       "cao_hong_s2": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/cao_hong.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",
@@ -25721,7 +25721,7 @@
     "name": "孙策",
     "troop": "轻骑兵",
     "color": "#dc2626",
-    "portrait": "",
+    "portrait": "res://assets/sun_ce.png",
     "stats": {
       "hp": 194.0,
       "atk": 121.0,
@@ -25817,7 +25817,7 @@
       "off_武韬阵": 1.0
     },
     "ed_art": {
-      "portrait_path": "",
+      "portrait_path": "res://assets/sun_ce.png",
       "illust_path": "",
       "sprite_path": "",
       "sheet_type": "strip",

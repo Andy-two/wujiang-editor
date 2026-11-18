@@ -56,6 +56,9 @@ const DEFAULTS := {
 	"mult_counter": 0.8,
 	"mult_combo": 0.5,
 	"mult_pursuit": 1.0,
+	# —— P3 机制参数 ——
+	"max_combo_per_round": 2,   # 每单位每回合最多触发几次合击
+	"combo_need_adjacent": 1,   # 合击是否要求与攻击者相邻（1=是）
 	"heal_mult_default": 0.8,
 	"douqi_per_stack": 0.05,
 	"wushuang_mult": 1.15,
@@ -504,6 +507,121 @@ static func arm_upgrade_stats(lv: int, spend: Dictionary) -> Dictionary:
 	}
 
 
+# ============================================================
+# 副将（vice）数值层
+#   副将数据见 data/vice_generals.json，每个副将的数值成分为：
+#     ① taolue   韬略文案（如「提升1.5%物攻」），纯数值加成
+#     ② stats    属性百分比加成（hp/atk/def/matk/mdef）
+#     ③ dmg      伤害加成百分比
+#   本段只负责把①②③换算成「对主将模板的修正量」，不含任何机制效果。
+# ============================================================
+
+# 韬略文案 -> 修正键。值为「乘区键」，对应的数值从文案里的百分数解析。
+#   属性类：stat_hp / stat_atk / stat_def / stat_matk / stat_mdef
+#   战斗类：damage_bonus（通用增伤）/ damage_cut（通用减伤）
+#           crit_damage（暴伤加成）/ crit_resist（暴击抗性）
+#           skill_damage（技策伤害）/ normal_damage（普攻伤害）
+#           counter_damage（反击伤害）/ combo_damage（合击伤害）
+#           fixed_damage（固伤伤害）/ restrict_damage（克制伤害）
+#           skill_cut（受技策伤害减免）/ counter_cut（受反击减免）
+#           heal_bonus（治疗加成）/ heal_taken（受疗加成）
+#           fortune_add（运势加点，非百分比）
+#   注意：这里只登记「这条文案影响哪个乘区」，具体数值从文案里正则解析，
+#         这样数据侧改文案数值时不用动代码。
+const VICE_TAOLUE_KEYS := {
+	# 顺序敏感：先匹配「具体的」，再匹配「泛化的」。
+	# 因为 parse_taolue 用 contains 且取第一个命中，例如
+	# 「战斗中技能伤害提升1.5%」必须命中 skill_damage 而不是 damage_bonus。
+	"受到技能伤害减免": "skill_cut",
+	"受到伤害减免": "damage_cut",
+	"受到反击伤害降低": "counter_cut",
+	"受到治疗效果提升": "heal_taken",
+	"技能伤害提升": "skill_damage",
+	"普攻伤害提升": "normal_damage",
+	"克制伤害提升": "restrict_damage",
+	"反击伤害增加": "counter_damage",
+	"合击伤害增加": "combo_damage",
+	"固定伤害": "fixed_damage",
+	"暴击抗性": "crit_resist",
+	"暴击伤害": "crit_damage",
+	"治疗效果": "heal_bonus",
+	"伤害提升": "damage_bonus",
+	"点运势": "fortune_add",
+	"运势": "fortune_add",
+	"兵力": "stat_hp",
+	"物攻": "stat_atk",
+	"谋攻": "stat_matk",
+	"物防": "stat_def",
+	"谋防": "stat_mdef",
+}
+
+
+# 从文案里取第一个百分数（「提升1.5%物攻」-> 0.015）；取不到返回 -1
+static func pct_in(text: String) -> float:
+	var re := RegEx.new()
+	re.compile("([0-9]+(?:\\.[0-9]+)?)%")
+	var m := re.search(text)
+	if m == null:
+		return -1.0
+	return float(m.get_string(1)) / 100.0
+
+
+# 从文案里取第一个不带 % 的整数（「战斗中提升20点运势」-> 20）
+static func int_in(text: String) -> int:
+	var re := RegEx.new()
+	re.compile("([0-9]+)")
+	var m := re.search(text)
+	if m == null:
+		return 0
+	return int(m.get_string(1))
+
+
+# 解析一条韬略文案 -> {"key": 乘区键, "value": 数值}，无法识别返回空字典
+#   文案可能带前缀（如「重击：战斗中伤害提升2%」），所以用 contains 匹配
+static func parse_taolue(text: String) -> Dictionary:
+	var t := text.strip_edges()
+	for pat in VICE_TAOLUE_KEYS.keys():
+		if not t.contains(String(pat)):
+			continue
+		var key := String(VICE_TAOLUE_KEYS[pat])
+		if key == "fortune_add":
+			return {"key": key, "value": float(int_in(t))}
+		var p := pct_in(t)
+		if p < 0.0:
+			return {}
+		return {"key": key, "value": p}
+	return {}
+
+
+# 把一个副将数据换算成修正量字典
+#   {"stat": {stat_hp: 0.015, ...}, "mul": {damage_bonus: 0.02, ...}, "dmg": 0.03}
+static func vice_modifiers(vice: Dictionary) -> Dictionary:
+	var stat := {}
+	var mul := {}
+	# ① taolue
+	for line in (vice.get("taolue", []) as Array):
+		var p := parse_taolue(String(line))
+		if p.is_empty():
+			continue
+		var key := String(p["key"])
+		var val := float(p["value"])
+		if key.begins_with("stat_"):
+			var sk := key.substr(5)
+			stat[sk] = float(stat.get(sk, 0.0)) + val
+		else:
+			mul[key] = float(mul.get(key, 0.0)) + val
+	# ② stats（本身就是百分比，如 {"hp": 1.5} 表示 +1.5%）
+	var vs: Dictionary = vice.get("stats", {}) if vice.get("stats") is Dictionary else {}
+	for k in vs.keys():
+		var sk2 := String(k)
+		stat[sk2] = float(stat.get(sk2, 0.0)) + float(vs[k]) / 100.0
+	# ③ dmg（伤害加成百分比，进通用增伤乘区）
+	var dmg := float(vice.get("dmg", 0.0)) / 100.0
+	if dmg != 0.0:
+		mul["damage_bonus"] = float(mul.get("damage_bonus", 0.0)) + dmg
+	return {"stat": stat, "mul": mul, "dmg": dmg}
+
+
 # ---------------- 升星 ----------------
 static func star_rule() -> Dictionary:
 	var out := STAR_DEFAULTS.duplicate(true)
@@ -588,15 +706,24 @@ const SFX_SWITCH := "switch_skill"    # 技能形态切换（切换为 / 升级�
 const SFX_RESOURCE := "resource"      # 资源层数（智/深谋/斗气/机巧/备战/武魂…）
 const SFX_CONSUME := "consume"        # 消耗资源
 const SFX_ZOC := "zoc"                # 阻挡领域（ZOC）
-# —— P3 小机制 ——
+# —— P3 机制 ——
+const SFX_PRIORITY := "priority"      # 先攻（抢先出手：本回合首次行动优先）
+const SFX_BLOCK := "block"           # 格挡（按概率免伤 / 减伤）
+const SFX_DODGE := "dodge"            # 闪避（按概率完全回避一次攻击）
+const SFX_IMMUNITY := "immunity"      # 免疫（免疫控制 / 属性减益 / 移动减益 / 地形减益）
+const SFX_RESIST := "resist"          # 抵抗（每回合首次抵抗某类减益）
+const SFX_COMBO := "combo"            # 合击（对同目标的相邻友军联合攻击）
+# —— P5 机制 ——
+const SFX_SPLASH := "splash"          # 溅射（对目标周围一圈的其它敌人造成伤害）
+# —— P6 机制 ——
+const SFX_TRANSFER := "transfer"      # 转移（把降低的战意转移给友军）
+const SFX_FACILITY := "facility"      # 设施（可交互的召唤物，如粮仓/营寨）
 const SFX_STEAL := "steal"            # 偷取（战意/资源）
-const SFX_TRANSFER := "transfer"      # 传递减益给周围敌军
-const SFX_FIRST_STRIKE := "first_strike"  # 先攻（先手攻击）
 const SFX_MUST_LAST := "must_last"    # 必定后手攻击
-const SFX_COMBO := "combo"            # 可触发合击
 const SFX_LIFELINK_HIT := "lifesteal" # 攻心（造成的伤害按比例回血）
 const SFX_EXECUTE := "execute"        # 处决/斩杀（低血秒杀）
 const SFX_TRAIT := "trait"            # 按性格/兵种筛选生效
+const SFX_FIRST_STRIKE := "first_strike"  # 先攻（兼容旧数据）
 
 const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_DISPEL, SFX_SELF_DISPEL, SFX_SELF_HEAL, SFX_CD_DOWN, SFX_EXTRA_MOVE,
@@ -605,8 +732,8 @@ const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_REVIVE, SFX_CRIT_UP, SFX_LIFELINK, SFX_COPY_BUFF, SFX_STEAL_BUFF, SFX_FIXED,
 	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI, SFX_COUNTER_UP, SFX_SWITCH,
 	SFX_RESOURCE, SFX_CONSUME, SFX_ZOC,
-	SFX_STEAL, SFX_TRANSFER, SFX_FIRST_STRIKE, SFX_MUST_LAST, SFX_COMBO,
-	SFX_LIFELINK_HIT, SFX_EXECUTE, SFX_TRAIT]
+	SFX_PRIORITY, SFX_BLOCK, SFX_DODGE, SFX_IMMUNITY, SFX_RESIST, SFX_COMBO,
+	SFX_SPLASH, SFX_TRANSFER, SFX_FACILITY]
 
 # 资源名（用于层数系统）
 const RESOURCES := ["智", "深谋", "斗气", "机巧", "备战", "武魂", "凤羽", "凤衣", "威严", "被动层数"]
@@ -630,14 +757,15 @@ const SFX_LABELS := {
 	SFX_RESOURCE: "资源层数",
 	SFX_CONSUME: "消耗资源",
 	SFX_ZOC: "阻挡领域",
-	SFX_STEAL: "偷取",
-	SFX_TRANSFER: "传递减益",
-	SFX_FIRST_STRIKE: "先攻",
-	SFX_MUST_LAST: "必定后手",
-	SFX_COMBO: "可触发合击",
-	SFX_LIFELINK_HIT: "攻心",
-	SFX_EXECUTE: "斩杀",
-	SFX_TRAIT: "性格/兵种特攻",
+	SFX_PRIORITY: "先攻",
+	SFX_BLOCK: "格挡",
+	SFX_DODGE: "闪避",
+	SFX_IMMUNITY: "免疫",
+	SFX_RESIST: "抵抗",
+	SFX_COMBO: "合击",
+	SFX_SPLASH: "溅射",
+	SFX_TRANSFER: "转移",
+	SFX_FACILITY: "设施",
 }
 # 常用状态名（可自由输入其它名字）
 const COMMON_STATUS := ["低迷", "虚弱", "定身", "眩晕", "撕裂", "溃逃", "缴械", "封技",
@@ -729,22 +857,26 @@ static func default_sfx(type: String) -> Dictionary:
 			return {"type": type, "name": ""}
 		SFX_ZOC:
 			return {"type": type, "value": 1}
-		SFX_STEAL:
-			return {"type": type, "what": "战意", "value": 20}
-		SFX_TRANSFER:
+		SFX_PRIORITY:
 			return {"type": type, "value": 1}
-		SFX_FIRST_STRIKE:
-			return {"type": type}
-		SFX_MUST_LAST:
-			return {"type": type}
+		SFX_BLOCK:
+			return {"type": type, "value": 0.2, "turns": 2}
+		SFX_DODGE:
+			return {"type": type, "value": 0.2, "turns": 2}
+		SFX_IMMUNITY:
+			return {"type": type, "value": "控制", "turns": 2}
+		SFX_RESIST:
+			return {"type": type, "value": "眩晕", "turns": 2}
+		SFX_SPLASH:
+			return {"type": type, "value": 0.5, "radius": 1, "shape": "circle",
+				"magic": false, "ignore_def": 0.0}
+		SFX_TRANSFER:
+			return {"type": type, "value": 10, "radius": 3}
+		SFX_FACILITY:
+			return {"type": type, "value": "粮仓", "turns": 3, "uses": 2,
+				"heal_pct": 0.15, "buff": "奋强", "buff_turns": 2, "extra_turn": true}
 		SFX_COMBO:
-			return {"type": type}
-		SFX_LIFELINK_HIT:
-			return {"type": type, "value": 0.2}
-		SFX_EXECUTE:
-			return {"type": type, "value": 0.15}
-		SFX_TRAIT:
-			return {"type": type, "trait": "", "debuff": "", "turns": 1}
+			return {"type": type, "value": 1}
 		_:
 			return {"type": type, "value": 0}
 
@@ -840,23 +972,36 @@ static func sfx_text(fx: Dictionary) -> String:
 			return "消耗所有「%s」" % String(fx.get("name", ""))
 		SFX_ZOC:
 			return "获得 %d 格「阻挡领域」" % int(fx.get("value", 1))
-		SFX_STEAL:
-			var sn := String(fx.get("what", "战意"))
-			return "偷取敌军 %d 点%s" % [int(fx.get("value", 20)), sn]
-		SFX_TRANSFER:
-			return "将自身减益传递给周围 %d 圈敌军" % int(fx.get("value", 1))
-		SFX_FIRST_STRIKE:
-			return "先攻（先于目标出手）"
-		SFX_MUST_LAST:
-			return "必定后手攻击"
+		SFX_PRIORITY:
+			return "获得「先攻」（本回合行动优先）"
+		SFX_BLOCK:
+			return "获得「格挡」：受到伤害降低 %.0f%%，持续 %d 回合" % [
+				float(fx.get("value", 0.2)) * 100.0, int(fx.get("turns", 2))]
+		SFX_DODGE:
+			return "获得「闪避」：%.0f%% 概率回避一次攻击，持续 %d 回合" % [
+				float(fx.get("value", 0.2)) * 100.0, int(fx.get("turns", 2))]
+		SFX_IMMUNITY:
+			return "获得「免疫%s」，持续 %d 回合" % [String(fx.get("value", "控制")),
+				int(fx.get("turns", 2))]
+		SFX_RESIST:
+			return "获得「抵抗%s」：每回合首次受到该类减益时抵消，持续 %d 回合" % [
+				String(fx.get("value", "眩晕")), int(fx.get("turns", 2))]
 		SFX_COMBO:
-			return "本次攻击可触发合击"
-		SFX_LIFELINK_HIT:
-			return "攻心：造成伤害的 %.0f%% 回复为兵力" % (float(fx.get("value", 0.2)) * 100.0)
-		SFX_EXECUTE:
-			return "斩杀：目标兵力低于 %.0f%% 时直接击杀" % (float(fx.get("value", 0.15)) * 100.0)
-		SFX_TRAIT:
-			return "对「%s」目标额外施加「%s」" % [String(fx.get("trait", "")), String(fx.get("debuff", ""))]
+			return "可触发合击（相邻友军对同一目标联合攻击）"
+		SFX_SPLASH:
+			var shp := String(fx.get("shape", "circle"))
+			return "溅射：对目标周围 %d 圈（%s）的其它敌人造成%s%.0f%%伤害" % [
+				int(fx.get("radius", 1)), "方形圈" if shp == "circle" else "十字",
+				"谋攻" if bool(fx.get("magic", false)) else "物攻",
+				float(fx.get("value", 0.5)) * 100.0]
+		SFX_TRANSFER:
+			return "转移：把降低的 %d 点战意转给 %d 格内的我方部队" % [
+				int(fx.get("value", 10)), int(fx.get("radius", 3))]
+		SFX_FACILITY:
+			var uf := int(fx.get("uses", 2))
+			return "召唤设施「%s」（%d 回合，可收获 %d 次：回复兵力上限%.0f%%并施加「%s」）" % [
+				String(fx.get("value", "粮仓")), int(fx.get("turns", 3)), uf,
+				float(fx.get("heal_pct", 0.15)) * 100.0, String(fx.get("buff", "奋强"))]
 	return t
 
 
@@ -1069,6 +1214,36 @@ static func _mul(ext: Dictionary, key: String) -> float:
 	return float(ext.get(key, 0.0))
 
 
+# 按伤害来源类型取增伤键（副将韬略）
+#   kind: skill / normal / counter / combo / pursue / fixed
+#   返回该类型专属的增伤倍率
+static func _kind_add(ext: Dictionary, kind: String, bucket: String) -> float:
+	match kind:
+		"skill":
+			return float(ext.get("skill_damage", 0.0))
+		"normal":
+			return float(ext.get("normal_damage", 0.0))
+		"counter":
+			return float(ext.get("counter_damage", 0.0))
+		"combo":
+			return float(ext.get("combo_damage", 0.0))
+		"pursue":
+			return float(ext.get("pursue_damage", 0.0))
+		"fixed":
+			return float(ext.get("fixed_damage", 0.0))
+	return 0.0
+
+
+# 按伤害来源类型取减伤键（受技策伤害减免 / 受反击伤害降低）
+static func _kind_cut(ext: Dictionary, kind: String) -> float:
+	match kind:
+		"skill":
+			return -float(ext.get("skill_cut", 0.0))
+		"counter":
+			return -float(ext.get("counter_cut", 0.0))
+	return 0.0
+
+
 # 直伤公式。ctx 可选键：
 #   attack_add / attack_cut   攻击加成 / 攻击降低（倍率，如 0.2 = +20%）
 #   def_cut / ignore_def      防御降低 / 无视防御
@@ -1113,6 +1288,9 @@ static func damage_direct(attacker: Dictionary, target: Dictionary, opt: Diction
 	mult_area *= 1.0 + float(opt.get("elem_add", 0.0))
 	mult_area *= 1.0 + float(opt.get("general_add", 0.0)) - float(opt.get("general_cut", 0.0))
 	mult_area *= 1.0 + float(opt.get("final_add", 0.0))
+	# 按伤害来源类型的增伤（副将韬略：技能伤害 / 普攻伤害 / 反击伤害 / 合击伤害 / 克制伤害）
+	mult_area *= 1.0 + float(opt.get("kind_add", 0.0))
+	mult_area *= 1.0 + float(opt.get("kind_cut", 0.0))
 	raw *= maxf(0.0, mult_area)
 	return {"dmg": raw, "crit": crit, "crit_mult": crit_mult, "atk_base": atk_base, "def_base": def_base}
 
@@ -1171,12 +1349,18 @@ static func mei_of(unit: Dictionary) -> int:
 static func crit_chance_of(unit: Dictionary) -> float:
 	var c := float(mei_of(unit)) * get_f("crit_per_mei")
 	c += float(unit.get("crit_bonus", 0.0))
+	# 副将韬略「战斗中提升N%暴击率」等附加暴击并入 ext.crit_bonus
+	c += float((unit.get("ext", {}) as Dictionary).get("crit_bonus", 0.0))
 	return clampf(c, 0.0, 1.0)
 
 
 # 最终暴击伤害倍率 = 基础倍率 + 魅力×系数 + 额外暴伤
 static func crit_mult_of(unit: Dictionary) -> float:
-	return get_f("crit_damage") + float(mei_of(unit)) * get_f("mei_crit_dmg_per") + float(unit.get("crit_damage", 0.0))
+	var m := get_f("crit_damage") + float(mei_of(unit)) * get_f("mei_crit_dmg_per") \
+		+ float(unit.get("crit_damage", 0.0))
+	# 副将韬略「战斗中提升N%暴击伤害」并入 ext.crit_damage
+	m += float((unit.get("ext", {}) as Dictionary).get("crit_damage", 0.0))
+	return m
 
 
 # 一次伤害结算（确定性部分 + 可选随机浮动 / 暴击）
@@ -1192,18 +1376,21 @@ static func roll_damage(attacker: Dictionary, target: Dictionary, mult: float,
 	var crit_mult := crit_mult_of(attacker)
 	var ext_a: Dictionary = attacker.get("ext", {}) if attacker.get("ext") is Dictionary else {}
 	var ext_t: Dictionary = target.get("ext", {}) if target.get("ext") is Dictionary else {}
+	var kind := String(opt.get("kind", ""))
 	var res := damage_direct(attacker, target, {
 		"magic": bool(opt.get("magic", false)),
 		"attack_add": atk_add + _mul(ext_a, "attack_add"),
 		"def_cut": _mul(ext_t, "def_cut"),
 		"ignore_def": float(opt.get("ignore_def", 0.0)),
 		"restrict_mult": arm_mul,
-		"restrict_add": _mul(ext_a, "restrict_add"),
+		"restrict_add": _mul(ext_a, "restrict_add") + _kind_add(ext_a, kind, "restrict_damage"),
 		"multi_hit_add": _mul(ext_a, "multi_hit_add"),
 		"elem_add": float(opt.get("elem_add", 0.0)) + _mul(ext_a, "elem_add"),
 		"general_add": _mul(ext_a, "damage_bonus"),
 		"general_cut": _mul(ext_t, "damage_cut"),
 		"final_add": _mul(ext_a, "final_add"),
+		"kind_add": _kind_add(ext_a, kind, "damage_bonus_kind"),
+		"kind_cut": _kind_cut(ext_t, kind),
 		"power_mult": mult,
 		"crit": crit,
 		"crit_mult": crit_mult,
@@ -1225,7 +1412,7 @@ static func roll_damage(attacker: Dictionary, target: Dictionary, mult: float,
 
 # 期望伤害（不掷骰，用于验算台对比）：直伤 × (1 + (暴击倍率-1) × 暴击率)
 static func expected_damage(attacker: Dictionary, target: Dictionary, mult: float,
-		arm_mul: float = 1.0, magic: bool = false) -> int:
+		arm_mul: float = 1.0, magic: bool = false, kind: String = "") -> int:
 	var atk_add := get_f("douqi_per_stack") * float(attacker.get("douqi", 0))
 	if int(attacker.get("wushuang", 0)) > 0:
 		atk_add += get_f("wushuang_mult") - 1.0
@@ -1241,6 +1428,8 @@ static func expected_damage(attacker: Dictionary, target: Dictionary, mult: floa
 		"elem_add": _mul(ext_a, "elem_add"),
 		"general_add": _mul(ext_a, "damage_bonus"),
 		"general_cut": _mul(ext_t, "damage_cut"),
+		"kind_add": _kind_add(ext_a, kind, ""),
+		"kind_cut": _kind_cut(ext_t, kind),
 		"final_add": _mul(ext_a, "final_add"),
 		"power_mult": mult,
 		"crit": false,
@@ -1276,6 +1465,27 @@ static func dilate(area: Array, n: int) -> Array:
 		for c in add:
 			set[c] = true
 	return set.keys()
+
+
+# 溅射范围（以某点为中心的偏移格）
+#   shape = "diamond"：曼哈顿距离 ≤ radius（十字形，radius=1 时为上下左右 4 格）
+#   shape = "circle"  ：切比雪夫距离 ≤ radius（方形，radius=1 时为周围 8 格「一圈」）
+# 不含中心格自身
+static func splash_cells(radius: int, shape: String) -> Array:
+	var r := maxi(1, radius)
+	var out: Array = []
+	for y in range(-r, r + 1):
+		for x in range(-r, r + 1):
+			if x == 0 and y == 0:
+				continue
+			if shape == "circle":
+				if maxi(absi(x), absi(y)) > r:
+					continue
+			else:
+				if absi(x) + absi(y) > r:
+					continue
+			out.append(Vector2i(x, y))
+	return out
 
 
 static func face_dir(from_pos: Vector2i, to_pos: Vector2i) -> Vector2i:
