@@ -19166,7 +19166,7 @@
       "move": 4.0,
       "range": 1.0
     },
-    "talent": "xhd_talent",
+    "talent": "zhang_xiu_talent",
     "talent_lv": 1.0,
     "talent_name": "北地枪王",
     "talent_desc": "施放伤害技策时暴击率提升25%；施放单体伤害技策后，对敌军额外造成物攻50%伤害的 「 追击 」 。",
@@ -20573,7 +20573,7 @@
       "move": 4.0,
       "range": 1.0
     },
-    "talent": "xu_talent",
+    "talent": "dian_wei_talent",
     "talent_lv": 1.0,
     "talent_name": "万夫不当",
     "talent_desc": "受到主动单体攻击或反击伤害后若伤害来源在3格范围内，对其造成物攻50%伤害的 「 追击 」 。",
