@@ -56,6 +56,9 @@ const DEFAULTS := {
 	"mult_counter": 0.8,
 	"mult_combo": 0.5,
 	"mult_pursuit": 1.0,
+	# —— P3 机制参数 ——
+	"max_combo_per_round": 2,   # 每单位每回合最多触发几次合击
+	"combo_need_adjacent": 1,   # 合击是否要求与攻击者相邻（1=是）
 	"heal_mult_default": 0.8,
 	"douqi_per_stack": 0.05,
 	"wushuang_mult": 1.15,
@@ -588,6 +591,12 @@ const SFX_SWITCH := "switch_skill"    # 技能形态切换（切换为 / 升级�
 const SFX_RESOURCE := "resource"      # 资源层数（智/深谋/斗气/机巧/备战/武魂…）
 const SFX_CONSUME := "consume"        # 消耗资源
 const SFX_ZOC := "zoc"                # 阻挡领域（ZOC）
+# —— P3 机制 ——
+const SFX_PRIORITY := "priority"      # 先攻（抢先出手：本回合首次行动优先）
+const SFX_BLOCK := "block"           # 格挡（按概率免伤 / 减伤）
+const SFX_DODGE := "dodge"            # 闪避（按概率完全回避一次攻击）
+const SFX_IMMUNITY := "immunity"      # 免疫（免疫控制 / 属性减益 / 移动减益 / 地形减益）
+const SFX_COMBO := "combo"            # 合击（对同目标的相邻友军联合攻击）
 
 const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_DISPEL, SFX_SELF_DISPEL, SFX_SELF_HEAL, SFX_CD_DOWN, SFX_EXTRA_MOVE,
@@ -595,7 +604,8 @@ const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_SILENCE, SFX_DISARM, SFX_SUMMON, SFX_TELEPORT, SFX_EXTRA_TURN,
 	SFX_REVIVE, SFX_CRIT_UP, SFX_LIFELINK, SFX_COPY_BUFF, SFX_STEAL_BUFF, SFX_FIXED,
 	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI, SFX_COUNTER_UP, SFX_SWITCH,
-	SFX_RESOURCE, SFX_CONSUME, SFX_ZOC]
+	SFX_RESOURCE, SFX_CONSUME, SFX_ZOC,
+	SFX_PRIORITY, SFX_BLOCK, SFX_DODGE, SFX_IMMUNITY, SFX_COMBO]
 
 # 资源名（用于层数系统）
 const RESOURCES := ["智", "深谋", "斗气", "机巧", "备战", "武魂", "凤羽", "凤衣", "威严", "被动层数"]
@@ -619,6 +629,11 @@ const SFX_LABELS := {
 	SFX_RESOURCE: "资源层数",
 	SFX_CONSUME: "消耗资源",
 	SFX_ZOC: "阻挡领域",
+	SFX_PRIORITY: "先攻",
+	SFX_BLOCK: "格挡",
+	SFX_DODGE: "闪避",
+	SFX_IMMUNITY: "免疫",
+	SFX_COMBO: "合击",
 }
 # 常用状态名（可自由输入其它名字）
 const COMMON_STATUS := ["低迷", "虚弱", "定身", "眩晕", "撕裂", "溃逃", "缴械", "封技",
@@ -709,6 +724,16 @@ static func default_sfx(type: String) -> Dictionary:
 		SFX_CONSUME:
 			return {"type": type, "name": ""}
 		SFX_ZOC:
+			return {"type": type, "value": 1}
+		SFX_PRIORITY:
+			return {"type": type, "value": 1}
+		SFX_BLOCK:
+			return {"type": type, "value": 0.2, "turns": 2}
+		SFX_DODGE:
+			return {"type": type, "value": 0.2, "turns": 2}
+		SFX_IMMUNITY:
+			return {"type": type, "value": "控制", "turns": 2}
+		SFX_COMBO:
 			return {"type": type, "value": 1}
 		_:
 			return {"type": type, "value": 0}
@@ -805,6 +830,19 @@ static func sfx_text(fx: Dictionary) -> String:
 			return "消耗所有「%s」" % String(fx.get("name", ""))
 		SFX_ZOC:
 			return "获得 %d 格「阻挡领域」" % int(fx.get("value", 1))
+		SFX_PRIORITY:
+			return "获得「先攻」（本回合行动优先）"
+		SFX_BLOCK:
+			return "获得「格挡」：受到伤害降低 %.0f%%，持续 %d 回合" % [
+				float(fx.get("value", 0.2)) * 100.0, int(fx.get("turns", 2))]
+		SFX_DODGE:
+			return "获得「闪避」：%.0f%% 概率回避一次攻击，持续 %d 回合" % [
+				float(fx.get("value", 0.2)) * 100.0, int(fx.get("turns", 2))]
+		SFX_IMMUNITY:
+			return "获得「免疫%s」，持续 %d 回合" % [String(fx.get("value", "控制")),
+				int(fx.get("turns", 2))]
+		SFX_COMBO:
+			return "可触发合击（相邻友军对同一目标联合攻击）"
 	return t
 
 

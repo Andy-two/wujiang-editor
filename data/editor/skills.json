@@ -3273,6 +3273,12 @@
         "type": "switch_skill",
         "to": "zhao_yundanu",
         "min_lv": 1.0
+      },
+      {
+        "type": "block",
+        "value": 0.2,
+        "turns": 2.0,
+        "min_lv": 1.0
       }
     ],
     "radius": 1.0,
@@ -7083,6 +7089,12 @@
         "to": "ma_yunlu_hongying_jie",
         "min_lv": 1.0,
         "trigger": "on_turn_end"
+      },
+      {
+        "type": "dodge",
+        "value": 0.3,
+        "turns": 2.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -9709,6 +9721,18 @@
         "type": "switch_skill",
         "to": "zhao_deshenggui",
         "min_lv": 1.0
+      },
+      {
+        "type": "block",
+        "value": 0.2,
+        "turns": 2.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "immunity",
+        "value": "控制",
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -11088,6 +11112,18 @@
       {
         "type": "buff",
         "value": "免疫控制",
+        "turns": 2.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "immunity",
+        "value": "控制",
+        "turns": 2.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "immunity",
+        "value": "属性减益",
         "turns": 2.0,
         "min_lv": 3.0
       }
@@ -15169,6 +15205,18 @@
         "value": "免疫移动减益",
         "turns": 3.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "immunity",
+        "value": "属性减益",
+        "turns": 3.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "immunity",
+        "value": "移动减益",
+        "turns": 3.0,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -16632,6 +16680,11 @@
         "min_lv": 1.0,
         "ignore_def": 0.0,
         "trigger": "on_hit"
+      },
+      {
+        "type": "combo",
+        "value": 1.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -17353,6 +17406,18 @@
       {
         "type": "buff",
         "value": "免疫移动减益",
+        "turns": 2.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "immunity",
+        "value": "地形减益",
+        "turns": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "immunity",
+        "value": "移动减益",
         "turns": 2.0,
         "min_lv": 3.0
       }
@@ -19742,6 +19807,12 @@
         "type": "zoc",
         "value": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "priority",
+        "value": 1.0,
+        "min_lv": 2.0,
+        "trigger": "on_counter"
       }
     ]
   },
@@ -20634,6 +20705,11 @@
         "value": 1.0,
         "magic": true,
         "min_lv": 1.0
+      },
+      {
+        "type": "combo",
+        "value": 1.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -20742,6 +20818,12 @@
         "to": "ma_yunlu_hongying_chao",
         "min_lv": 1.0,
         "trigger": "on_turn_end"
+      },
+      {
+        "type": "dodge",
+        "value": 0.3,
+        "turns": 2.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -20762,6 +20844,12 @@
       {
         "type": "buff",
         "value": "闪避",
+        "turns": 2.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "dodge",
+        "value": 0.3,
         "turns": 2.0,
         "min_lv": 1.0
       }
@@ -21221,6 +21309,12 @@
         "type": "switch_skill",
         "to": "zhao_touwei",
         "min_lv": 1.0
+      },
+      {
+        "type": "block",
+        "value": 0.2,
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ]
   },

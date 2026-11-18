@@ -91,6 +91,13 @@ func add_unit(t: Dictionary, pos: Vector2i, side: int) -> Dictionary:
 		"form_state": {},        # 技能形态状态 {原技能id: 当前形态id}
 		"res": {},               # 资源层数 {"智": 0, "深谋": 0, ...}
 		"zoc": 0,                # 阻挡领域格数（0=无）
+		"priority": 0,           # 先攻层数（>0 时本回合行动优先）
+		"block": 0.0,            # 格挡减伤比例（0.2 = 减伤20%）
+		"block_turns": 0,        # 格挡剩余回合
+		"dodge": 0.0,            # 闪避概率（0.2 = 20% 回避）
+		"dodge_turns": 0,        # 闪避剩余回合
+		"immunity": {},          # 免疫 {"控制": 2, "属性减益": 2, ...}（值为剩余回合）
+		"combo_used": 0,         # 本回合已触发合击次数
 		"moved_tiles": 0,
 		"face": "down",          # 当前朝向
 		"anim": "idle",          # 当前动作
@@ -431,6 +438,9 @@ func basic_attack(attacker, target) -> Dictionary:
 		return {"ok": false, "msg": "超出普攻射程"}
 	var arm_mul := RULEZ.arm_multiplier(String(attacker["arm"]), String(target["arm"]))
 	_face_towards(attacker, target["pos"])
+	# P3 闪避：目标可能完全回避这次攻击
+	if try_dodge(target):
+		return {"ok": true, "dmg": 0, "crit": false, "dodged": true}
 	# 融合进来的被动（如「袭扰」= 普攻物攻 +8%）——按被融合技能名识别
 	var passive_bonus := 1.0
 	for pn in merged_passives(attacker):
@@ -458,6 +468,9 @@ func basic_attack(attacker, target) -> Dictionary:
 		_kill(target, attacker)
 		passive_on("on_kill", attacker, {"target": target})
 	else:
+		# P3 合击：攻击者带「合击」标记时，相邻友军对同一目标追加攻击
+		if can_combo(attacker) and target["alive"]:
+			trigger_combo(attacker, target)
 		# 反击：目标若在自己的普攻范围内且是近战则反击（简化规则：普攻范围覆盖攻击者即反击）
 		# 若攻击方带「无法被反击」标记（技能 Lv3 等），则跳过反击
 		var no_counter := bool(attacker.get("no_counter", false))
@@ -572,6 +585,9 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 					for tgt in foes:
 						if not tgt["alive"]:
 							continue
+						# P3 闪避：目标可能完全回避这次技能伤害
+						if try_dodge(tgt):
+							continue
 						var magic := bool(fx.get("magic", false)) or float(u["matk"]) > float(u["atk"]) * 1.2
 						var am := RULEZ.arm_multiplier(String(u["arm"]), String(tgt["arm"]))
 						var res := RULEZ.roll_damage(u, tgt, float(fx.get("value", 1.0)) * status_damage_mult(u, tgt), am,
@@ -592,6 +608,9 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 						if int(tgt["hp"]) <= 0:
 							_kill(tgt, u)
 							passive_on("on_kill", u, {"target": tgt})
+						# P3 合击：技能带「合击」标记时，相邻友军对同一目标追加攻击
+						elif can_combo(u) and tgt["alive"]:
+							trigger_combo(u, tgt)
 			RULEZ.SFX_HEAL:
 				var pool2: Array = allies if not allies.is_empty() else [u]
 				for tgt2 in pool2:
@@ -669,6 +688,24 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 			RULEZ.SFX_ZOC:
 				u["zoc"] = maxi(int(u.get("zoc", 0)), int(fx.get("value", 1)))
 				_emit("  → %s 获得 %d 格「阻挡领域」" % [u["name"], int(u["zoc"])], "info")
+			RULEZ.SFX_PRIORITY:
+				# 先攻：获得先攻层数（本回合行动优先）
+				grant_priority(u, int(fx.get("value", 1)))
+			RULEZ.SFX_BLOCK:
+				# 格挡：降低受到的伤害
+				grant_block(u, float(fx.get("value", 0.2)), int(fx.get("turns", 2)))
+			RULEZ.SFX_DODGE:
+				# 闪避：按概率回避一次攻击
+				grant_dodge(u, float(fx.get("value", 0.2)), int(fx.get("turns", 2)))
+			RULEZ.SFX_IMMUNITY:
+				# 免疫：控制 / 属性减益 / 移动减益 / 地形减益
+				var ikind := str(fx.get("value", "控制"))
+				for tgt_i in (allies if not allies.is_empty() else [u]):
+					grant_immunity(tgt_i, ikind, int(fx.get("turns", 2)))
+			RULEZ.SFX_COMBO:
+				# 合击：本次攻击可触发相邻友军联合攻击
+				u["can_combo"] = true
+				_emit("  → %s 的本次攻击可触发合击" % u["name"], "info")
 			RULEZ.SFX_ZHANYI:
 				# 战意：正数回复自身；负数降低敌军（作用范围内的敌军，无命中时取目标点单位）
 				var zv := int(fx.get("value", 10))
@@ -886,6 +923,10 @@ func _apply_outgoing(u, dmg: int) -> int:
 func _add_debuff(t, name: String, turns: int, src = null) -> void:
 	if t == null or not t["alive"]:
 		return
+	# 免疫拦截：控制 / 属性减益 / 移动减益 / 地形减益
+	if debuff_blocked_by_immunity(name, t):
+		_emit("  → %s 免疫了「%s」" % [t["name"], name], "info")
+		return
 	t["debuffs"].append({"name": name, "turns": maxi(1, turns), "src": int(src["uid"]) if src != null else -1})
 
 
@@ -986,7 +1027,13 @@ func status_damage_mult(attacker, defender) -> float:
 
 func _apply_incoming(u, dmg: int) -> int:
 	var cut := float(u["ext"].get("damage_cut", 0.0))
-	return int(maxf(1.0, round(float(dmg) * (1.0 - clampf(cut, 0.0, 0.9)))))
+	var d := int(maxf(1.0, round(float(dmg) * (1.0 - clampf(cut, 0.0, 0.9)))))
+	# P3 格挡：按比例降低受到的伤害
+	if u != null and int(u.get("block_turns", 0)) > 0:
+		var blk := clampf(float(u.get("block", 0.0)), 0.0, 0.9)
+		if blk > 0.0:
+			d = maxi(1, int(round(float(d) * (1.0 - blk))))
+	return d
 
 
 func _kill(u, src) -> void:
@@ -1046,9 +1093,12 @@ func start_side(side: int) -> void:
 		if int(u["side"]) == side and u["alive"]:
 			u["done"] = false
 			u["counter_used"] = 0
+			u["combo_used"] = 0
+			u["can_combo"] = false
 			for sid in (u["cd"] as Dictionary).keys():
 				u["cd"][sid] = maxi(0, int(u["cd"][sid]) - 1)
 			_tick_statuses(u)
+			_tick_p3_state(u)
 	_emit("—— %s 行动 ——" % ("我方" if side == 0 else "敌军"), "round")
 	changed.emit()
 
@@ -1144,6 +1194,18 @@ func _apply_passive_startup() -> void:
 					var sh := int(round(float(u["max_hp"]) * float(fd.get("value", 0.1))))
 					u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + sh)
 					n += 1
+				RULEZ.SFX_PRIORITY:
+					grant_priority(u, int(fd.get("value", 1)))
+					n += 1
+				RULEZ.SFX_BLOCK:
+					grant_block(u, float(fd.get("value", 0.2)), int(fd.get("turns", 2)))
+					n += 1
+				RULEZ.SFX_DODGE:
+					grant_dodge(u, float(fd.get("value", 0.2)), int(fd.get("turns", 2)))
+					n += 1
+				RULEZ.SFX_IMMUNITY:
+					grant_immunity(u, str(fd.get("value", "控制")), int(fd.get("turns", 2)))
+					n += 1
 		if n > 0:
 			_emit("%s 的被动生效：%d 项（开局型）" % [u["name"], n], "info")
 
@@ -1178,6 +1240,16 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 			RULEZ.SFX_SHIELD:
 				_add_buff(u, "护盾", int(fd.get("turns", 2)), int(fd.get("value", 50)))
 				_emit("  「%s」触发：获得护盾" % src, "info")
+			RULEZ.SFX_PRIORITY:
+				grant_priority(u, int(fd.get("value", 1)))
+			RULEZ.SFX_BLOCK:
+				grant_block(u, float(fd.get("value", 0.2)), int(fd.get("turns", 2)))
+			RULEZ.SFX_DODGE:
+				grant_dodge(u, float(fd.get("value", 0.2)), int(fd.get("turns", 2)))
+			RULEZ.SFX_IMMUNITY:
+				grant_immunity(u, str(fd.get("value", "控制")), int(fd.get("turns", 2)))
+			RULEZ.SFX_COMBO:
+				u["can_combo"] = true
 			_:
 				# 对目标施加的被动（如 on_hit 施加减益）
 				var tgt = ctx.get("target", null)
@@ -1281,6 +1353,215 @@ func is_in_enemy_zoc(pos: Vector2i, mover_side: int) -> bool:
 
 
 # ------------------------------------------------------------
+# P3 机制：先攻 / 格挡 / 闪避 / 免疫 / 合击
+# ------------------------------------------------------------
+
+# 每回合推进 P3 的持续性状态（格挡 / 闪避 / 免疫 / 先攻层数）
+func _tick_p3_state(u) -> void:
+	if u == null:
+		return
+	# 格挡
+	if int(u.get("block_turns", 0)) > 0:
+		u["block_turns"] = int(u["block_turns"]) - 1
+		if int(u["block_turns"]) <= 0:
+			u["block"] = 0.0
+	# 闪避
+	if int(u.get("dodge_turns", 0)) > 0:
+		u["dodge_turns"] = int(u["dodge_turns"]) - 1
+		if int(u["dodge_turns"]) <= 0:
+			u["dodge"] = 0.0
+	# 免疫
+	var im: Dictionary = u.get("immunity", {}) if u.get("immunity") is Dictionary else {}
+	for k in im.keys():
+		im[k] = int(im[k]) - 1
+		if int(im[k]) <= 0:
+			im.erase(k)
+	u["immunity"] = im
+	# 先攻层数：每回合递减（先攻只在本回合有效）
+	if int(u.get("priority", 0)) > 0:
+		u["priority"] = int(u["priority"]) - 1
+
+
+# ---- 先攻：拥有先攻的单位在自己回合内优先行动 ----
+func grant_priority(u, n: int = 1) -> void:
+	if u == null or not u["alive"]:
+		return
+	u["priority"] = int(u.get("priority", 0)) + int(n)
+	_emit("  → %s 获得「先攻」%d 层" % [u["name"], int(n)], "info")
+
+
+# 取当前回合该阵营里拥有先攻、且尚未行动的单位（按先攻层数降序）
+func priority_units(side: int) -> Array:
+	var out: Array = []
+	for u in units:
+		if not u["alive"] or int(u["side"]) != side or bool(u["done"]):
+			continue
+		if int(u.get("priority", 0)) > 0:
+			out.append(u)
+	out.sort_custom(func(a, b) -> bool:
+		return int(a.get("priority", 0)) > int(b.get("priority", 0)))
+	return out
+
+
+# ---- 格挡：按比例降低受到的伤害 ----
+func grant_block(u, ratio: float, turns: int) -> void:
+	if u == null or not u["alive"]:
+		return
+	u["block"] = clampf(float(ratio), 0.0, 0.9)
+	u["block_turns"] = maxi(int(turns), 1)
+	_emit("  → %s 获得「格挡」：减伤 %.0f%%（%d 回合）" % [u["name"], float(ratio) * 100.0,
+		int(turns)], "info")
+
+
+# ---- 闪避：按概率完全回避一次攻击 ----
+func grant_dodge(u, ratio: float, turns: int) -> void:
+	if u == null or not u["alive"]:
+		return
+	u["dodge"] = clampf(float(ratio), 0.0, 1.0)
+	u["dodge_turns"] = maxi(int(turns), 1)
+	_emit("  → %s 获得「闪避」：%.0f%% 回避（%d 回合）" % [u["name"], float(ratio) * 100.0,
+		int(turns)], "info")
+
+
+# 判定一次攻击是否被闪避（命中则消耗一次闪避层）
+func try_dodge(defender) -> bool:
+	if defender == null or not defender["alive"]:
+		return false
+	if int(defender.get("dodge_turns", 0)) <= 0:
+		return false
+	var chance := float(defender.get("dodge", 0.0))
+	if chance <= 0.0:
+		return false
+	if randf() < chance:
+		_emit("  → %s 闪避了这次攻击" % defender["name"], "info")
+		defender["dodge_turns"] = int(defender["dodge_turns"]) - 1
+		return true
+	return false
+
+
+# ---- 免疫：免疫控制 / 属性减益 / 移动减益 / 地形减益 ----
+func grant_immunity(u, kind: String, turns: int) -> void:
+	if u == null or not u["alive"] or kind == "":
+		return
+	var im: Dictionary = u.get("immunity", {}) if u.get("immunity") is Dictionary else {}
+	im[kind] = maxi(int(im.get(kind, 0)), int(turns))
+	u["immunity"] = im
+	_emit("  → %s 获得「免疫%s」（%d 回合）" % [u["name"], kind, int(turns)], "info")
+
+
+# 某单位是否对某类减益免疫
+func is_immune(u, kind: String) -> bool:
+	if u == null:
+		return false
+	var im: Dictionary = u.get("immunity", {}) if u.get("immunity") is Dictionary else {}
+	return int(im.get(kind, 0)) > 0
+
+
+# 减益是否被免疫拦截（控制类：眩晕/定身/封技/嘲讽/缴械；移动类：牵制；属性类：低迷/虚弱等）
+func debuff_blocked_by_immunity(debuff_name: String, u) -> bool:
+	if u == null:
+		return false
+	var n := String(debuff_name)
+	if n.begins_with("免疫"):
+		return false
+	var control_kw := ["眩晕", "定身", "封技", "嘲讽", "缴械", "混乱", "失智", "胆怯"]
+	var move_kw := ["牵制", "疾行", "禁移"]
+	var terrain_kw := ["地形", "沼", "陷"]
+	for k in control_kw:
+		if n.contains(k) and is_immune(u, "控制"):
+			return true
+	for k in move_kw:
+		if n.contains(k) and is_immune(u, "移动减益"):
+			return true
+	for k in terrain_kw:
+		if n.contains(k) and is_immune(u, "地形减益"):
+			return true
+	if is_immune(u, "属性减益"):
+		var attr_kw := ["低迷", "虚弱", "破绽", "识破", "锐心", "锐气", "虚弱", "减物防", "减谋防",
+			"减物攻", "减谋攻", "撕裂", "溃逃", "减防", "减伤"]
+		for k in attr_kw:
+			if n.contains(k):
+				return true
+	return false
+
+
+# ---- 合击：相邻友军对同一目标联合攻击 ----
+# 参与条件：① 与攻击者相邻（并肩作战）② 自身能打到该目标（射程内或移动后可达）
+# 返回可参与合击的友军列表
+func combo_partners(attacker, target) -> Array:
+	var out: Array = []
+	if attacker == null or target == null:
+		return out
+	for u in units:
+		if u == attacker or not u["alive"]:
+			continue
+		if int(u["side"]) != int(attacker["side"]):
+			continue
+		# 必须与攻击者相邻
+		var d: Vector2i = u["pos"] - attacker["pos"]
+		if absi(d.x) + absi(d.y) != 1:
+			continue
+		# 且能打到目标：已在普攻范围内，或移动力+射程内可达
+		if not _combo_can_reach(u, target):
+			continue
+		out.append(u)
+	return out
+
+
+# 合击伙伴能否打到目标：普攻范围覆盖，或（移动力 + 射程）可达
+func _combo_can_reach(u, target) -> bool:
+	if u == null or target == null:
+		return false
+	var rel: Vector2i = target["pos"] - u["pos"]
+	if attack_area(u).has(rel):
+		return true
+	var dist := absi(rel.x) + absi(rel.y)
+	var reach := int(u.get("move", 4)) + int(u.get("atk_range", 1))
+	return dist <= reach
+
+
+# 触发合击：每个伙伴对目标追加一次合击伤害（mult_combo 倍率，不触发反击/合击连锁）
+func trigger_combo(attacker, target) -> int:
+	var hits := 0
+	for p in combo_partners(attacker, target):
+		if not p["alive"] or not target["alive"]:
+			continue
+		if int(p.get("combo_used", 0)) >= int(RULEZ.get_i("max_combo_per_round")):
+			continue
+		p["combo_used"] = int(p.get("combo_used", 0)) + 1
+		var am := RULEZ.arm_multiplier(String(p["arm"]), String(target["arm"]))
+		var res := RULEZ.roll_damage(p, target, RULEZ.get_f("mult_combo"),
+			am, {})
+		var dmg := _apply_incoming(target, _apply_outgoing(p, int(res["dmg"])))
+		dmg = mini(dmg, int(target["hp"]))
+		target["hp"] = int(target["hp"]) - dmg
+		hits += 1
+		_set_anim(target, "hurt")
+		target["anim_hold"] = 0.35
+		_emit("  → %s 与 %s 合击 %s：%d 伤害" % [attacker["name"], p["name"],
+			target["name"], dmg], "hit")
+		passive_on("on_hit", p, {"target": target})
+		passive_on("on_hurt", target, {"source": p})
+		if int(target["hp"]) <= 0:
+			_kill(target, p)
+			break
+	return hits
+
+
+# 该单位是否有「可触发合击」的被动/技能标记
+func can_combo(u) -> bool:
+	if u == null:
+		return false
+	# 技能施放期间临时开启的合击标记
+	if bool(u.get("can_combo", false)):
+		return true
+	for fx in unit_passives(u):
+		if String((fx as Dictionary).get("type", "")) == RULEZ.SFX_COMBO:
+			return true
+	return false
+
+
+# ------------------------------------------------------------
 # 技能形态切换（切换为 / 升级至）
 #   form_state: { 原始技能id: 当前形态id }
 #   switch_skill() 记录当前形态；skill_def_for() 取当前形态的定义
@@ -1374,13 +1655,23 @@ func _emit(text: String, tone: String) -> void:
 func run_ai() -> void:
 	if ended:
 		return
-	var ai := alive(1).duplicate()
+	# P3 先攻：拥有先攻的单位优先行动
+	var ai := priority_units(1)
 	for u in ai:
 		if ended:
 			break
 		if not u["alive"]:
 			continue
 		_ai_act(u)
+	# 其余敌军按原有顺序
+	for u2 in alive(1).duplicate():
+		if ended:
+			break
+		if not u2["alive"] or bool(u2["done"]):
+			continue
+		if ai.has(u2):
+			continue
+		_ai_act(u2)
 	if not ended:
 		_emit("—— 敌军行动结束 ——", "round")
 

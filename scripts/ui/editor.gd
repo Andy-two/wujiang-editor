@@ -2394,6 +2394,63 @@ func _build_effect_editor(box: Control, sid: String, d: Dictionary) -> void:
 						data.dirty = true
 						_mark_dirty())
 					row.add_child(v3)
+				RULEZ.SFX_PRIORITY:
+					row.add_child(THEME.label("层数", 12, THEME.MUTED))
+					var pv := SpinBox.new()
+					pv.min_value = 1
+					pv.max_value = 9
+					pv.custom_minimum_size = Vector2(70, 0)
+					pv.value = int(fx.get("value", 1))
+					pv.value_changed.connect(func(x: float) -> void:
+						fx["value"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(pv)
+				RULEZ.SFX_BLOCK, RULEZ.SFX_DODGE:
+					row.add_child(THEME.label("比率", 12, THEME.MUTED))
+					var rv := SpinBox.new()
+					rv.min_value = 0.0
+					rv.max_value = 1.0
+					rv.step = 0.05
+					rv.custom_minimum_size = Vector2(70, 0)
+					rv.value = float(fx.get("value", 0.2))
+					rv.value_changed.connect(func(x: float) -> void:
+						fx["value"] = x
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(rv)
+					row.add_child(THEME.label("回合", 12, THEME.MUTED))
+					var rt := SpinBox.new()
+					rt.min_value = 1
+					rt.max_value = 9
+					rt.custom_minimum_size = Vector2(60, 0)
+					rt.value = int(fx.get("turns", 2))
+					rt.value_changed.connect(func(x: float) -> void:
+						fx["turns"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(rt)
+				RULEZ.SFX_IMMUNITY:
+					var ik := LineEdit.new()
+					ik.custom_minimum_size = Vector2(110, 0)
+					ik.placeholder_text = "控制/属性减益/移动减益/地形减益"
+					ik.text = String(fx.get("value", "控制"))
+					ik.text_changed.connect(func(x: String) -> void:
+						fx["value"] = x
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(ik)
+					row.add_child(THEME.label("回合", 12, THEME.MUTED))
+					var it := SpinBox.new()
+					it.min_value = 1
+					it.max_value = 9
+					it.custom_minimum_size = Vector2(60, 0)
+					it.value = int(fx.get("turns", 2))
+					it.value_changed.connect(func(x: float) -> void:
+						fx["turns"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(it)
 				_:
 					pass
 			# 生效等级：从第几级开始生效
