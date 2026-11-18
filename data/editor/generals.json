@@ -14014,7 +14014,7 @@
       "range": 1.0
     },
     "portrait": "res://assets/zhang_he.png",
-    "talent": "10193021",
+    "talent": "zhang_he_talent",
     "talent_lv": 1.0,
     "skills": [
       "10195021",
@@ -15884,7 +15884,7 @@
       "move": 5.0,
       "range": 2.0
     },
-    "talent": "cao_talent",
+    "talent": "canglan_cao_cao_talent",
     "talent_lv": 1.0,
     "talent_name": "沧海横流",
     "talent_desc": "施放技策后获得1层 「 将令 」 ； 「 将令 」 5层后，使用战法时，消耗5层 「 将令 」 ，该战法作用于敌方时，战法伤害增加25%、暴击率提升30%，该战法作用于我方部队时，使其随机1层 「 可升级增益 」 升1级，并延长该增益1回合持续时间，随后对其施加 「 新书·壹 」 ，持续4回合，若其已拥有 「 新书 」 ，则提升其等级，并延长1回合时间。",

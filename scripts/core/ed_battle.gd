@@ -1516,6 +1516,9 @@ func _apply_talent_effects() -> void:
 					var rn2 := str(fx.get("name", ""))
 					if rn2 != "":
 						add_resource(u, rn2, int(fx.get("value", 1)), int(fx.get("max", 99)))
+				RULEZ.SFX_ZHANYI:
+					# 天赋的战意加成（如「初始战意值增加30」）
+					add_zhanyi(u, int(fx.get("value", 10)))
 		if not fx_list.is_empty():
 			_emit("%s 的天赋「%s」(Lv%d) 生效：%d 个效果" % [u["name"],
 				String(td.get("name", tid)), lv, fx_list.size()], "info")
