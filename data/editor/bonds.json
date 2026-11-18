@@ -15,5 +15,30 @@
         "heal_back": 1.0
       }
     ]
+  },
+  "qihuang_xiangji": {
+    "name": "岐黄相济",
+    "members": [
+      "1329",
+      "1330"
+    ],
+    "desc": "同时上阵华佗、张仲景可激活：受到致命伤害后，免除1次死亡，并回复自身兵力上限35%的兵力，同时清除自身5个减益和2个控制效果。（每局1次）",
+    "trigger": "on_fatal",
+    "once_per_battle": true,
+    "fx": [
+      {
+        "type": "revive",
+        "value": 0.35
+      },
+      {
+        "type": "self_dispel",
+        "value": 5.0
+      },
+      {
+        "type": "self_dispel",
+        "value": 2.0,
+        "kind": "control"
+      }
+    ]
   }
 }

@@ -1494,11 +1494,46 @@ func _apply_incoming(u, dmg: int) -> int:
 
 func _kill(u, src) -> void:
 	var was_alive: bool = u["alive"]
+	if not was_alive:
+		return
+	# 羁绊免死（如「岐黄相济」华佗+张仲景）：每局一次
+	if bool(u.get("bond_revive_used", false)) == false:
+		for cfg in active_bonds_for(int(u["side"])):
+			var c: Dictionary = cfg
+			if str(c.get("trigger", "")) != "on_fatal":
+				continue
+			if bool(c.get("once_per_battle", false)) and bool(u.get("bond_revive_used", false)):
+				continue
+			var revived := false
+			for fx in (c.get("fx", []) as Array):
+				var fd: Dictionary = fx
+				var t := str(fd.get("type", ""))
+				if t == "revive":
+					u["alive"] = true
+					var rh := int(round(float(u["max_hp"]) * float(fd.get("value", 0.35))))
+					u["hp"] = maxi(1, rh)
+					revived = true
+				elif t == "self_dispel":
+					var cnt := int(fd.get("value", 1))
+					var kind := str(fd.get("kind", ""))
+					var kept: Array = []
+					var removed := 0
+					for db in (u.get("debuffs", []) as Array):
+						var dn := String((db as Dictionary).get("name", ""))
+						var is_ctrl := ["眩晕", "定身", "缴械", "封技", "嘲讽", "混乱", "缠缚"].has(dn)
+						if removed < cnt and (kind == "" or (kind == "control" and is_ctrl)):
+							removed += 1
+						else:
+							kept.append(db)
+					u["debuffs"] = kept
+			if revived:
+				u["bond_revive_used"] = true
+				_emit("  「%s」羁绊：%s 免除死亡（每局一次）" % [String(c.get("name", "")), u["name"]], "info")
+				return
 	u["alive"] = false
 	u["hp"] = 0
-	if was_alive:
-		_set_anim(u, "die", String(u["face"]))
-		u["anim_hold"] = 999.0
+	_set_anim(u, "die", String(u["face"]))
+	u["anim_hold"] = 999.0
 	_emit("%s 被击败%s" % [u["name"], ("（%s）" % src["name"]) if src != null else ""], "kill")
 	_check_end()
 
