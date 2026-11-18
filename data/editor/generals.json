@@ -22918,7 +22918,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "talent": "xy_talent",
+    "talent": "mi_zhu_talent",
     "talent_lv": 1.0,
     "talent_name": "富商",
     "talent_desc": "施放技策或战法后，为兵力最低的其他我方部队回复谋攻50%的兵力。",
@@ -23387,7 +23387,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "talent": "sun_talent",
+    "talent": "jian_yong_talent",
     "talent_lv": 1.0,
     "talent_name": "巧舌",
     "talent_desc": "造成单体伤害前为敌军施加 「 松懈·壹 」 ，持续1回合。",
