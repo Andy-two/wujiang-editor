@@ -688,7 +688,51 @@
       "行动结束时额外对攻击范围内最近的1个敌军造成物攻35%伤害的「追击」；拥有「苍引」的敌军被主动攻击或追击暴击后攻击者回复5%伤害的兵力；「苍引」提升至无视10%防御，受到暴击伤害提升10%。",
       "施加「苍引」的时机由主动攻击后改为主动攻击前；主动攻击或「追击」时暴击率和暴击伤害提升10%；受到拥有「苍引」的敌军伤害降低15%。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "debuff",
+        "value": "苍引",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "extra_move",
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.25,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.15,
+        "ignore_def": 0.15,
+        "trigger": "on_hit",
+        "min_lv": 2.0
+      },
+      {
+        "type": "damage",
+        "value": 0.5,
+        "trigger": "on_hit",
+        "min_lv": 2.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 99.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "buff",
+        "value": "坚壁",
+        "turns": 99.0,
+        "min_lv": 3.0
+      }
+    ]
   },
   "huang_yueying_talent": {
     "name": "巧夺天工",
@@ -1025,7 +1069,64 @@
       "受到主动单体攻击前对敌军施加「牵制·贰」，持续2回合；行动结束时对自身2格范围内的敌军造成谋攻60%的伤害并施加「牵制·贰」，持续1回合，为自身2格范围内的我方部队回复谋攻50%的兵力并驱散1个减益。",
       "天赋提升至自身3格范围内；自身3格范围内每有一个拥有「牵制」的敌军自身除兵力外全属性提升10%（最多20%）；自身3格范围内的敌军被施加「牵制」时若已拥有「牵制」额外对其造成谋攻35%的伤害。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "疾行·壹",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "牵制·贰",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "凝霜",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "牵制·贰",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hurt",
+        "min_lv": 2.0
+      },
+      {
+        "type": "damage",
+        "value": 0.6,
+        "magic": true,
+        "trigger": "on_turn_end",
+        "min_lv": 2.0
+      },
+      {
+        "type": "heal",
+        "value": 0.5,
+        "magic": true,
+        "trigger": "on_turn_end",
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "fixed",
+        "value": 35.0,
+        "trigger": "on_hit",
+        "min_lv": 3.0
+      }
+    ]
   },
   "yj_talent": {
     "name": "胆烈",
@@ -1912,6 +2013,96 @@
         "turns": 2.0,
         "stacks": 2.0,
         "trigger": "on_turn_end",
+        "min_lv": 3.0
+      }
+    ],
+    "from_official": true
+  },
+  "da_qiao_talent": {
+    "name": "天姿国色",
+    "type": "support",
+    "desc": "初始战意增加50点；自身3格范围内的我方部队回复战意时为其回复谋攻60%的兵力；自身3格范围内的我方部队消耗战意时为其施加「高级破军」，持续2回合；对我方部队施放技策或战法时为其施加「斗志」，持续2回合；被非女性敌军主动攻击或反击时受到伤害降低20%并使自身2格范围内攻击最高的其他我方部队对攻击者造成攻击100%的伤害。",
+    "lv": [
+      "初始战意增加50点；自身3格范围内的我方部队回复战意时为其回复谋攻60%的兵力；自身3格范围内的我方部队消耗战意时为其施加「高级破军」，持续2回合；对我方部队施放技策或战法时为其施加「斗志」，持续2回合；被非女性敌军主动攻击或反击时受到伤害降低20%并使自身2格范围内攻击最高的其他我方部队对攻击者造成攻击100%的伤害。",
+      "初始战意增加50点；自身3格范围内的我方部队回复战意时为其回复谋攻60%的兵力。",
+      "「斗志」增加行动结束时回复10点战意；被非女性敌军主动攻击或反击时受到伤害降低30%并使自身3格范围内攻击最高的其他我方部队对攻击者造成自身攻击150%的伤害。"
+    ],
+    "ed_fx_list": [
+      {
+        "type": "zhanyi",
+        "value": 50.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "heal",
+        "value": 0.6,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "高级破军",
+        "turns": 2.0,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "斗志",
+        "turns": 2.0,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "坚壁",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "zhanyi",
+        "value": 10.0,
+        "trigger": "on_turn_end",
+        "min_lv": 3.0
+      },
+      {
+        "type": "fixed",
+        "value": 100.0,
+        "trigger": "on_hurt",
+        "min_lv": 3.0
+      }
+    ],
+    "from_official": true
+  },
+  "chen_qun_talent": {
+    "name": "知人明理",
+    "type": "support",
+    "desc": "行动结束时为自身2格范围内谋攻最高的一个我方部队施加「妙策·贰」，持续2回合；合击时为另一个我方部队施加「妙策·贰」，持续2回合（每回合可触发一次）。",
+    "lv": [
+      "行动结束时为自身2格范围内谋攻最高的一个我方部队施加「妙策·贰」，持续2回合；合击时为另一个我方部队施加「妙策·贰」，持续2回合（每回合可触发一次）。",
+      "合击时为另一个我方部队施加「妙策」，持续2回合（每回合可触发一次）。",
+      "合击时改为施加「高级妙策」。"
+    ],
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "妙策·贰",
+        "turns": 2.0,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "妙策·贰",
+        "turns": 2.0,
+        "trigger": "on_combo",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "高级妙策",
+        "turns": 2.0,
+        "trigger": "on_combo",
         "min_lv": 3.0
       }
     ],
