@@ -2487,6 +2487,74 @@ func _build_effect_editor(box: Control, sid: String, d: Dictionary) -> void:
 						data.dirty = true
 						_mark_dirty())
 					row.add_child(ssp)
+				RULEZ.SFX_TRANSFER:
+					row.add_child(THEME.label("战意", 12, THEME.MUTED))
+					var tv := SpinBox.new()
+					tv.min_value = 1
+					tv.max_value = 99
+					tv.custom_minimum_size = Vector2(70, 0)
+					tv.value = int(fx.get("value", 10))
+					tv.value_changed.connect(func(x: float) -> void:
+						fx["value"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(tv)
+					row.add_child(THEME.label("半径", 12, THEME.MUTED))
+					var tr := SpinBox.new()
+					tr.min_value = 1
+					tr.max_value = 9
+					tr.custom_minimum_size = Vector2(60, 0)
+					tr.value = int(fx.get("radius", 3))
+					tr.value_changed.connect(func(x: float) -> void:
+						fx["radius"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(tr)
+				RULEZ.SFX_FACILITY:
+					var fn := LineEdit.new()
+					fn.custom_minimum_size = Vector2(90, 0)
+					fn.placeholder_text = "设施名"
+					fn.text = String(fx.get("value", "粮仓"))
+					fn.text_changed.connect(func(x: String) -> void:
+						fx["value"] = x
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(fn)
+					row.add_child(THEME.label("回合", 12, THEME.MUTED))
+					var ft := SpinBox.new()
+					ft.min_value = 1
+					ft.max_value = 9
+					ft.custom_minimum_size = Vector2(60, 0)
+					ft.value = int(fx.get("turns", 3))
+					ft.value_changed.connect(func(x: float) -> void:
+						fx["turns"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(ft)
+					row.add_child(THEME.label("次数", 12, THEME.MUTED))
+					var fu := SpinBox.new()
+					fu.min_value = 1
+					fu.max_value = 9
+					fu.custom_minimum_size = Vector2(60, 0)
+					fu.value = int(fx.get("uses", 2))
+					fu.value_changed.connect(func(x: float) -> void:
+						fx["uses"] = int(x)
+						fx["max_uses"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(fu)
+					row.add_child(THEME.label("回复%", 12, THEME.MUTED))
+					var fh := SpinBox.new()
+					fh.min_value = 0
+					fh.max_value = 1.0
+					fh.step = 0.05
+					fh.custom_minimum_size = Vector2(70, 0)
+					fh.value = float(fx.get("heal_pct", 0.15))
+					fh.value_changed.connect(func(x: float) -> void:
+						fx["heal_pct"] = x
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(fh)
 				_:
 					pass
 			# 生效等级：从第几级开始生效

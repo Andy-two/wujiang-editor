@@ -600,6 +600,9 @@ const SFX_RESIST := "resist"          # 抵抗（每回合首次抵抗某类减�
 const SFX_COMBO := "combo"            # 合击（对同目标的相邻友军联合攻击）
 # —— P5 机制 ——
 const SFX_SPLASH := "splash"          # 溅射（对目标周围一圈的其它敌人造成伤害）
+# —— P6 机制 ——
+const SFX_TRANSFER := "transfer"      # 转移（把降低的战意转移给友军）
+const SFX_FACILITY := "facility"      # 设施（可交互的召唤物，如粮仓/营寨）
 
 const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_DISPEL, SFX_SELF_DISPEL, SFX_SELF_HEAL, SFX_CD_DOWN, SFX_EXTRA_MOVE,
@@ -609,7 +612,7 @@ const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI, SFX_COUNTER_UP, SFX_SWITCH,
 	SFX_RESOURCE, SFX_CONSUME, SFX_ZOC,
 	SFX_PRIORITY, SFX_BLOCK, SFX_DODGE, SFX_IMMUNITY, SFX_RESIST, SFX_COMBO,
-	SFX_SPLASH]
+	SFX_SPLASH, SFX_TRANSFER, SFX_FACILITY]
 
 # 资源名（用于层数系统）
 const RESOURCES := ["智", "深谋", "斗气", "机巧", "备战", "武魂", "凤羽", "凤衣", "威严", "被动层数"]
@@ -640,6 +643,8 @@ const SFX_LABELS := {
 	SFX_RESIST: "抵抗",
 	SFX_COMBO: "合击",
 	SFX_SPLASH: "溅射",
+	SFX_TRANSFER: "转移",
+	SFX_FACILITY: "设施",
 }
 # 常用状态名（可自由输入其它名字）
 const COMMON_STATUS := ["低迷", "虚弱", "定身", "眩晕", "撕裂", "溃逃", "缴械", "封技",
@@ -744,6 +749,11 @@ static func default_sfx(type: String) -> Dictionary:
 		SFX_SPLASH:
 			return {"type": type, "value": 0.5, "radius": 1, "shape": "circle",
 				"magic": false, "ignore_def": 0.0}
+		SFX_TRANSFER:
+			return {"type": type, "value": 10, "radius": 3}
+		SFX_FACILITY:
+			return {"type": type, "value": "粮仓", "turns": 3, "uses": 2,
+				"heal_pct": 0.15, "buff": "奋强", "buff_turns": 2, "extra_turn": true}
 		SFX_COMBO:
 			return {"type": type, "value": 1}
 		_:
@@ -863,6 +873,14 @@ static func sfx_text(fx: Dictionary) -> String:
 				int(fx.get("radius", 1)), "方形圈" if shp == "circle" else "十字",
 				"谋攻" if bool(fx.get("magic", false)) else "物攻",
 				float(fx.get("value", 0.5)) * 100.0]
+		SFX_TRANSFER:
+			return "转移：把降低的 %d 点战意转给 %d 格内的我方部队" % [
+				int(fx.get("value", 10)), int(fx.get("radius", 3))]
+		SFX_FACILITY:
+			var uf := int(fx.get("uses", 2))
+			return "召唤设施「%s」（%d 回合，可收获 %d 次：回复兵力上限%.0f%%并施加「%s」）" % [
+				String(fx.get("value", "粮仓")), int(fx.get("turns", 3)), uf,
+				float(fx.get("heal_pct", 0.15)) * 100.0, String(fx.get("buff", "奋强"))]
 	return t
 
 

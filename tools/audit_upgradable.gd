@@ -34,8 +34,11 @@ const MECH := {
 	"减伤": ["debuff", "block"], "增伤": ["debuff", "crit_up"],
 	"无视": ["damage"], "重复": ["damage"], "层": ["debuff", "buff", "resource"],
 	# 引擎完全没有（用 NONE 表示空集）
-	"溅射": ["splash"], "转移": [NONE], "地形": [NONE], "营寨": [NONE],
-	"粮仓": [NONE], "收获": [NONE], "特殊地形": [NONE], "连决": [NONE],
+	"溅射": ["splash"],
+	"转移": ["transfer"],
+	"粮仓": ["facility"], "收获": ["facility"],
+	"地形": [NONE], "营寨": [NONE],
+	"特殊地形": [NONE], "连决": [NONE],
 }
 
 

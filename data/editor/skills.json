@@ -2889,6 +2889,19 @@
         "value": 2.0,
         "trigger": "on_turn_end",
         "min_lv": 1.0
+      },
+      {
+        "type": "zhanyi",
+        "value": -10.0,
+        "min_lv": 2.0,
+        "trigger": "on_turn_end"
+      },
+      {
+        "type": "transfer",
+        "value": 10.0,
+        "radius": 3.0,
+        "min_lv": 3.0,
+        "trigger": "on_turn_end"
       }
     ],
     "ed_merged_passives": [
@@ -20666,11 +20679,6 @@
     "from_official": true,
     "ed_fx_list": [
       {
-        "type": "summon",
-        "value": 1.0,
-        "min_lv": 1.0
-      },
-      {
         "type": "heal",
         "value": 0.15,
         "min_lv": 1.0
@@ -20684,6 +20692,28 @@
       {
         "type": "extra_turn",
         "min_lv": 1.0
+      },
+      {
+        "type": "facility",
+        "value": "粮仓",
+        "turns": 3.0,
+        "uses": 2.0,
+        "heal_pct": 0.15,
+        "buff": "奋强",
+        "buff_turns": 2.0,
+        "extra_turn": true,
+        "min_lv": 1.0
+      },
+      {
+        "type": "facility",
+        "value": "粮仓",
+        "turns": 3.0,
+        "uses": 3.0,
+        "heal_pct": 0.15,
+        "buff": "奋强",
+        "buff_turns": 2.0,
+        "extra_turn": true,
+        "min_lv": 3.0
       }
     ]
   },

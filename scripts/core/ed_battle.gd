@@ -25,6 +25,7 @@ var gw := 12
 var gh := 10
 var blocked: Dictionary = {}       # Vector2i -> true
 var units: Array = []
+var facilities: Array = []         # 设施（粮仓/营寨等可交互物件）
 var turn_side := 0                 # 0 = 我方, 1 = 敌军
 var round_no := 1
 var ended := false
@@ -578,18 +579,24 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 	# ---- 按「效果块」依次执行（只执行当前等级已生效的块）----
 	var skill_lv := int(u["skill_lv"].get(sid, 1))
 	var effects: Array = RULEZ.skill_effects_at(d, skill_lv)
-	# 溅射：同一技能若有多个溅射块，只生效等级最高的那个（如 Lv1 十字 → Lv3 一圈）
-	var splash_idx := -1
+	# 升级替换型块：同一技能若有多个「溅射 / 设施」块，只生效等级最高的那个
+	#   溅射：被坚执锐 Lv1 十字 → Lv3 一圈
+	#   设施：开屯护民 Lv1 粮仓可收获2次 → Lv3 可收获3次
+	var replace_types := [RULEZ.SFX_SPLASH, RULEZ.SFX_FACILITY]
+	var replace_idx := {}
 	for i in range(effects.size()):
-		if String((effects[i] as Dictionary).get("type", "")) == RULEZ.SFX_SPLASH:
-			if splash_idx < 0:
-				splash_idx = i
-			elif int((effects[i] as Dictionary).get("min_lv", 1)) > \
-					int((effects[splash_idx] as Dictionary).get("min_lv", 1)):
-				splash_idx = i
-	for fx in effects:
+		var bt := String((effects[i] as Dictionary).get("type", ""))
+		if not (bt in replace_types):
+			continue
+		if not replace_idx.has(bt):
+			replace_idx[bt] = i
+		elif int((effects[i] as Dictionary).get("min_lv", 1)) > \
+				int((effects[replace_idx[bt]] as Dictionary).get("min_lv", 1)):
+			replace_idx[bt] = i
+	for fi in range(effects.size()):
+		var fx: Dictionary = effects[fi]
 		var t := String(fx.get("type", ""))
-		if t == RULEZ.SFX_SPLASH and effects.find(fx) != splash_idx:
+		if replace_types.has(t) and replace_idx.get(t, -1) != fi:
 			continue
 		match t:
 			RULEZ.SFX_DAMAGE:
@@ -629,6 +636,17 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 			RULEZ.SFX_SPLASH:
 				# 溅射：对目标周围一圈的其它敌人造成伤害（不含主目标）
 				hits += do_splash(u, foes, target, fx)
+			RULEZ.SFX_TRANSFER:
+				# 转移：把降低的战意转给友军
+				transfer_zhanyi(u, int(fx.get("value", 10)), int(fx.get("radius", 3)))
+			RULEZ.SFX_FACILITY:
+				# 设施：召唤可交互物件（粮仓/营寨）
+				var fname := str(fx.get("value", "粮仓"))
+				var fpos := _find_free_near(u["pos"])
+				if fpos.x >= 0:
+					var ffx := fx.duplicate(true)
+					ffx["owner_uid"] = int(u["uid"])
+					add_facility(fname, fpos, int(u["side"]), ffx)
 			RULEZ.SFX_HEAL:
 				var pool2: Array = allies if not allies.is_empty() else [u]
 				for tgt2 in pool2:
@@ -874,6 +892,81 @@ func _find_dead_ally(side: int):
 
 
 # ------------------------------------------------------------
+# 设施系统（粮仓 / 营寨等）
+#   设施是召唤到战场上的「物件」，不占格、单位可站上去并与之交互（收获）
+#   facilities: [{name, pos, side, turns, uses, heal_pct, buff, buff_turns, extra_turn, owner}]
+#   设施本身不参与战斗结算，不阻挡移动
+# ------------------------------------------------------------
+func add_facility(name: String, pos: Vector2i, side: int, fx: Dictionary) -> void:
+	var f := {
+		"name": name,
+		"pos": pos,
+		"side": side,
+		"turns": maxi(1, int(fx.get("turns", 3))),
+		"uses": maxi(1, int(fx.get("uses", 2))),
+		"max_uses": maxi(1, int(fx.get("uses", 2))),
+		"heal_pct": float(fx.get("heal_pct", 0.15)),
+		"buff": String(fx.get("buff", "奋强")),
+		"buff_turns": int(fx.get("buff_turns", 2)),
+		"extra_turn": bool(fx.get("extra_turn", true)),
+		"owner": int(fx.get("owner_uid", -1)),
+	}
+	facilities.append(f)
+	_emit("  → 召唤设施「%s」于 %s（持续 %d 回合，可收获 %d 次）" %
+		[name, str(pos), int(f["turns"]), int(f["uses"])], "info")
+
+
+# 设施所在格上的单位（若有）
+func unit_on_facility(pos: Vector2i):
+	var tu = unit_at(pos)
+	if tu == null:
+		return null
+	return tu
+
+
+# 收获设施：范围内的己方单位回复 + 施加增益 + 获得继续行动，消耗 1 次使用次数
+func harvest_facility(u, f: Dictionary) -> Dictionary:
+	if u == null or f == null or not u["alive"]:
+		return {"ok": false, "msg": "无法收获"}
+	if int(f.get("uses", 0)) <= 0:
+		return {"ok": false, "msg": "该设施已无剩余收获次数"}
+	if int(f.get("side", 0)) != int(u["side"]):
+		return {"ok": false, "msg": "无法收获敌方的设施"}
+	var heal := int(round(float(u["max_hp"]) * float(f.get("heal_pct", 0.15))))
+	u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + heal)
+	var bn := String(f.get("buff", ""))
+	if bn != "":
+		_add_buff(u, bn, int(f.get("buff_turns", 2)), 1)
+	if bool(f.get("extra_turn", true)):
+		u["done"] = false
+		u["extra_action"] = true
+	f["uses"] = int(f["uses"]) - 1
+	_emit("  → %s 收获「%s」：回复 %d 兵力，获得「%s」" %
+		[u["name"], String(f.get("name", "设施")), heal, bn], "heal")
+	return {"ok": true, "heal": heal, "uses_left": int(f["uses"])}
+
+
+# 找出 u 所在格上的己方设施
+func facility_at_unit(u) -> Dictionary:
+	if u == null:
+		return {}
+	for f in facilities:
+		if (f as Dictionary).get("pos", Vector2i(-1, -1)) == u["pos"]:
+			return f
+	return {}
+
+
+# 每回合推进设施持续时间
+func _tick_facilities() -> void:
+	for i in range(facilities.size() - 1, -1, -1):
+		var f: Dictionary = facilities[i]
+		f["turns"] = int(f["turns"]) - 1
+		if int(f["turns"]) <= 0:
+			_emit("  → 设施「%s」消失" % String(f.get("name", "")), "info")
+			facilities.remove_at(i)
+
+
+# ------------------------------------------------------------
 # 战意系统
 # ------------------------------------------------------------
 func add_zhanyi(u, delta: int) -> void:
@@ -910,6 +1003,57 @@ func steal_zhanyi_from(u, amount: int) -> void:
 		return
 	add_zhanyi(best, -amount)
 	add_zhanyi(u, amount)
+
+
+# ------------------------------------------------------------
+# 转移：把「降低的战意」转给友军（如舞影 Lv3）
+#   amount：从敌军身上削掉多少战意（正数）
+#   radius：友军需在施法者多少格内
+#   优先给战意最低的友军（战意是团队资源，缺时更需要）
+#   返回实际转移的战意点数
+# ------------------------------------------------------------
+func transfer_zhanyi(u, amount: int, radius: int) -> int:
+	if u == null or not u["alive"] or amount <= 0:
+		return 0
+	# 目标：范围内战意最高的敌军
+	var worst = null
+	var worst_z := -1
+	for t in units:
+		if not t["alive"] or int(t["side"]) == int(u["side"]):
+			continue
+		var d: Vector2i = t["pos"] - u["pos"]
+		if absi(d.x) + absi(d.y) > radius:
+			continue
+		if int(t.get("zhanyi", 0)) > worst_z:
+			worst_z = int(t.get("zhanyi", 0))
+			worst = t
+	if worst == null or worst_z <= 0:
+		return 0
+	# 接收者：范围内战意最低的友军（不含施法者自己）
+	var best = null
+	var best_z := 999999
+	for t2 in units:
+		if not t2["alive"] or int(t2["side"]) != int(u["side"]):
+			continue
+		if t2 == u:
+			continue
+		var d2: Vector2i = t2["pos"] - u["pos"]
+		if absi(d2.x) + absi(d2.y) > radius:
+			continue
+		if int(t2.get("zhanyi", 0)) < best_z:
+			best_z = int(t2.get("zhanyi", 0))
+			best = t2
+	if best == null:
+		return 0
+	# 实际能转移多少：敌军现有战意 与 友军可承接空间 的较小值
+	var can_take := maxi(0, int(best.get("zhanyi_max", 100)) - best_z)
+	var moved := mini(mini(amount, worst_z), can_take)
+	if moved <= 0:
+		return 0
+	add_zhanyi(worst, -moved)
+	add_zhanyi(best, moved)
+	_emit("  → 转移 %d 点战意：%s → %s" % [moved, worst["name"], best["name"]], "info")
+	return moved
 
 
 # ------------------------------------------------------------
@@ -1193,6 +1337,11 @@ func _check_end() -> void:
 # ------------------------------------------------------------
 func end_unit_turn(u) -> void:
 	if u != null:
+		# 设施收获：单位站在己方设施上时，结束行动自动收获（如开屯护民的粮仓）
+		var f := facility_at_unit(u)
+		if not f.is_empty() and int(f.get("side", 0)) == int(u["side"]) \
+				and int(f.get("uses", 0)) > 0:
+			harvest_facility(u, f)
 		u["done"] = true
 	changed.emit()
 
@@ -1217,6 +1366,7 @@ func start_side(side: int) -> void:
 				u["cd"][sid] = maxi(0, int(u["cd"][sid]) - 1)
 			_tick_statuses(u)
 			_tick_p3_state(u)
+	_tick_facilities()
 	_emit("—— %s 行动 ——" % ("我方" if side == 0 else "敌军"), "round")
 	changed.emit()
 
@@ -1380,6 +1530,16 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 				grant_resist(u, str(fd.get("value", "眩晕")), int(fd.get("turns", 2)))
 			RULEZ.SFX_COMBO:
 				u["can_combo"] = true
+			RULEZ.SFX_TRANSFER:
+				# 被动转移（如舞影 Lv3：把降低的战意转给友军）
+				transfer_zhanyi(u, int(fd.get("value", 10)), int(fd.get("radius", 3)))
+			RULEZ.SFX_FACILITY:
+				# 被动召唤设施
+				var fpos2 := _find_free_near(u["pos"])
+				if fpos2.x >= 0:
+					var ffx2 := fd.duplicate(true)
+					ffx2["owner_uid"] = int(u["uid"])
+					add_facility(str(fd.get("value", "粮仓")), fpos2, int(u["side"]), ffx2)
 			_:
 				# 对目标施加的被动（如 on_hit 施加减益）
 				var tgt = ctx.get("target", null)
