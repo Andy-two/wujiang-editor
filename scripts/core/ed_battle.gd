@@ -256,7 +256,92 @@ func _general_ranges(gkey: String) -> Dictionary:
 var _data_ref: Dictionary = {}        # 由外部注入：{"general_ranges": {key: ranges}, "skills": {...}, "talents": {...}}
 
 
-func bind_data(generals: Dictionary, skills: Dictionary, talents: Dictionary, arm_shapes: Dictionary = {}) -> void:
+# ============================================================
+# 羁绊系统（bonds）
+#   羁绊由「副将ID组合」触发：同一方的上阵武将携带的副将
+#   凑齐某条羁绊的 members 时激活，在该羁绊的 trigger 时机执行 fx。
+# ============================================================
+var _active_bonds: Dictionary = {}   # side -> [{id, cfg}]
+
+
+func _rebuild_active_bonds() -> void:
+	_active_bonds.clear()
+
+
+# 检查某方是否激活了某羁绊，返回该羁绊配置数组
+func active_bonds_for(side: int) -> Array:
+	if _active_bonds.has(side):
+		return _active_bonds[side]
+	var bonds: Dictionary = _data_ref.get("bonds", {})
+	var vice_ids: Array = []
+	for u in units:
+		if not u["alive"] or int(u["side"]) != side:
+			continue
+		var ext: Dictionary = u.get("ext", {}) if u.get("ext") is Dictionary else {}
+		var vid := int(ext.get("vice_id", 0))
+		if vid > 0:
+			vice_ids.append(str(vid))
+	var out: Array = []
+	for bid in bonds.keys():
+		if not (bonds[bid] is Dictionary):
+			continue
+		var cfg: Dictionary = bonds[bid]
+		var members: Array = cfg.get("members", []) if cfg.get("members") is Array else []
+		if members.is_empty():
+			continue
+		var all := true
+		for m in members:
+			if not vice_ids.has(str(m)):
+				all = false
+				break
+		if all:
+			var c2 := cfg.duplicate(true)
+			c2["id"] = String(bid)
+			out.append(c2)
+	_active_bonds[side] = out
+	return out
+
+
+# 在指定时机触发羁绊效果
+func trigger_bonds(event: String, u, targets: Array) -> void:
+	if u == null or not u["alive"]:
+		return
+	for cfg in active_bonds_for(int(u["side"])):
+		var c: Dictionary = cfg
+		if str(c.get("trigger", "")) != event:
+			continue
+		var fx_list: Array = c.get("fx", []) if c.get("fx") is Array else []
+		for fx in fx_list:
+			var fd: Dictionary = fx
+			var t := str(fd.get("type", ""))
+			match t:
+				"fixed":
+					var base := float(fd.get("value", 0.0))
+					# of_atk：按攻击者物攻百分比计算固伤
+					if bool(fd.get("of_atk", false)):
+						base = float(u["atk"]) * base
+					for tgt in targets:
+						if tgt == null or not tgt["alive"] or int(tgt["hp"]) <= 0:
+							continue
+						var dm := int(round(base))
+						dm = clampi(dm, 0, int(tgt["hp"]))
+						if dm <= 0:
+							continue
+						tgt["hp"] = int(tgt["hp"]) - dm
+						# 回血：按造成的伤害量回复自身
+						if float(fd.get("heal_back", 0.0)) > 0.0:
+							u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + dm)
+						_emit("  「%s」羁绊：%s 受到 %d 固定伤害" % [
+							String(c.get("name", "")), tgt["name"], dm], "hit")
+						if int(tgt["hp"]) <= 0:
+							_kill(tgt, u)
+				"heal_by_damage":
+					# 上一条 fixed 已处理，这里保留兼容（不重复回血）
+					pass
+	# 给 fixed 块打回血标记（在触发前处理，简单起见直接在上方完成）
+
+
+func bind_data(generals: Dictionary, skills: Dictionary, talents: Dictionary, arm_shapes: Dictionary = {}, bonds: Dictionary = {}) -> void:
 	var cache := {}
 	var art_cache := {}
 	for k in generals.keys():
@@ -265,7 +350,9 @@ func bind_data(generals: Dictionary, skills: Dictionary, talents: Dictionary, ar
 		if art is Dictionary and (art as Dictionary).get("anims") is Dictionary:
 			art_cache[String(k)] = (art as Dictionary)["anims"]
 	_data_ref = {"ed_ranges_cache": cache, "skills": skills, "talents": talents,
-		"generals": generals, "art_cache": art_cache, "arm_shapes": arm_shapes}
+		"generals": generals, "art_cache": art_cache, "arm_shapes": arm_shapes,
+		"bonds": bonds}
+	_rebuild_active_bonds()
 
 
 func skill_def(sid: String) -> Dictionary:
@@ -467,6 +554,7 @@ func basic_attack(attacker, target) -> Dictionary:
 	# 被动触发：暴击 / 造成伤害 / 受击
 	if bool(res["crit"]):
 		passive_on("on_crit", attacker, {"target": target})
+		trigger_bonds("on_crit", attacker, [target])
 	passive_on("on_hit", attacker, {"target": target})
 	passive_on("on_hurt", target, {"source": attacker})
 	if int(target["hp"]) <= 0:
@@ -627,6 +715,7 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 						# 被动触发（技能伤害同样触发）
 						if bool(res["crit"]):
 							passive_on("on_crit", u, {"target": tgt})
+						trigger_bonds("on_crit", u, [tgt])
 						passive_on("on_hurt", tgt, {"source": u})
 						if int(tgt["hp"]) <= 0:
 							_kill(tgt, u)
@@ -1246,6 +1335,7 @@ func do_splash(u, foes: Array, target: Vector2i, fx: Dictionary) -> int:
 		_emit("  → 溅射 %s：%d 伤害%s" % [tu["name"], dmg, "（暴击）" if res["crit"] else ""], "hit")
 		if bool(res["crit"]):
 			passive_on("on_crit", u, {"target": tu})
+			trigger_bonds("on_crit", u, [tu])
 		passive_on("on_hurt", tu, {"source": u})
 		if int(tu["hp"]) <= 0:
 			_kill(tu, u)

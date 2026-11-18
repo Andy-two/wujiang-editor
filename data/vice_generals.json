@@ -1,8 +1,8 @@
 {
   "1201": {
-    "id": 1201,
+    "id": 1201.0,
     "name": "鲍信",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1201.png",
     "effect_name": "御锋",
@@ -15,12 +15,12 @@
     "stats": {
       "hp": 1.5
     },
-    "dmg": 2
+    "dmg": 2.0
   },
   "1202": {
-    "id": 1202,
+    "id": 1202.0,
     "name": "董昭",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1202.png",
     "effect_name": "劝进",
@@ -31,15 +31,15 @@
     ],
     "intro": "年轻时被举为孝廉。",
     "stats": {
-      "matk": 15,
+      "matk": 15.0,
       "hp": 1.5
     },
-    "dmg": 15
+    "dmg": 15.0
   },
   "1203": {
-    "id": 1203,
+    "id": 1203.0,
     "name": "李通",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1203.png",
     "effect_name": "裂伤",
@@ -52,12 +52,12 @@
     "stats": {
       "atk": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1204": {
-    "id": 1204,
+    "id": 1204.0,
     "name": "高览",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1204.png",
     "effect_name": "叠锋",
@@ -68,15 +68,15 @@
     ],
     "intro": "曾与许褚大战不分胜负。",
     "stats": {
-      "atk": 3,
+      "atk": 3.0,
       "hp": 1.5
     },
     "dmg": 1.5
   },
   "1205": {
-    "id": 1205,
+    "id": 1205.0,
     "name": "朱灵",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1205.png",
     "effect_name": "韧守",
@@ -87,16 +87,16 @@
     ],
     "intro": "公私分明，用兵有道。",
     "stats": {
-      "hp": 6,
-      "atk": 3,
-      "matk": 3
+      "hp": 6.0,
+      "atk": 3.0,
+      "matk": 3.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1206": {
-    "id": 1206,
+    "id": 1206.0,
     "name": "张燕",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1206.png",
     "effect_name": "激昂",
@@ -112,9 +112,9 @@
     "dmg": 1.5
   },
   "1207": {
-    "id": 1207,
+    "id": 1207.0,
     "name": "曹纯",
-    "quality": 0,
+    "quality": 0.0,
     "quality_name": "奇",
     "portrait": "res://assets/vice/1207.png",
     "effect_name": "严守",
@@ -122,16 +122,16 @@
     "taolue": [],
     "intro": "曹仁之弟，年少有为。",
     "stats": {
-      "hp": 2,
-      "atk": 1,
-      "matk": 1
+      "hp": 2.0,
+      "atk": 1.0,
+      "matk": 1.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1208": {
-    "id": 1208,
+    "id": 1208.0,
     "name": "史涣",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1208.png",
     "effect_name": "忠护",
@@ -139,14 +139,14 @@
     "taolue": [],
     "intro": "年少任侠，以忠诚勇敢著称。",
     "stats": {
-      "mdef": 10
+      "mdef": 10.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1209": {
-    "id": 1209,
+    "id": 1209.0,
     "name": "卞瑶",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1209.png",
     "effect_name": "抚琴",
@@ -159,12 +159,12 @@
     "stats": {
       "hp": 1.5
     },
-    "dmg": 15
+    "dmg": 15.0
   },
   "1210": {
-    "id": 1210,
+    "id": 1210.0,
     "name": "蔡邕",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1210.png",
     "effect_name": "博闻",
@@ -172,14 +172,14 @@
     "taolue": [],
     "intro": "善文学书法，精通音律经史。",
     "stats": {
-      "matk": 8
+      "matk": 8.0
     },
-    "dmg": 8
+    "dmg": 8.0
   },
   "1211": {
-    "id": 1211,
+    "id": 1211.0,
     "name": "戏志才",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1211.png",
     "effect_name": "残谋",
@@ -190,14 +190,14 @@
     ],
     "intro": "善于谋略，有辅佐之才。",
     "stats": {
-      "matk": 15
+      "matk": 15.0
     },
     "dmg": 1.5
   },
   "1212": {
-    "id": 1212,
+    "id": 1212.0,
     "name": "枣袛",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1212.png",
     "effect_name": "屯守",
@@ -205,16 +205,16 @@
     "taolue": [],
     "intro": "屯田制首倡者之一。",
     "stats": {
-      "hp": 4,
-      "atk": 2,
-      "matk": 2
+      "hp": 4.0,
+      "atk": 2.0,
+      "matk": 2.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1213": {
-    "id": 1213,
+    "id": 1213.0,
     "name": "臧霸",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1213.png",
     "effect_name": "长驱",
@@ -228,9 +228,9 @@
     "dmg": 1.5
   },
   "1214": {
-    "id": 1214,
+    "id": 1214.0,
     "name": "胡车儿",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1214.png",
     "effect_name": "追袭",
@@ -241,12 +241,12 @@
     ],
     "intro": "力大无穷，勇冠其军。",
     "stats": {},
-    "dmg": 30
+    "dmg": 30.0
   },
   "1215": {
-    "id": 1215,
+    "id": 1215.0,
     "name": "夏侯昭",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1215.png",
     "effect_name": "燕护",
@@ -259,12 +259,12 @@
     "stats": {
       "atk": 1.5
     },
-    "dmg": 30
+    "dmg": 30.0
   },
   "1216": {
-    "id": 1216,
+    "id": 1216.0,
     "name": "邹蕙",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1216.png",
     "effect_name": "蕙心",
@@ -280,9 +280,9 @@
     "dmg": 1.5
   },
   "1217": {
-    "id": 1217,
+    "id": 1217.0,
     "name": "吕虔",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1217.png",
     "effect_name": "固本",
@@ -290,14 +290,14 @@
     "taolue": [],
     "intro": "有勇有谋，善领兵打仗。",
     "stats": {
-      "def": 10
+      "def": 10.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1218": {
-    "id": 1218,
+    "id": 1218.0,
     "name": "管亥",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1218.png",
     "effect_name": "滞敌",
@@ -311,12 +311,12 @@
       "atk": 1.5,
       "def": 1.5
     },
-    "dmg": 15
+    "dmg": 15.0
   },
   "1219": {
-    "id": 1219,
+    "id": 1219.0,
     "name": "蒯越",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1219.png",
     "effect_name": "伺机",
@@ -324,14 +324,14 @@
     "taolue": [],
     "intro": "足智多谋。出身荆州名门。",
     "stats": {
-      "hp": 8
+      "hp": 8.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1220": {
-    "id": 1220,
+    "id": 1220.0,
     "name": "韩浩",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1220.png",
     "effect_name": "镇军",
@@ -342,14 +342,14 @@
     ],
     "intro": "与王匡一起领兵抵御董卓。",
     "stats": {
-      "atk": 5
+      "atk": 5.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1221": {
-    "id": 1221,
+    "id": 1221.0,
     "name": "毛玠",
-    "quality": 0,
+    "quality": 0.0,
     "quality_name": "奇",
     "portrait": "res://assets/vice/1221.png",
     "effect_name": "先佐",
@@ -357,16 +357,16 @@
     "taolue": [],
     "intro": "为官以清廉公正著称。",
     "stats": {
-      "hp": 2,
-      "atk": 1,
-      "matk": 1
+      "hp": 2.0,
+      "atk": 1.0,
+      "matk": 1.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1222": {
-    "id": 1222,
+    "id": 1222.0,
     "name": "杜若",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1222.png",
     "effect_name": "幽思",
@@ -377,14 +377,14 @@
     ],
     "intro": "原为吕布将秦宜禄之妻。",
     "stats": {
-      "matk": 15
+      "matk": 15.0
     },
-    "dmg": 15
+    "dmg": 15.0
   },
   "1223": {
-    "id": 1223,
+    "id": 1223.0,
     "name": "蹋顿",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1223.png",
     "effect_name": "扫蛮",
@@ -395,15 +395,15 @@
     ],
     "intro": "丘力居之侄，骁勇善战。",
     "stats": {
-      "def": 12,
+      "def": 12.0,
       "atk": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1224": {
-    "id": 1224,
+    "id": 1224.0,
     "name": "娄圭",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1224.png",
     "effect_name": "隐智",
@@ -411,14 +411,14 @@
     "taolue": [],
     "intro": "年少时便与曹操相识。",
     "stats": {
-      "matk": 8
+      "matk": 8.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1225": {
-    "id": 1225,
+    "id": 1225.0,
     "name": "王朗",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1225.png",
     "effect_name": "富瞻",
@@ -429,14 +429,14 @@
     ],
     "intro": "博学多闻，性格严谨慷慨。",
     "stats": {
-      "mdef": 10
+      "mdef": 10.0
     },
     "dmg": 1.5
   },
   "1226": {
-    "id": 1226,
+    "id": 1226.0,
     "name": "武安国",
-    "quality": 0,
+    "quality": 0.0,
     "quality_name": "奇",
     "portrait": "res://assets/vice/1226.png",
     "effect_name": "蹈锋",
@@ -444,12 +444,12 @@
     "taolue": [],
     "intro": "知恩图报，善用铁锤作战。",
     "stats": {},
-    "dmg": 12
+    "dmg": 12.0
   },
   "1227": {
-    "id": 1227,
+    "id": 1227.0,
     "name": "杨阜",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1227.png",
     "effect_name": "长策",
@@ -463,12 +463,12 @@
       "matk": 1.5,
       "hp": 1.5
     },
-    "dmg": 15
+    "dmg": 15.0
   },
   "1228": {
-    "id": 1228,
+    "id": 1228.0,
     "name": "牛金",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1228.png",
     "effect_name": "悍攻",
@@ -482,12 +482,12 @@
       "atk": 1.5,
       "hp": 1.5
     },
-    "dmg": 20
+    "dmg": 20.0
   },
   "1229": {
-    "id": 1229,
+    "id": 1229.0,
     "name": "严珩",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1229.png",
     "effect_name": "励军",
@@ -500,12 +500,12 @@
     "stats": {
       "matk": 6.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1230": {
-    "id": 1230,
+    "id": 1230.0,
     "name": "梁习",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1230.png",
     "effect_name": "铁骑",
@@ -516,12 +516,12 @@
     ],
     "intro": "传有“梁习治最”典故。",
     "stats": {},
-    "dmg": 12
+    "dmg": 12.0
   },
   "1231": {
-    "id": 1231,
+    "id": 1231.0,
     "name": "杨修",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1231.png",
     "effect_name": "机辩",
@@ -529,14 +529,14 @@
     "taolue": [],
     "intro": "心思敏捷，善揣摩人心。",
     "stats": {
-      "matk": 8
+      "matk": 8.0
     },
-    "dmg": 8
+    "dmg": 8.0
   },
   "1232": {
-    "id": 1232,
+    "id": 1232.0,
     "name": "曹昂",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1232.png",
     "effect_name": "荡寇",
@@ -544,12 +544,12 @@
     "taolue": [],
     "intro": "曹操长子，二十岁时被举为孝廉。",
     "stats": {},
-    "dmg": 10
+    "dmg": 10.0
   },
   "1234": {
-    "id": 1234,
+    "id": 1234.0,
     "name": "赵娥",
-    "quality": 0,
+    "quality": 0.0,
     "quality_name": "奇",
     "portrait": "res://assets/vice/1234.png",
     "effect_name": "枕戈",
@@ -557,16 +557,16 @@
     "taolue": [],
     "intro": "为报父仇筹备十余年。",
     "stats": {
-      "hp": 2,
-      "atk": 1,
-      "matk": 1
+      "hp": 2.0,
+      "atk": 1.0,
+      "matk": 1.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1235": {
-    "id": 1235,
+    "id": 1235.0,
     "name": "韩遂",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1235.png",
     "effect_name": "坚行",
@@ -577,14 +577,14 @@
     ],
     "intro": "曾举兵叛乱，拥兵自守。",
     "stats": {
-      "def": 8
+      "def": 8.0
     },
     "dmg": 1.5
   },
   "1236": {
-    "id": 1236,
+    "id": 1236.0,
     "name": "仓慈",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1236.png",
     "effect_name": "蓄谋",
@@ -595,15 +595,15 @@
     ],
     "intro": "任敦煌太守，深受百姓爱戴。",
     "stats": {
-      "mdef": 3,
+      "mdef": 3.0,
       "matk": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1237": {
-    "id": 1237,
+    "id": 1237.0,
     "name": "曹安民",
-    "quality": 0,
+    "quality": 0.0,
     "quality_name": "奇",
     "portrait": "res://assets/vice/1237.png",
     "effect_name": "疾斩",
@@ -611,12 +611,12 @@
     "taolue": [],
     "intro": "曹操之侄。",
     "stats": {},
-    "dmg": 8
+    "dmg": 8.0
   },
   "1238": {
-    "id": 1238,
+    "id": 1238.0,
     "name": "崔琰",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1238.png",
     "effect_name": "防护",
@@ -629,12 +629,12 @@
     "stats": {
       "matk": 7.5
     },
-    "dmg": 6
+    "dmg": 6.0
   },
   "1239": {
-    "id": 1239,
+    "id": 1239.0,
     "name": "糜芮",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1239.png",
     "effect_name": "慈援",
@@ -647,12 +647,12 @@
     "stats": {
       "def": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1242": {
-    "id": 1242,
+    "id": 1242.0,
     "name": "陈琳",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1242.png",
     "effect_name": "孤笔",
@@ -660,14 +660,14 @@
     "taolue": [],
     "intro": "善诗词，风格雄放强劲。",
     "stats": {
-      "matk": 8
+      "matk": 8.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1243": {
-    "id": 1243,
+    "id": 1243.0,
     "name": "华歆",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1243.png",
     "effect_name": "德素",
@@ -683,9 +683,9 @@
     "dmg": 1.5
   },
   "1244": {
-    "id": 1244,
+    "id": 1244.0,
     "name": "蔡瑁",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1244.png",
     "effect_name": "督水",
@@ -696,14 +696,14 @@
     ],
     "intro": "刘表麾下重臣。",
     "stats": {
-      "atk": 18
+      "atk": 18.0
     },
-    "dmg": 24
+    "dmg": 24.0
   },
   "1245": {
-    "id": 1245,
+    "id": 1245.0,
     "name": "麹义",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1245.png",
     "effect_name": "锐矢",
@@ -716,12 +716,12 @@
     "stats": {
       "atk": 1.5
     },
-    "dmg": 20
+    "dmg": 20.0
   },
   "1246": {
-    "id": 1246,
+    "id": 1246.0,
     "name": "张既",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1246.png",
     "effect_name": "斩谋",
@@ -732,16 +732,16 @@
     ],
     "intro": "曹操手下名臣，治绩为三辅第一。",
     "stats": {
-      "mdef": 4,
+      "mdef": 4.0,
       "hp": 1.5,
       "matk": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1247": {
-    "id": 1247,
+    "id": 1247.0,
     "name": "许攸",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1247.png",
     "effect_name": "傲睨",
@@ -749,14 +749,14 @@
     "taolue": [],
     "intro": "胸有谋略但性格狂傲。",
     "stats": {
-      "matk": 9
+      "matk": 9.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1248": {
-    "id": 1248,
+    "id": 1248.0,
     "name": "钟繇",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1248.png",
     "effect_name": "墨伐",
@@ -767,14 +767,14 @@
     ],
     "intro": "善书法政治，德高望重。",
     "stats": {
-      "matk": 5
+      "matk": 5.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1250": {
-    "id": 1250,
+    "id": 1250.0,
     "name": "邢道荣",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1250.png",
     "effect_name": "蛮勇",
@@ -782,15 +782,15 @@
     "taolue": [],
     "intro": "善用开山斧，人称万人敌。",
     "stats": {
-      "atk": 8,
-      "def": 10
+      "atk": 8.0,
+      "def": 10.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1251": {
-    "id": 1251,
+    "id": 1251.0,
     "name": "阎柔",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1251.png",
     "effect_name": "增势",
@@ -801,15 +801,15 @@
     ],
     "intro": "成长于乌桓，深得外族信任。",
     "stats": {
-      "def": 5,
+      "def": 5.0,
       "atk": 1.5
     },
-    "dmg": 5
+    "dmg": 5.0
   },
   "1253": {
-    "id": 1253,
+    "id": 1253.0,
     "name": "孙资",
-    "quality": 0,
+    "quality": 0.0,
     "quality_name": "奇",
     "portrait": "res://assets/vice/1253.png",
     "effect_name": "富瞻",
@@ -817,16 +817,16 @@
     "taolue": [],
     "intro": "举孝廉出身，博学多才。",
     "stats": {
-      "hp": 2,
-      "atk": 1,
-      "matk": 1
+      "hp": 2.0,
+      "atk": 1.0,
+      "matk": 1.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1254": {
-    "id": 1254,
+    "id": 1254.0,
     "name": "曹节",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1254.png",
     "effect_name": "连环",
@@ -837,16 +837,16 @@
     ],
     "intro": "汉献帝的第二任皇后。",
     "stats": {
-      "hp": 6,
-      "atk": 3,
-      "matk": 3
+      "hp": 6.0,
+      "atk": 3.0,
+      "matk": 3.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1256": {
-    "id": 1256,
+    "id": 1256.0,
     "name": "淳于琼",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1256.png",
     "effect_name": "恃力",
@@ -854,12 +854,12 @@
     "taolue": [],
     "intro": "西园八校尉之一，后为袁绍部将。",
     "stats": {},
-    "dmg": 15
+    "dmg": 15.0
   },
   "1257": {
-    "id": 1257,
+    "id": 1257.0,
     "name": "宋宪",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1257.png",
     "effect_name": "锐兵",
@@ -867,14 +867,14 @@
     "taolue": [],
     "intro": "八健将之一。",
     "stats": {
-      "atk": 8
+      "atk": 8.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1258": {
-    "id": 1258,
+    "id": 1258.0,
     "name": "魏续",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1258.png",
     "effect_name": "骁掠",
@@ -882,12 +882,12 @@
     "taolue": [],
     "intro": "八健将之一。",
     "stats": {},
-    "dmg": 9
+    "dmg": 9.0
   },
   "1259": {
-    "id": 1259,
+    "id": 1259.0,
     "name": "蒋济",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1259.png",
     "effect_name": "叠势",
@@ -898,15 +898,15 @@
     ],
     "intro": "曹操的心腹谋士。",
     "stats": {
-      "matk": 4,
+      "matk": 4.0,
       "hp": 1.5
     },
-    "dmg": 4
+    "dmg": 4.0
   },
   "1262": {
-    "id": 1262,
+    "id": 1262.0,
     "name": "向朗",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1262.png",
     "effect_name": "砺锋",
@@ -919,12 +919,12 @@
     "stats": {
       "atk": 16.5
     },
-    "dmg": 15
+    "dmg": 15.0
   },
   "1264": {
-    "id": 1264,
+    "id": 1264.0,
     "name": "张允",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1264.png",
     "effect_name": "党立",
@@ -937,12 +937,12 @@
     "stats": {
       "atk": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1265": {
-    "id": 1265,
+    "id": 1265.0,
     "name": "蔡阳",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1265.png",
     "effect_name": "猎敌",
@@ -956,12 +956,12 @@
       "atk": 1.5,
       "matk": 1.5
     },
-    "dmg": 5
+    "dmg": 5.0
   },
   "1266": {
-    "id": 1266,
+    "id": 1266.0,
     "name": "晏明",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1266.png",
     "effect_name": "倚城",
@@ -972,15 +972,15 @@
     ],
     "intro": "在长坂坡领军围捕赵云。",
     "stats": {
-      "def": 6,
+      "def": 6.0,
       "hp": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1268": {
-    "id": 1268,
+    "id": 1268.0,
     "name": "霍峻",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1268.png",
     "effect_name": "抗衡",
@@ -994,12 +994,12 @@
       "def": 1.5,
       "atk": 1.5
     },
-    "dmg": 6
+    "dmg": 6.0
   },
   "1271": {
-    "id": 1271,
+    "id": 1271.0,
     "name": "糜芳",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1271.png",
     "effect_name": "疗续",
@@ -1007,16 +1007,16 @@
     "taolue": [],
     "intro": "糜竺之弟。",
     "stats": {
-      "hp": 4,
-      "atk": 2,
-      "matk": 2
+      "hp": 4.0,
+      "atk": 2.0,
+      "matk": 2.0
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1272": {
-    "id": 1272,
+    "id": 1272.0,
     "name": "孙乾",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1272.png",
     "effect_name": "预攻",
@@ -1029,12 +1029,12 @@
     "stats": {
       "def": 1.5
     },
-    "dmg": 5
+    "dmg": 5.0
   },
   "1273": {
-    "id": 1273,
+    "id": 1273.0,
     "name": "伊籍",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1273.png",
     "effect_name": "预谋",
@@ -1045,12 +1045,12 @@
     ],
     "intro": "参与编制︽蜀科︾。",
     "stats": {},
-    "dmg": 5
+    "dmg": 5.0
   },
   "1274": {
-    "id": 1274,
+    "id": 1274.0,
     "name": "夏侯兰",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1274.png",
     "effect_name": "逐敌",
@@ -1063,12 +1063,12 @@
     "stats": {
       "atk": 1.5
     },
-    "dmg": 20
+    "dmg": 20.0
   },
   "1275": {
-    "id": 1275,
+    "id": 1275.0,
     "name": "车胄",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "杰",
     "portrait": "res://assets/vice/1275.png",
     "effect_name": "追剿",
@@ -1076,12 +1076,12 @@
     "taolue": [],
     "intro": "后任徐州刺史。",
     "stats": {},
-    "dmg": 15
+    "dmg": 15.0
   },
   "1276": {
-    "id": 1276,
+    "id": 1276.0,
     "name": "夏侯恩",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1276.png",
     "effect_name": "断锋",
@@ -1092,15 +1092,15 @@
     ],
     "intro": "负责背负青釭剑。",
     "stats": {
-      "atk": 15,
-      "def": 15
+      "atk": 15.0,
+      "def": 15.0
     },
-    "dmg": 2
+    "dmg": 2.0
   },
   "1277": {
-    "id": 1277,
+    "id": 1277.0,
     "name": "诸葛均",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1277.png",
     "effect_name": "潜谋",
@@ -1113,12 +1113,12 @@
     "stats": {
       "matk": 1.5
     },
-    "dmg": 30
+    "dmg": 30.0
   },
   "1278": {
-    "id": 1278,
+    "id": 1278.0,
     "name": "卞喜",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1278.png",
     "effect_name": "飞锤",
@@ -1129,12 +1129,12 @@
     ],
     "intro": "任汜水关守将。",
     "stats": {},
-    "dmg": 12
+    "dmg": 12.0
   },
   "1282": {
-    "id": 1282,
+    "id": 1282.0,
     "name": "刘琦",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1282.png",
     "effect_name": "反行",
@@ -1145,15 +1145,15 @@
     ],
     "intro": "被刘备表为荆州刺史。",
     "stats": {
-      "atk": 22,
+      "atk": 22.0,
       "def": 1.5
     },
-    "dmg": 22
+    "dmg": 22.0
   },
   "1283": {
-    "id": 1283,
+    "id": 1283.0,
     "name": "胡班",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1283.png",
     "effect_name": "锐击",
@@ -1166,30 +1166,30 @@
     "stats": {
       "atk": 1.5
     },
-    "dmg": 15
+    "dmg": 15.0
   },
   "1288": {
-    "id": 1288,
+    "id": 1288.0,
     "name": "周仓",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1288.png",
     "effect_name": "奋迅",
     "effect_desc": "触发#「再行动」#link1或#「继续行动」#link1时，自身增益状态时间不减，主动攻击后若击杀敌军下一次主动攻击造成的物理伤害提升25%，若未击杀敌军下次受到物理伤害降低25%。",
     "taolue": [
-      "战斗中技能伤害提升1.5%",
-      "提升1.5%兵力"
+      "战斗中技能伤害提升2.5%",
+      "提升5%兵力"
     ],
     "intro": "关羽侍从，臂有千斤之力。",
     "stats": {
-      "hp": 1.5
+      "hp": 5.0
     },
-    "dmg": 25
+    "dmg": 25.0
   },
   "1290": {
-    "id": 1290,
+    "id": 1290.0,
     "name": "辛宪英",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1290.png",
     "effect_name": "运筹",
@@ -1202,12 +1202,12 @@
     "stats": {
       "hp": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1295": {
-    "id": 1295,
+    "id": 1295.0,
     "name": "廖化",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1295.png",
     "effect_name": "先锋",
@@ -1220,12 +1220,12 @@
     "stats": {
       "atk": 7.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1296": {
-    "id": 1296,
+    "id": 1296.0,
     "name": "曹性",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1296.png",
     "effect_name": "势压",
@@ -1237,14 +1237,14 @@
     "intro": "八健将之一。",
     "stats": {
       "atk": 26.5,
-      "def": 5
+      "def": 5.0
     },
-    "dmg": 10
+    "dmg": 10.0
   },
   "1297": {
-    "id": 1297,
+    "id": 1297.0,
     "name": "侯成",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1297.png",
     "effect_name": "迅防",
@@ -1255,16 +1255,16 @@
     ],
     "intro": "八健将之一。",
     "stats": {
-      "atk": 5,
+      "atk": 5.0,
       "def": 1.5,
       "hp": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1298": {
-    "id": 1298,
+    "id": 1298.0,
     "name": "黄承彦",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1298.png",
     "effect_name": "备势",
@@ -1275,15 +1275,15 @@
     ],
     "intro": "沔南名士。",
     "stats": {
-      "matk": 20,
-      "atk": 20
+      "matk": 20.0,
+      "atk": 20.0
     },
-    "dmg": 20
+    "dmg": 20.0
   },
   "1299": {
-    "id": 1299,
+    "id": 1299.0,
     "name": "明远",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1299.png",
     "effect_name": "远谋",
@@ -1294,15 +1294,15 @@
     ],
     "intro": "诸葛亮身边的书童。",
     "stats": {
-      "matk": 20,
-      "mdef": 10
+      "matk": 20.0,
+      "mdef": 10.0
     },
-    "dmg": 20
+    "dmg": 20.0
   },
   "1301": {
-    "id": 1301,
+    "id": 1301.0,
     "name": "颜良",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "",
     "portrait": "res://assets/vice/1301.png",
     "effect_name": "",
@@ -1310,12 +1310,12 @@
     "taolue": [],
     "intro": "河北名将，",
     "stats": {},
-    "dmg": 0
+    "dmg": 0.0
   },
   "1302": {
-    "id": 1302,
+    "id": 1302.0,
     "name": "文丑",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "",
     "portrait": "res://assets/vice/1302.png",
     "effect_name": "",
@@ -1323,12 +1323,12 @@
     "taolue": [],
     "intro": "河北名将，",
     "stats": {},
-    "dmg": 0
+    "dmg": 0.0
   },
   "1303": {
-    "id": 1303,
+    "id": 1303.0,
     "name": "王允",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "",
     "portrait": "res://assets/vice/1303.png",
     "effect_name": "",
@@ -1336,12 +1336,12 @@
     "taolue": [],
     "intro": "字子师，",
     "stats": {},
-    "dmg": 0
+    "dmg": 0.0
   },
   "1304": {
-    "id": 1304,
+    "id": 1304.0,
     "name": "袁熙",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1304.png",
     "effect_name": "玄谋",
@@ -1355,12 +1355,12 @@
       "matk": 1.5,
       "hp": 1.5
     },
-    "dmg": 15
+    "dmg": 15.0
   },
   "1305": {
-    "id": 1305,
+    "id": 1305.0,
     "name": "郭淮",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1305.png",
     "effect_name": "趁势",
@@ -1374,12 +1374,12 @@
       "atk": 1.5,
       "def": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1306": {
-    "id": 1306,
+    "id": 1306.0,
     "name": "孙翊",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1306.png",
     "effect_name": "震击",
@@ -1392,12 +1392,12 @@
     "stats": {
       "atk": 1.5
     },
-    "dmg": 4
+    "dmg": 4.0
   },
   "1307": {
-    "id": 1307,
+    "id": 1307.0,
     "name": "孙绍",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1307.png",
     "effect_name": "增护",
@@ -1410,28 +1410,28 @@
     "stats": {
       "matk": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1308": {
-    "id": 1308,
+    "id": 1308.0,
     "name": "关平",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1308.png",
     "effect_name": "断金",
-    "effect_desc": "主动单体攻击时暴击伤害提升20%；触发#「再行动」#link1或#「继续行动」#link1时自身物理增伤减伤提升10%直到自身行动开始。",
+    "effect_desc": "主动单体攻击时暴击伤害提升9.8%；触发「再行动」或「继续行动」时自身物理增伤减伤提升4.9%直到自身行动开始。",
     "taolue": [
-      "战斗中提升3%暴击伤害",
-      "战斗中受到技能伤害减免1.5%"
+      "战斗中提升4%暴击伤害",
+      "战斗中受到技能伤害减免2%"
     ],
     "intro": "随关羽北伐曹仁。",
     "stats": {},
-    "dmg": 20
+    "dmg": 9.8
   },
   "1309": {
-    "id": 1309,
+    "id": 1309.0,
     "name": "陈宫",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "",
     "portrait": "res://assets/vice/1309.png",
     "effect_name": "",
@@ -1439,12 +1439,12 @@
     "taolue": [],
     "intro": "字公台，",
     "stats": {},
-    "dmg": 0
+    "dmg": 0.0
   },
   "1310": {
-    "id": 1310,
+    "id": 1310.0,
     "name": "徐庶",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "",
     "portrait": "res://assets/vice/1310.png",
     "effect_name": "",
@@ -1452,12 +1452,12 @@
     "taolue": [],
     "intro": "字元直，",
     "stats": {},
-    "dmg": 0
+    "dmg": 0.0
   },
   "1311": {
-    "id": 1311,
+    "id": 1311.0,
     "name": "司马徽",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1311.png",
     "effect_name": "借力",
@@ -1468,15 +1468,15 @@
     ],
     "intro": "有“水镜先生”之称。",
     "stats": {
-      "mdef": 6,
+      "mdef": 6.0,
       "matk": 1.5
     },
     "dmg": 1.5
   },
   "1312": {
-    "id": 1312,
+    "id": 1312.0,
     "name": "马岱",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1312.png",
     "effect_name": "虎跃",
@@ -1487,12 +1487,12 @@
     ],
     "intro": "诸葛亮病逝后斩杀了魏延。",
     "stats": {},
-    "dmg": 8
+    "dmg": 8.0
   },
   "1313": {
-    "id": 1313,
+    "id": 1313.0,
     "name": "赵襄",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1313.png",
     "effect_name": "扶汉",
@@ -1505,12 +1505,12 @@
     "stats": {
       "atk": 1.5
     },
-    "dmg": 20
+    "dmg": 20.0
   },
   "1314": {
-    "id": 1314,
+    "id": 1314.0,
     "name": "庞德公",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1314.png",
     "effect_name": "乘势",
@@ -1524,12 +1524,12 @@
       "mdef": 5.02,
       "matk": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1315": {
-    "id": 1315,
+    "id": 1315.0,
     "name": "张瑾云",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1315.png",
     "effect_name": "易型",
@@ -1543,12 +1543,12 @@
       "def": 1.5,
       "atk": 1.5
     },
-    "dmg": 15
+    "dmg": 15.0
   },
   "1316": {
-    "id": 1316,
+    "id": 1316.0,
     "name": "王平",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1316.png",
     "effect_name": "饮刃",
@@ -1565,9 +1565,9 @@
     "dmg": 3.34
   },
   "1317": {
-    "id": 1317,
+    "id": 1317.0,
     "name": "董衡",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1317.png",
     "effect_name": "聚势",
@@ -1581,12 +1581,12 @@
       "atk": 1.5,
       "def": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1318": {
-    "id": 1318,
+    "id": 1318.0,
     "name": "张昭",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "",
     "portrait": "res://assets/vice/1318.png",
     "effect_name": "",
@@ -1594,12 +1594,12 @@
     "taolue": [],
     "intro": "字子布，",
     "stats": {},
-    "dmg": 0
+    "dmg": 0.0
   },
   "1319": {
-    "id": 1319,
+    "id": 1319.0,
     "name": "张纮",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1319.png",
     "effect_name": "策引",
@@ -1610,15 +1610,15 @@
     ],
     "intro": "孙吴重臣，善辞家。",
     "stats": {
-      "matk": 15,
+      "matk": 15.0,
       "mdef": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1322": {
-    "id": 1322,
+    "id": 1322.0,
     "name": "诸葛瑾",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1322.png",
     "effect_name": "叠焰",
@@ -1631,12 +1631,12 @@
     "stats": {
       "matk": 1.5
     },
-    "dmg": 22
+    "dmg": 22.0
   },
   "1323": {
-    "id": 1323,
+    "id": 1323.0,
     "name": "周循",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1323.png",
     "effect_name": "审时",
@@ -1649,12 +1649,12 @@
     "stats": {
       "matk": 4.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1324": {
-    "id": 1324,
+    "id": 1324.0,
     "name": "严颜",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1324.png",
     "effect_name": "自若",
@@ -1667,12 +1667,12 @@
     "stats": {
       "atk": 7.5
     },
-    "dmg": 3
+    "dmg": 3.0
   },
   "1325": {
-    "id": 1325,
+    "id": 1325.0,
     "name": "高翔",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1325.png",
     "effect_name": "坚阵",
@@ -1685,12 +1685,12 @@
     "stats": {
       "atk": 11.5
     },
-    "dmg": 10
+    "dmg": 10.0
   },
   "1326": {
-    "id": 1326,
+    "id": 1326.0,
     "name": "司马孚",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1326.png",
     "effect_name": "趁虚",
@@ -1706,9 +1706,9 @@
     "dmg": 3.6
   },
   "1327": {
-    "id": 1327,
+    "id": 1327.0,
     "name": "司马干",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1327.png",
     "effect_name": "威逼",
@@ -1721,12 +1721,12 @@
     "stats": {
       "matk": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1328": {
-    "id": 1328,
+    "id": 1328.0,
     "name": "陶谦",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1328.png",
     "effect_name": "怀仁",
@@ -1739,12 +1739,12 @@
     "stats": {
       "hp": 1.5
     },
-    "dmg": 6
+    "dmg": 6.0
   },
   "1329": {
-    "id": 1329,
+    "id": 1329.0,
     "name": "华佗",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1329.png",
     "effect_name": "悬壶",
@@ -1758,12 +1758,12 @@
       "matk": 1.5,
       "hp": 1.5
     },
-    "dmg": 12
+    "dmg": 12.0
   },
   "1330": {
-    "id": 1330,
+    "id": 1330.0,
     "name": "张仲景",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1330.png",
     "effect_name": "济世",
@@ -1776,12 +1776,12 @@
     "stats": {
       "matk": 1.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1331": {
-    "id": 1331,
+    "id": 1331.0,
     "name": "张绍",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1331.png",
     "effect_name": "奉玺",
@@ -1794,12 +1794,12 @@
     "stats": {
       "atk": 16.5
     },
-    "dmg": 0
+    "dmg": 0.0
   },
   "1332": {
-    "id": 1332,
+    "id": 1332.0,
     "name": "成廉",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1332.png",
     "effect_name": "驰突",
@@ -1812,12 +1812,12 @@
     "stats": {
       "atk": 1.5
     },
-    "dmg": 18
+    "dmg": 18.0
   },
   "1333": {
-    "id": 1333,
+    "id": 1333.0,
     "name": "赵俨",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1333.png",
     "effect_name": "奋势",
@@ -1828,12 +1828,12 @@
     ],
     "intro": "去世前升任至司空。",
     "stats": {},
-    "dmg": 11
+    "dmg": 11.0
   },
   "1334": {
-    "id": 1334,
+    "id": 1334.0,
     "name": "程普",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1334.png",
     "effect_name": "固营",
@@ -1846,12 +1846,12 @@
     "stats": {
       "matk": 4.7
     },
-    "dmg": 6
+    "dmg": 6.0
   },
   "1335": {
-    "id": 1335,
+    "id": 1335.0,
     "name": "董袭",
-    "quality": 2,
+    "quality": 2.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1335.png",
     "effect_name": "历战",
@@ -1862,16 +1862,16 @@
     ],
     "intro": "东汉末年孙氏部将，字元代，会稽余姚人。身长八尺，勇力过人，早年追随孙策，后辅佐孙权，官至偏将军。征讨黄祖时，与凌统各率百名敢死士，冒着箭雨突入敌船之间，亲斩缆索，为大军开道。后奉命驻守濡须口，遭遇暴风仍不肯弃守，最终随楼船倾覆而亡。",
     "stats": {
-      "hp": 19,
-      "atk": 9,
-      "matk": 0
+      "hp": 19.0,
+      "atk": 9.0,
+      "matk": 0.0
     },
-    "dmg": 2
+    "dmg": 2.0
   },
   "1543": {
-    "id": 1543,
+    "id": 1543.0,
     "name": "孔融",
-    "quality": 1,
+    "quality": 1.0,
     "quality_name": "超",
     "portrait": "res://assets/vice/1543.png",
     "effect_name": "让梨",
@@ -1884,6 +1884,6 @@
     "stats": {
       "matk": 11.5
     },
-    "dmg": 0
+    "dmg": 0.0
   }
 }

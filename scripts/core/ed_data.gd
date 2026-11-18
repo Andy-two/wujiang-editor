@@ -15,6 +15,7 @@ const GENERALS_PATH := "res://data/editor/generals.json"
 const SKILLS_PATH := "res://data/editor/skills.json"
 const TALENTS_PATH := "res://data/editor/talents.json"
 const VICE_PATH := "res://data/vice_generals.json"
+const BONDS_PATH := "res://data/editor/bonds.json"
 const SETTINGS_PATH := "res://data/editor/settings.json"
 const LIBRARY_PATH := "res://data/editor/art_library.json"
 const DS_URL_PATH := "res://data/editor/datasource.json"
@@ -132,6 +133,7 @@ var order: Array[String] = []      # 显示顺序
 var skills: Dictionary = {}
 var talents: Dictionary = {}
 var vices: Dictionary = {}
+var bonds: Dictionary = {}
 var library: Dictionary = {}       # 美术素材库：abs_path -> 元信息
 var _arm_shapes_cache: Dictionary = {}
 var _arm_shapes_cache_loaded := false
@@ -188,6 +190,8 @@ func load_all() -> bool:
 	talents = t if t is Dictionary else {}
 	var v = read_json(VICE_PATH)
 	vices = v if v is Dictionary else {}
+	var bd = read_json(BONDS_PATH)
+	bonds = bd if bd is Dictionary else {}
 	var lib = read_json(LIBRARY_PATH)
 	library = lib if lib is Dictionary else {}
 	var ds = read_json(DS_URL_PATH)
@@ -255,6 +259,8 @@ func save_all() -> bool:
 	ok = _save_generals() and ok
 	ok = write_json(SKILLS_PATH, skills) and ok
 	ok = write_json(TALENTS_PATH, talents) and ok
+	ok = write_json(BONDS_PATH, bonds) and ok
+	ok = write_json(VICE_PATH, vices) and ok
 	ok = write_json(LIBRARY_PATH, library) and ok
 	ok = save_arm_shapes() and ok
 	ok = write_json(DS_URL_PATH, {"url": ds_url}) and ok
@@ -1243,6 +1249,7 @@ func export_data(mode: String = "full") -> Dictionary:
 		"generals": gens,
 		"skills": skills.duplicate(true),
 		"talents": talents.duplicate(true),
+		"bonds": bonds.duplicate(true),
 	}
 	if mode == "full":
 		out["settings"] = RULEZ.settings.duplicate(true)

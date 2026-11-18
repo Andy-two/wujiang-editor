@@ -1,0 +1,19 @@
+{
+  "yanyue_shuangfeng": {
+    "name": "偃月双锋",
+    "members": [
+      "1288",
+      "1308"
+    ],
+    "desc": "同时上阵关平、周仓可激活：造成单体暴击伤害后对敌军额外造成物攻30%的固定伤害，并为自身回复等量兵力。",
+    "trigger": "on_crit",
+    "fx": [
+      {
+        "type": "fixed",
+        "value": 0.3,
+        "of_atk": true,
+        "heal_back": 1.0
+      }
+    ]
+  }
+}

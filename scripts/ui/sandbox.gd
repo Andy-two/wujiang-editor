@@ -530,7 +530,7 @@ func _setup_battle() -> void:
 	for k in data.order:
 		gens[k] = data.generals[k]
 	_generals_ref = gens
-	battle.bind_data(gens, data.skills, data.talents, data.get_arm_shapes())
+	battle.bind_data(gens, data.skills, data.talents, data.get_arm_shapes(), data.bonds)
 	battle.set_seed(12345)
 	battle.log_line.connect(_on_log)
 	battle.changed.connect(func() -> void: _refresh_battle())
