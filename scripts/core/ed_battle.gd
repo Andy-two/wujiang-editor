@@ -453,7 +453,7 @@ func basic_attack(attacker, target) -> Dictionary:
 			passive_bonus *= 1.08
 		if pn.contains("奋勇"):
 			passive_bonus *= 1.20
-	var res := RULEZ.roll_damage(attacker, target, passive_bonus * status_damage_mult(attacker, target), arm_mul, {})
+	var res := RULEZ.roll_damage(attacker, target, passive_bonus * status_damage_mult(attacker, target), arm_mul, {"kind": "normal"})
 	var dmg := int(res["dmg"])
 	dmg = _apply_outgoing(attacker, dmg)
 	dmg = _apply_incoming(target, dmg)
@@ -487,7 +487,7 @@ func basic_attack(attacker, target) -> Dictionary:
 			# 反击增强：倍率加成
 			var c_mul := RULEZ.get_f("mult_counter") * (1.0 + float(target.get("counter_mul", 0.0)))
 			var back := RULEZ.roll_damage(target, attacker, c_mul,
-				RULEZ.arm_multiplier(String(target["arm"]), String(attacker["arm"])), {})
+				RULEZ.arm_multiplier(String(target["arm"]), String(attacker["arm"])), {"kind": "counter"})
 			# 被反击方可能带减伤
 			var raw_bd := _apply_outgoing(target, int(back["dmg"]))
 			raw_bd = int(round(float(raw_bd) * (1.0 - float(attacker.get("counter_cut", 0.0)))))
@@ -613,7 +613,7 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 						var magic := bool(fx.get("magic", false)) or float(u["matk"]) > float(u["atk"]) * 1.2
 						var am := RULEZ.arm_multiplier(String(u["arm"]), String(tgt["arm"]))
 						var res := RULEZ.roll_damage(u, tgt, float(fx.get("value", 1.0)) * status_damage_mult(u, tgt), am,
-							{"magic": magic, "ignore_def": float(fx.get("ignore_def", 0.0))})
+							{"magic": magic, "ignore_def": float(fx.get("ignore_def", 0.0)), "kind": "skill"})
 						var dmg := _apply_incoming(tgt, _apply_outgoing(u, int(res["dmg"])))
 						dmg = mini(dmg, int(tgt["hp"]))
 						tgt["hp"] = int(tgt["hp"]) - dmg
@@ -652,6 +652,7 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 				for tgt2 in pool2:
 					var heal := int(round(float(u["matk"]) * float(fx.get("value", 0.8))
 						* float(u["ext"].get("skill_power", 1.0))))
+					heal = _mod_heal(u, tgt2, heal)
 					tgt2["hp"] = mini(int(tgt2["max_hp"]), int(tgt2["hp"]) + heal)
 					_emit("%s 施放「%s」，%s 回复 %d 兵力" % [u["name"], sname, tgt2["name"], heal], "heal")
 			RULEZ.SFX_DEBUFF:
@@ -786,7 +787,8 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 					if bool(fx.get("by_max_hp", false)):
 						famt = float(tgt_f["max_hp"]) * float(fx.get("value_pct", 0.1))
 					var fdmg := int(roundf(RULEZ.damage_fixed(famt, {
-						"fixed_add": float((u["ext"] as Dictionary).get("fixed_add", 0.0))})))
+						"fixed_add": float((u["ext"] as Dictionary).get("fixed_add", 0.0))
+							+ float((u["ext"] as Dictionary).get("fixed_damage", 0.0))})))
 					fdmg = mini(fdmg, int(tgt_f["hp"]))
 					tgt_f["hp"] = int(tgt_f["hp"]) - fdmg
 					hits += 1
@@ -922,6 +924,21 @@ func unit_on_facility(pos: Vector2i):
 	if tu == null:
 		return null
 	return tu
+
+
+# 治疗量修正：施法方的治疗加成 × 受疗方的受疗加成
+#   副将韬略「战斗中提升N%治疗效果」/「受到治疗效果提升N%」
+func _mod_heal(src, dst, amount: int) -> int:
+	if amount <= 0:
+		return amount
+	var add := 0.0
+	if src != null and src.get("ext") is Dictionary:
+		add += float((src["ext"] as Dictionary).get("heal_bonus", 0.0))
+	if dst != null and dst.get("ext") is Dictionary:
+		add += float((dst["ext"] as Dictionary).get("heal_taken", 0.0))
+	if add == 0.0:
+		return amount
+	return int(round(float(amount) * (1.0 + add)))
 
 
 # 收获设施：范围内的己方单位回复 + 施加增益 + 获得继续行动，消耗 1 次使用次数
@@ -1067,6 +1084,7 @@ func do_pursuit(u, tgt, fx: Dictionary) -> int:
 	var res := RULEZ.roll_damage(u, tgt, float(fx.get("value", 0.5)), am, {
 		"magic": magic, "ignore_def": float(fx.get("ignore_def", 0.0)),
 		"no_counter": true,
+		"kind": "pursue",
 	})
 	var dmg := _apply_incoming(tgt, _apply_outgoing(u, int(res["dmg"])))
 	dmg = mini(dmg, int(tgt["hp"]))
@@ -1131,6 +1149,7 @@ func do_splash(u, foes: Array, target: Vector2i, fx: Dictionary) -> int:
 			"magic": magic,
 			"ignore_def": float(fx.get("ignore_def", 0.0)),
 			"no_counter": true,
+			"kind": "skill",
 		})
 		var dmg := _apply_incoming(tu, _apply_outgoing(u, int(res["dmg"])))
 		dmg = mini(dmg, int(tu["hp"]))
@@ -1569,7 +1588,8 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 						var mult2 := float(fd.get("value", 1.0)) * status_damage_mult(u, tgt)
 						var r2 := RULEZ.roll_damage(u, tgt, mult2, am2,
 							{"magic": bool(fd.get("magic", false)),
-							 "ignore_def": float(fd.get("ignore_def", 0.0))})
+							 "ignore_def": float(fd.get("ignore_def", 0.0)),
+							 "kind": "pursue"})
 						var d2 := _apply_incoming(tgt, _apply_outgoing(u, int(r2["dmg"])))
 						d2 = mini(d2, int(tgt["hp"]))
 						tgt["hp"] = int(tgt["hp"]) - d2
@@ -1887,7 +1907,7 @@ func trigger_combo(attacker, target) -> int:
 		p["combo_used"] = int(p.get("combo_used", 0)) + 1
 		var am := RULEZ.arm_multiplier(String(p["arm"]), String(target["arm"]))
 		var res := RULEZ.roll_damage(p, target, RULEZ.get_f("mult_combo"),
-			am, {})
+			am, {"kind": "combo"})
 		var dmg := _apply_incoming(target, _apply_outgoing(p, int(res["dmg"])))
 		dmg = mini(dmg, int(target["hp"]))
 		target["hp"] = int(target["hp"]) - dmg

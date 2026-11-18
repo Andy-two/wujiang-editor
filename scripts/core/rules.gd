@@ -507,6 +507,121 @@ static func arm_upgrade_stats(lv: int, spend: Dictionary) -> Dictionary:
 	}
 
 
+# ============================================================
+# 副将（vice）数值层
+#   副将数据见 data/vice_generals.json，每个副将的数值成分为：
+#     ① taolue   韬略文案（如「提升1.5%物攻」），纯数值加成
+#     ② stats    属性百分比加成（hp/atk/def/matk/mdef）
+#     ③ dmg      伤害加成百分比
+#   本段只负责把①②③换算成「对主将模板的修正量」，不含任何机制效果。
+# ============================================================
+
+# 韬略文案 -> 修正键。值为「乘区键」，对应的数值从文案里的百分数解析。
+#   属性类：stat_hp / stat_atk / stat_def / stat_matk / stat_mdef
+#   战斗类：damage_bonus（通用增伤）/ damage_cut（通用减伤）
+#           crit_damage（暴伤加成）/ crit_resist（暴击抗性）
+#           skill_damage（技策伤害）/ normal_damage（普攻伤害）
+#           counter_damage（反击伤害）/ combo_damage（合击伤害）
+#           fixed_damage（固伤伤害）/ restrict_damage（克制伤害）
+#           skill_cut（受技策伤害减免）/ counter_cut（受反击减免）
+#           heal_bonus（治疗加成）/ heal_taken（受疗加成）
+#           fortune_add（运势加点，非百分比）
+#   注意：这里只登记「这条文案影响哪个乘区」，具体数值从文案里正则解析，
+#         这样数据侧改文案数值时不用动代码。
+const VICE_TAOLUE_KEYS := {
+	# 顺序敏感：先匹配「具体的」，再匹配「泛化的」。
+	# 因为 parse_taolue 用 contains 且取第一个命中，例如
+	# 「战斗中技能伤害提升1.5%」必须命中 skill_damage 而不是 damage_bonus。
+	"受到技能伤害减免": "skill_cut",
+	"受到伤害减免": "damage_cut",
+	"受到反击伤害降低": "counter_cut",
+	"受到治疗效果提升": "heal_taken",
+	"技能伤害提升": "skill_damage",
+	"普攻伤害提升": "normal_damage",
+	"克制伤害提升": "restrict_damage",
+	"反击伤害增加": "counter_damage",
+	"合击伤害增加": "combo_damage",
+	"固定伤害": "fixed_damage",
+	"暴击抗性": "crit_resist",
+	"暴击伤害": "crit_damage",
+	"治疗效果": "heal_bonus",
+	"伤害提升": "damage_bonus",
+	"点运势": "fortune_add",
+	"运势": "fortune_add",
+	"兵力": "stat_hp",
+	"物攻": "stat_atk",
+	"谋攻": "stat_matk",
+	"物防": "stat_def",
+	"谋防": "stat_mdef",
+}
+
+
+# 从文案里取第一个百分数（「提升1.5%物攻」-> 0.015）；取不到返回 -1
+static func pct_in(text: String) -> float:
+	var re := RegEx.new()
+	re.compile("([0-9]+(?:\\.[0-9]+)?)%")
+	var m := re.search(text)
+	if m == null:
+		return -1.0
+	return float(m.get_string(1)) / 100.0
+
+
+# 从文案里取第一个不带 % 的整数（「战斗中提升20点运势」-> 20）
+static func int_in(text: String) -> int:
+	var re := RegEx.new()
+	re.compile("([0-9]+)")
+	var m := re.search(text)
+	if m == null:
+		return 0
+	return int(m.get_string(1))
+
+
+# 解析一条韬略文案 -> {"key": 乘区键, "value": 数值}，无法识别返回空字典
+#   文案可能带前缀（如「重击：战斗中伤害提升2%」），所以用 contains 匹配
+static func parse_taolue(text: String) -> Dictionary:
+	var t := text.strip_edges()
+	for pat in VICE_TAOLUE_KEYS.keys():
+		if not t.contains(String(pat)):
+			continue
+		var key := String(VICE_TAOLUE_KEYS[pat])
+		if key == "fortune_add":
+			return {"key": key, "value": float(int_in(t))}
+		var p := pct_in(t)
+		if p < 0.0:
+			return {}
+		return {"key": key, "value": p}
+	return {}
+
+
+# 把一个副将数据换算成修正量字典
+#   {"stat": {stat_hp: 0.015, ...}, "mul": {damage_bonus: 0.02, ...}, "dmg": 0.03}
+static func vice_modifiers(vice: Dictionary) -> Dictionary:
+	var stat := {}
+	var mul := {}
+	# ① taolue
+	for line in (vice.get("taolue", []) as Array):
+		var p := parse_taolue(String(line))
+		if p.is_empty():
+			continue
+		var key := String(p["key"])
+		var val := float(p["value"])
+		if key.begins_with("stat_"):
+			var sk := key.substr(5)
+			stat[sk] = float(stat.get(sk, 0.0)) + val
+		else:
+			mul[key] = float(mul.get(key, 0.0)) + val
+	# ② stats（本身就是百分比，如 {"hp": 1.5} 表示 +1.5%）
+	var vs: Dictionary = vice.get("stats", {}) if vice.get("stats") is Dictionary else {}
+	for k in vs.keys():
+		var sk2 := String(k)
+		stat[sk2] = float(stat.get(sk2, 0.0)) + float(vs[k]) / 100.0
+	# ③ dmg（伤害加成百分比，进通用增伤乘区）
+	var dmg := float(vice.get("dmg", 0.0)) / 100.0
+	if dmg != 0.0:
+		mul["damage_bonus"] = float(mul.get("damage_bonus", 0.0)) + dmg
+	return {"stat": stat, "mul": mul, "dmg": dmg}
+
+
 # ---------------- 升星 ----------------
 static func star_rule() -> Dictionary:
 	var out := STAR_DEFAULTS.duplicate(true)
@@ -1093,6 +1208,36 @@ static func _mul(ext: Dictionary, key: String) -> float:
 	return float(ext.get(key, 0.0))
 
 
+# 按伤害来源类型取增伤键（副将韬略）
+#   kind: skill / normal / counter / combo / pursue / fixed
+#   返回该类型专属的增伤倍率
+static func _kind_add(ext: Dictionary, kind: String, bucket: String) -> float:
+	match kind:
+		"skill":
+			return float(ext.get("skill_damage", 0.0))
+		"normal":
+			return float(ext.get("normal_damage", 0.0))
+		"counter":
+			return float(ext.get("counter_damage", 0.0))
+		"combo":
+			return float(ext.get("combo_damage", 0.0))
+		"pursue":
+			return float(ext.get("pursue_damage", 0.0))
+		"fixed":
+			return float(ext.get("fixed_damage", 0.0))
+	return 0.0
+
+
+# 按伤害来源类型取减伤键（受技策伤害减免 / 受反击伤害降低）
+static func _kind_cut(ext: Dictionary, kind: String) -> float:
+	match kind:
+		"skill":
+			return -float(ext.get("skill_cut", 0.0))
+		"counter":
+			return -float(ext.get("counter_cut", 0.0))
+	return 0.0
+
+
 # 直伤公式。ctx 可选键：
 #   attack_add / attack_cut   攻击加成 / 攻击降低（倍率，如 0.2 = +20%）
 #   def_cut / ignore_def      防御降低 / 无视防御
@@ -1137,6 +1282,9 @@ static func damage_direct(attacker: Dictionary, target: Dictionary, opt: Diction
 	mult_area *= 1.0 + float(opt.get("elem_add", 0.0))
 	mult_area *= 1.0 + float(opt.get("general_add", 0.0)) - float(opt.get("general_cut", 0.0))
 	mult_area *= 1.0 + float(opt.get("final_add", 0.0))
+	# 按伤害来源类型的增伤（副将韬略：技能伤害 / 普攻伤害 / 反击伤害 / 合击伤害 / 克制伤害）
+	mult_area *= 1.0 + float(opt.get("kind_add", 0.0))
+	mult_area *= 1.0 + float(opt.get("kind_cut", 0.0))
 	raw *= maxf(0.0, mult_area)
 	return {"dmg": raw, "crit": crit, "crit_mult": crit_mult, "atk_base": atk_base, "def_base": def_base}
 
@@ -1195,12 +1343,18 @@ static func mei_of(unit: Dictionary) -> int:
 static func crit_chance_of(unit: Dictionary) -> float:
 	var c := float(mei_of(unit)) * get_f("crit_per_mei")
 	c += float(unit.get("crit_bonus", 0.0))
+	# 副将韬略「战斗中提升N%暴击率」等附加暴击并入 ext.crit_bonus
+	c += float((unit.get("ext", {}) as Dictionary).get("crit_bonus", 0.0))
 	return clampf(c, 0.0, 1.0)
 
 
 # 最终暴击伤害倍率 = 基础倍率 + 魅力×系数 + 额外暴伤
 static func crit_mult_of(unit: Dictionary) -> float:
-	return get_f("crit_damage") + float(mei_of(unit)) * get_f("mei_crit_dmg_per") + float(unit.get("crit_damage", 0.0))
+	var m := get_f("crit_damage") + float(mei_of(unit)) * get_f("mei_crit_dmg_per") \
+		+ float(unit.get("crit_damage", 0.0))
+	# 副将韬略「战斗中提升N%暴击伤害」并入 ext.crit_damage
+	m += float((unit.get("ext", {}) as Dictionary).get("crit_damage", 0.0))
+	return m
 
 
 # 一次伤害结算（确定性部分 + 可选随机浮动 / 暴击）
@@ -1216,18 +1370,21 @@ static func roll_damage(attacker: Dictionary, target: Dictionary, mult: float,
 	var crit_mult := crit_mult_of(attacker)
 	var ext_a: Dictionary = attacker.get("ext", {}) if attacker.get("ext") is Dictionary else {}
 	var ext_t: Dictionary = target.get("ext", {}) if target.get("ext") is Dictionary else {}
+	var kind := String(opt.get("kind", ""))
 	var res := damage_direct(attacker, target, {
 		"magic": bool(opt.get("magic", false)),
 		"attack_add": atk_add + _mul(ext_a, "attack_add"),
 		"def_cut": _mul(ext_t, "def_cut"),
 		"ignore_def": float(opt.get("ignore_def", 0.0)),
 		"restrict_mult": arm_mul,
-		"restrict_add": _mul(ext_a, "restrict_add"),
+		"restrict_add": _mul(ext_a, "restrict_add") + _kind_add(ext_a, kind, "restrict_damage"),
 		"multi_hit_add": _mul(ext_a, "multi_hit_add"),
 		"elem_add": float(opt.get("elem_add", 0.0)) + _mul(ext_a, "elem_add"),
 		"general_add": _mul(ext_a, "damage_bonus"),
 		"general_cut": _mul(ext_t, "damage_cut"),
 		"final_add": _mul(ext_a, "final_add"),
+		"kind_add": _kind_add(ext_a, kind, "damage_bonus_kind"),
+		"kind_cut": _kind_cut(ext_t, kind),
 		"power_mult": mult,
 		"crit": crit,
 		"crit_mult": crit_mult,
@@ -1249,7 +1406,7 @@ static func roll_damage(attacker: Dictionary, target: Dictionary, mult: float,
 
 # 期望伤害（不掷骰，用于验算台对比）：直伤 × (1 + (暴击倍率-1) × 暴击率)
 static func expected_damage(attacker: Dictionary, target: Dictionary, mult: float,
-		arm_mul: float = 1.0, magic: bool = false) -> int:
+		arm_mul: float = 1.0, magic: bool = false, kind: String = "") -> int:
 	var atk_add := get_f("douqi_per_stack") * float(attacker.get("douqi", 0))
 	if int(attacker.get("wushuang", 0)) > 0:
 		atk_add += get_f("wushuang_mult") - 1.0
@@ -1265,6 +1422,8 @@ static func expected_damage(attacker: Dictionary, target: Dictionary, mult: floa
 		"elem_add": _mul(ext_a, "elem_add"),
 		"general_add": _mul(ext_a, "damage_bonus"),
 		"general_cut": _mul(ext_t, "damage_cut"),
+		"kind_add": _kind_add(ext_a, kind, ""),
+		"kind_cut": _kind_cut(ext_t, kind),
 		"final_add": _mul(ext_a, "final_add"),
 		"power_mult": mult,
 		"crit": false,

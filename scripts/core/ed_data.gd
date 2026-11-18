@@ -703,13 +703,58 @@ func add_talent(tid: String, d: Dictionary) -> void:
 
 
 # ------------------------------------------------------------
+# 副将
+# ------------------------------------------------------------
+# 取主将挂载的副将数据；未挂载返回空字典
+func vice_of(g: Dictionary) -> Dictionary:
+	var ext: Dictionary = g.get("ed_ext", {}) if g.get("ed_ext") is Dictionary else {}
+	var vid := int(ext.get("vice_id", 0))
+	if vid <= 0:
+		return {}
+	return vices.get(str(vid), {})
+
+
+# 取主将挂载的副将换算出的数值修正；未挂载或副将无效返回空字典
+func vice_mods_for(g: Dictionary) -> Dictionary:
+	var v := vice_of(g)
+	if v.is_empty():
+		return {}
+	return RULEZ.vice_modifiers(v)
+
+
+# 列出所有副将（按 ID 升序），供编辑器下拉框使用
+func vice_list() -> Array:
+	var out: Array = []
+	for k in vices.keys():
+		var v: Dictionary = vices[k]
+		out.append({
+			"id": int(v.get("id", int(String(k)))),
+			"name": String(v.get("name", String(k))),
+			"quality": int(v.get("quality", 0)),
+			"quality_name": String(v.get("quality_name", "")),
+			"effect_name": String(v.get("effect_name", "")),
+			"effect_desc": String(v.get("effect_desc", "")),
+			"taolue": (v.get("taolue", []) as Array).duplicate(),
+			"stats": (v.get("stats", {}) as Dictionary).duplicate(),
+			"dmg": float(v.get("dmg", 0.0)),
+			"intro": String(v.get("intro", "")),
+			"portrait": String(v.get("portrait", "")),
+		})
+	out.sort_custom(func(a, b): return int(a["id"]) < int(b["id"]))
+	return out
+
+
+# ------------------------------------------------------------
 # 计算：把武将记录变成「战斗单位模板」（验算台 / 小战场共用）
 # ------------------------------------------------------------
 func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") -> Dictionary:
 	var g: Dictionary = generals.get(key, {})
 	if g.is_empty():
 		return {}
-	var ext: Dictionary = g.get("ed_ext", {}) if g.get("ed_ext") is Dictionary else {}
+	# 深拷贝：ext 会被写入副将乘区（damage_bonus 等），
+	# 若直接引用 ed_ext 会永久污染原始武将数据。
+	var ext: Dictionary = (g.get("ed_ext", {}) as Dictionary).duplicate(true) \
+		if g.get("ed_ext") is Dictionary else {}
 	var e_lv: int = int(g.get("ed_level", 1)) if lv < 0 else lv
 	var e_star: int = int(g.get("ed_star", 1)) if star < 0 else star
 	var e_arm: String = String(g.get("arm", "盾")) if arm == "" else arm
@@ -739,6 +784,27 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 		stats["matk"] = int(round(float(stats["matk"]) * (1.0 - 0.01 * float(lv_c - 1) * 0.5)))
 	# 扩展项：装备/天赋面板加成
 	stats["atk"] = int(round(float(stats["atk"]) * (1.0 + float(ext.get("damage_bonus", 0.0)))))
+	# ---- 副将数值加成（stats / dmg / taolue） ----
+	#   副将数据来自 data/vice_generals.json，通过主将的 ed_ext.vice_id 挂载。
+	#   这里只应用「纯数值」部分；副将的 effect_desc 机制效果不在本段处理。
+	var vice_mod := vice_mods_for(g)
+	if not vice_mod.is_empty():
+		var vstat: Dictionary = vice_mod.get("stat", {})
+		var vs_mult := 1.0
+		for k4 in ["hp", "atk", "def", "matk", "mdef"]:
+			vs_mult = 1.0 + float(vstat.get(k4, 0.0))
+			if vs_mult == 1.0:
+				continue
+			var target_key := "max_hp" if k4 == "hp" else String(k4)
+			stats[target_key] = int(round(float(stats[target_key]) * vs_mult))
+		# 战斗类乘区并入 ext（后续伤害计算直接读 ext）
+		var vmul: Dictionary = vice_mod.get("mul", {})
+		for mk in vmul.keys():
+			if String(mk) == "fortune_add":
+				# 「战斗中提升20点运势」是加点，不是百分比
+				ext["fortune_bonus"] = float(ext.get("fortune_bonus", 0.0)) + float(vmul[mk])
+				continue
+			ext[mk] = float(ext.get(mk, 0.0)) + float(vmul[mk])
 	# 升星额外属性加成（如 8 星全属性 +8%）
 	var sb_mult := star_bonus_mult(g)
 	if sb_mult != 1.0:
@@ -785,6 +851,7 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 		"crit_damage": float(ext.get("crit_damage", 0.0)),
 		"damage_cut": float(ext.get("damage_cut", 0.0)),
 		# 运势 = 魅力（公式表：魅力提供运势），可再用 ext.fortune_bonus 调整
+		#       副将韬略「战斗中提升20点运势」通过 ext.fortune_bonus 并入
 		"fortune": float(cur_fives.get("mei", 0)) + float(ext.get("fortune_bonus", 0.0)),
 		"crit_resist": float(ext.get("crit_resist", 0.0)),
 		"douqi": 0,
