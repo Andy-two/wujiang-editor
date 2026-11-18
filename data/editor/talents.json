@@ -8,7 +8,60 @@
       "对落单的敌军（1格范围内没有友军）造成物理伤害提升15%，受到其伤害降低15%；天赋伤害击杀敌军后重复一次范围攻击（最多重复5次）。",
       "造成范围伤害后获得2层「斗气」；拥有「无双」时造成范围伤害必定暴击。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "damage",
+        "value": 0.5,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "self_heal",
+        "value": 0.2,
+        "trigger": "on_kill",
+        "min_lv": 1.0
+      },
+      {
+        "type": "resource",
+        "name": "斗气",
+        "value": 1.0,
+        "max": 3.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "无双",
+        "turns": 2.0,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "坚壁",
+        "turns": 99.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "resource",
+        "name": "斗气",
+        "value": 2.0,
+        "max": 3.0,
+        "trigger": "on_hit",
+        "min_lv": 3.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 99.0,
+        "min_lv": 3.0
+      }
+    ]
   },
   "biyue_xiuhua": {
     "name": "闭月羞花",
@@ -41,7 +94,42 @@
       "自身2格范围内每有一个敌军增伤减伤提升5%（最多10%）。",
       "反击和「追击」时无视敌军65%防御。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "zoc",
+        "value": 2.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "counter_up",
+        "mul": 0.75,
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "坚壁",
+        "turns": 99.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "counter_up",
+        "mul": 0.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.0,
+        "ignore_def": 0.65,
+        "trigger": "on_hit",
+        "min_lv": 3.0
+      }
+    ]
   },
   "guasheng": {
     "name": "寡胜众",
@@ -52,7 +140,50 @@
       "主动攻击伤害提升20%；追击伤害增加20%；免疫移动减益。",
       "回合开始和主动攻击时获得2层「龙胆」；自身兵力小于50%时获得1层「格挡」（每局一次）。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "resource",
+        "name": "龙胆",
+        "value": 1.0,
+        "max": 7.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "格挡",
+        "turns": 2.0,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "pursuit",
+        "value": 1.0,
+        "trigger": "on_counter",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "免疫移动减益",
+        "turns": 99.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "resource",
+        "name": "龙胆",
+        "value": 2.0,
+        "max": 7.0,
+        "trigger": "on_hit",
+        "min_lv": 3.0
+      },
+      {
+        "type": "buff",
+        "value": "格挡",
+        "turns": 2.0,
+        "trigger": "on_hurt",
+        "min_lv": 3.0
+      }
+    ]
   },
   "liaodi": {
     "name": "料敌如神",
@@ -217,7 +348,43 @@
       "行动结束时若「威风」达到5层，对一圈范围内的敌军造成物攻50%的伤害并施加1层「撕裂」，持续2回合 。",
       "对拥有「撕裂」的敌军造成伤害提升20%。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "resource",
+        "name": "威风",
+        "value": 1.0,
+        "max": 5.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "cd_down",
+        "value": 99.0,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "夺势",
+        "turns": 2.0,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "damage",
+        "value": 0.5,
+        "trigger": "on_turn_end",
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "撕裂",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_turn_end",
+        "min_lv": 2.0
+      }
+    ]
   },
   "xu_talent": {
     "name": "樊哙在世",

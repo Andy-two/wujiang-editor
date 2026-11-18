@@ -1507,9 +1507,45 @@ func _apply_talent_effects() -> void:
 					u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + sh)
 				RULEZ.SFX_CRIT_UP:
 					_add_buff(u, "强运", int(fx.get("turns", 99)), 1)
+				RULEZ.SFX_ZOC:
+					u["zoc"] = maxi(int(u.get("zoc", 0)), int(fx.get("value", 1)))
+				RULEZ.SFX_COUNTER_UP:
+					counter_boost(u, float(fx.get("mul", 0.0)), float(fx.get("cut", 0.0)),
+						int(fx.get("per_round", 0)))
+				RULEZ.SFX_RESOURCE:
+					var rn2 := str(fx.get("name", ""))
+					if rn2 != "":
+						add_resource(u, rn2, int(fx.get("value", 1)), int(fx.get("max", 99)))
 		if not fx_list.is_empty():
 			_emit("%s 的天赋「%s」(Lv%d) 生效：%d 个效果" % [u["name"],
 				String(td.get("name", tid)), lv, fx_list.size()], "info")
+	# 天赋里带 trigger 的块转为「常驻被动」，交由 passive_on 在战斗中触发
+	_rebuild_talent_passives()
+
+
+# 把天赋里带 trigger 的效果块注册为常驻被动
+func _rebuild_talent_passives() -> void:
+	var talents: Dictionary = _data_ref.get("talents", {})
+	for u in units:
+		if not u["alive"]:
+			continue
+		var tid := String(u.get("talent", ""))
+		if tid == "":
+			continue
+		var td: Dictionary = talents.get(tid, {})
+		var fx_raw = td.get("ed_fx_list", [])
+		if not (fx_raw is Array):
+			continue
+		var lv := int(u.get("talent_lv", 1))
+		for fx in RULEZ.effects_for_level(fx_raw, lv):
+			var fd: Dictionary = fx
+			if str(fd.get("trigger", "")) == "":
+				continue
+			var cp := fd.duplicate(true)
+			cp["_from"] = String(td.get("name", tid))
+			var lst: Array = u.get("talent_passives", [])
+			lst.append(cp)
+			u["talent_passives"] = lst
 
 # ============================================================
 # 被动技能系统
@@ -1595,7 +1631,7 @@ func _apply_passive_startup() -> void:
 func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 	if u == null or not u["alive"]:
 		return
-	for fx in unit_passives(u):
+	for fx in unit_passives(u) + (u.get("talent_passives", []) as Array):
 		var fd: Dictionary = fx
 		var trig := str(fd.get("trigger", ""))
 		if trig != event:
@@ -1635,6 +1671,37 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 				grant_resist(u, str(fd.get("value", "眩晕")), int(fd.get("turns", 2)))
 			RULEZ.SFX_COMBO:
 				u["can_combo"] = true
+			RULEZ.SFX_RESOURCE:
+				var prn := str(fd.get("name", ""))
+				if prn != "":
+					add_resource(u, prn, int(fd.get("value", 1)), int(fd.get("max", 99)))
+					_emit("  「%s」触发：%s 获得「%s」%d 层" % [src, u["name"], prn,
+						int(fd.get("value", 1))], "info")
+			RULEZ.SFX_COUNTER_UP:
+				counter_boost(u, float(fd.get("mul", 0.0)), float(fd.get("cut", 0.0)),
+					int(fd.get("per_round", 0)))
+			RULEZ.SFX_ZOC:
+				u["zoc"] = maxi(int(u.get("zoc", 0)), int(fd.get("value", 1)))
+			RULEZ.SFX_PURSUIT:
+				var pt_tgt = ctx.get("target", null)
+				if pt_tgt == null and ctx.has("source"):
+					pt_tgt = ctx.get("source")
+				if pt_tgt != null and pt_tgt["alive"]:
+					do_pursuit(u, pt_tgt, fd)
+			RULEZ.SFX_DAMAGE:
+				var d_tgt = ctx.get("target", null)
+				if d_tgt == null and ctx.has("source"):
+					d_tgt = ctx.get("source")
+				if d_tgt != null and d_tgt["alive"]:
+					var rd := RULEZ.roll_damage(u, d_tgt, float(fd.get("value", 0.5)),
+						RULEZ.arm_multiplier(String(u["arm"]), String(d_tgt["arm"])),
+						{"magic": bool(fd.get("magic", false))})
+					var dv := _apply_incoming(d_tgt, _apply_outgoing(u, int(rd["dmg"])))
+					dv = mini(dv, int(d_tgt["hp"]))
+					d_tgt["hp"] = int(d_tgt["hp"]) - dv
+					_emit("  「%s」触发：%s 受到 %d 伤害" % [src, d_tgt["name"], dv], "hit")
+					if int(d_tgt["hp"]) <= 0:
+						_kill(d_tgt, u)
 			RULEZ.SFX_TRANSFER:
 				# 被动转移（如舞影 Lv3：把降低的战意转给友军）
 				transfer_zhanyi(u, int(fd.get("value", 10)), int(fd.get("radius", 3)))
