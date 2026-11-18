@@ -14948,7 +14948,7 @@
       "range": 2.0
     },
     "portrait": "res://assets/cai_wenji.png",
-    "talent": "10273011",
+    "talent": "cai_wenji_talent",
     "talent_lv": 1.0,
     "skills": [
       "10274011",
@@ -16352,7 +16352,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "talent": "biyue_xiuhua",
+    "talent": "xiao_qiao_talent",
     "talent_lv": 1.0,
     "talent_name": "国色",
     "talent_desc": "施放单体技策、单体战法、单体普攻时，移除场上所有 「 印·风旋 」 ，并为目标点3圈范围内与其距离最近的敌军施加 「 印·风旋 」 ；触发风印反应时，为目标施加 「 脆弱 」 ，持续3回合。",
@@ -25263,7 +25263,7 @@
       "move": 4.0,
       "range": 1.0
     },
-    "talent": "cr_talent",
+    "talent": "cao_hong_talent",
     "talent_lv": 1.0,
     "talent_name": "大盾",
     "talent_desc": "受到伤害降低5%；行动结束时为自身回复兵力上限15%的兵力。",
