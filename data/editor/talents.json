@@ -194,7 +194,54 @@
       "受到自身直线范围内的敌军伤害降低20%；对自身非直线范围内的敌军造成伤害提升20%；「追击」时对目标周围1格范围内的敌军额外造成谋攻50%的伤害。",
       "对敌军每施加一个减益或控制额外造成谋攻20%的固定伤害；「识破」改为「高级识破」。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "pursuit",
+        "value": 1.0,
+        "magic": true,
+        "trigger": "on_enemy_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "识破",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "trigger": "on_enemy_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "坚壁",
+        "turns": 99.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "magic": true,
+        "trigger": "on_hit",
+        "min_lv": 2.0
+      },
+      {
+        "type": "fixed",
+        "value": 20.0,
+        "trigger": "on_hit",
+        "min_lv": 3.0
+      }
+    ]
   },
   "tongxin": {
     "name": "同心同德",
@@ -216,7 +263,60 @@
       "自身2格范围内的敌军移动力-1且物攻物防降低10%；造成暴击后为自身回复兵力上限5%的兵力。",
       "每累计造成3次暴击后，行动结束时自身获得「再行动」（间隔2回合触发）。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "疾行·壹",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "fixed",
+        "value": 10.0,
+        "trigger": "on_move",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 2.0,
+        "stacks": 5.0,
+        "trigger": "on_crit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "神威",
+        "turns": 2.0,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "迟钝",
+        "turns": 99.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "self_heal",
+        "value": 0.05,
+        "trigger": "on_crit",
+        "min_lv": 2.0
+      },
+      {
+        "type": "resource",
+        "name": "暴击计数",
+        "value": 1.0,
+        "max": 3.0,
+        "trigger": "on_crit",
+        "min_lv": 3.0
+      },
+      {
+        "type": "extra_turn",
+        "trigger": "on_turn_end",
+        "min_lv": 3.0
+      }
+    ]
   },
   "huang_talent": {
     "name": "先登穿杨",
@@ -293,7 +393,58 @@
       "「硫硝」的普攻无视敌军30%防御并对敌军额外施加1层「撕裂」，持续2回合。",
       "施放技策或战法后为自身和2格范围内另一个我方器械施加2层「机巧」；对敌军施加「溃逃」时若已拥有5层额外造成谋攻25%的固定伤害；对敌军施加「撕裂」时若已拥有5层额外造成物攻20%的固定伤害。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "resource",
+        "name": "机巧",
+        "value": 1.0,
+        "max": 9.0,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "硫硝",
+        "turns": 99.0,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "self_heal",
+        "value": 0.2,
+        "trigger": "on_resource_lost",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "精工",
+        "turns": 2.0,
+        "trigger": "on_resource_lost",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "撕裂",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 2.0
+      },
+      {
+        "type": "resource",
+        "name": "机巧",
+        "value": 2.0,
+        "max": 9.0,
+        "trigger": "on_cast",
+        "min_lv": 3.0
+      },
+      {
+        "type": "fixed",
+        "value": 25.0,
+        "trigger": "on_hit",
+        "min_lv": 3.0
+      }
+    ]
   },
   "xingcai_talent": {
     "name": "凤卫",
@@ -516,7 +667,30 @@
       "自身2格范围内的敌军被合击后，对其造成物攻50%伤害的「追击」（对每个敌军每回合最多攻击1次）",
       "「追击」时暴击率和暴击伤害提升30%。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "crit_up",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "trigger": "on_enemy_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "trigger": "on_enemy_combo",
+        "min_lv": 2.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 99.0,
+        "min_lv": 3.0
+      }
+    ]
   },
   "10273011": {
     "name": "悲鸿",
