@@ -909,7 +909,26 @@
       "刚烈无惧造成伤害时获得18%攻心。",
       "刚烈无惧对伤害来源造成的伤害提升50%。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "damage",
+        "value": 0.5,
+        "trigger": "on_hurt",
+        "min_lv": 1.0
+      },
+      {
+        "type": "lifesteal",
+        "value": 0.18,
+        "trigger": "on_hurt",
+        "min_lv": 2.0
+      },
+      {
+        "type": "fixed",
+        "value": 50.0,
+        "trigger": "on_hurt",
+        "min_lv": 3.0
+      }
+    ]
   },
   "xhy_talent": {
     "name": "骁将急袭",
@@ -1169,7 +1188,40 @@
       "若使敌军位移时受到阻挡额外对其造成物攻20%的固定伤害并施加1层「撕裂」，持续2回合。",
       "若使敌军位移时受到阻挡，对其造成所有「撕裂」%的固定伤害。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "push",
+        "value": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "fixed",
+        "value": 20.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "撕裂",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "fixed",
+        "value": 20.0,
+        "trigger": "on_hit",
+        "min_lv": 2.0
+      },
+      {
+        "type": "fixed",
+        "value": 50.0,
+        "trigger": "on_hit",
+        "min_lv": 3.0
+      }
+    ]
   },
   "cy_talent": {
     "name": "勇冠贲育",
@@ -2269,6 +2321,75 @@
         "type": "heal",
         "value": 0.1,
         "trigger": "on_cast",
+        "min_lv": 3.0
+      }
+    ],
+    "from_official": true
+  },
+  "ji_ling_talent": {
+    "name": "成国骁将",
+    "type": "attack",
+    "desc": "对拥有「牵制」的敌军主动造成伤害提升10%，之后获得3格「再移动」；行动结束时对自身2格范围内距离最近的敌军施加「牵制·贰」，持续2回合。",
+    "lv": [
+      "对拥有「牵制」的敌军主动造成伤害提升10%，之后获得3格「再移动」；行动结束时对自身2格范围内距离最近的敌军施加「牵制·贰」，持续2回合。",
+      "「牵制·贰」改为持续2回合；对拥有「牵制」的敌军主动造成伤害提升10%。",
+      "「牵制·贰」改为持续2回合；对拥有「牵制」的敌军主动造成伤害提升10%。"
+    ],
+    "ed_fx_list": [
+      {
+        "type": "extra_move",
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "牵制·贰",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 2.0
+      }
+    ],
+    "from_official": true
+  },
+  "lv_lingqi_talent": {
+    "name": "风驰电掣",
+    "type": "attack",
+    "desc": "移动时无视地形对移动力的衰减；主动造成伤害后，行动结束时获得3格「再移动」；每累计移动12格，回合结束时获得「双击」。",
+    "lv": [
+      "移动时无视地形对移动力的衰减；主动造成伤害后，行动结束时获得3格「再移动」；每累计移动12格，回合结束时获得「双击」。",
+      "移动时无视地形对移动力的衰减。",
+      "对移动力低于自身的敌军造成的伤害提升15%。"
+    ],
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "疾行·壹",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "extra_move",
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "双击",
+        "turns": 2.0,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
         "min_lv": 3.0
       }
     ],

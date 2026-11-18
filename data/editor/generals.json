@@ -20104,7 +20104,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "talent": "wusheng",
+    "talent": "lv_lingqi_talent",
     "talent_lv": 1.0,
     "talent_name": "将门虎女",
     "talent_desc": "主动造成伤害后，行动结束时获得3格 「 再移动 」 ，每累计移动12格，回合结束时获得 「 双击 」 。",
@@ -21980,7 +21980,7 @@
       "move": 6.0,
       "range": 1.0
     },
-    "talent": "ma_chao_talent",
+    "talent": "ji_ling_talent",
     "talent_lv": 1.0,
     "talent_name": "三尖两刃",
     "talent_desc": "行动结束时对自身2格范围内距离最近的敌军施加 「 牵制·贰 」 ，持续1回合。",
