@@ -19635,7 +19635,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "talent": "xy_talent",
+    "talent": "xun_you_talent",
     "talent_lv": 1.0,
     "talent_name": "算无遗策",
     "talent_desc": "施放技策或战法后为自身和2格范围内另一个谋攻最高的我方部队施加1层 「 智 」 （其他我方部队 「 智 」 提升一半谋攻）。",
@@ -21511,7 +21511,7 @@
       "move": 3.0,
       "range": 2.0
     },
-    "talent": "gj_talent",
+    "talent": "liu_ye_talent",
     "talent_lv": 1.0,
     "talent_name": "霹雳车",
     "talent_desc": "普攻和战法造成谋略伤害；施放技策或战法后，自身获得 「 蓄势 」 。",

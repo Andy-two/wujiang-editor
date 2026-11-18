@@ -72,7 +72,44 @@
       "对我方部队施放群体技策时，同样回复能力提升20%，并为其回复10点战意。",
       "对我方部队施放技策时，回复能力提升30%，并为其回复15点战意。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "heal",
+        "value": 0.2,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "zhanyi",
+        "value": 10.0,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "heal",
+        "value": 0.2,
+        "trigger": "on_cast",
+        "min_lv": 2.0
+      },
+      {
+        "type": "zhanyi",
+        "value": 10.0,
+        "trigger": "on_cast",
+        "min_lv": 2.0
+      },
+      {
+        "type": "heal",
+        "value": 0.3,
+        "trigger": "on_cast",
+        "min_lv": 3.0
+      },
+      {
+        "type": "zhanyi",
+        "value": 15.0,
+        "trigger": "on_cast",
+        "min_lv": 3.0
+      }
+    ]
   },
   "wusheng": {
     "name": "武圣",
@@ -665,7 +702,61 @@
       "反击时额外造成物防100%的固定伤害并为自身回复20%伤害量的兵力，「追击」时额外造成物防50%的固定伤害并为自身回复20%伤害量的兵力（目标处于「嘲讽」状态时，该次反击与「追击」造成的额外伤害与回复翻倍）。",
       "回合结束时获得1层「凤羽」；天赋获得的护盾量增加至物防的60%；自身兵力小于50%时获得1层「凤衣」（每局1次）。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "counter_up",
+        "mul": 0.0,
+        "cut": 0.2,
+        "min_lv": 1.0
+      },
+      {
+        "type": "shield",
+        "value": 40.0,
+        "turns": 2.0,
+        "trigger": "on_counter",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "凤羽",
+        "turns": 2.0,
+        "trigger": "on_counter",
+        "min_lv": 1.0
+      },
+      {
+        "type": "fixed",
+        "value": 100.0,
+        "trigger": "on_counter",
+        "min_lv": 1.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "trigger": "on_counter",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "凤羽",
+        "turns": 2.0,
+        "trigger": "on_be_countered",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "凤衣",
+        "turns": 2.0,
+        "trigger": "on_turn_end",
+        "min_lv": 3.0
+      },
+      {
+        "type": "shield",
+        "value": 60.0,
+        "turns": 2.0,
+        "trigger": "on_hurt",
+        "min_lv": 3.0
+      }
+    ]
   },
   "cao_talent": {
     "name": "孟德兵法",
@@ -1425,6 +1516,81 @@
         "type": "heal",
         "value": 0.15,
         "trigger": "on_turn_end",
+        "min_lv": 3.0
+      }
+    ],
+    "from_official": true
+  },
+  "xun_you_talent": {
+    "name": "大智若愚",
+    "type": "support",
+    "desc": "施放技策或战法后为自身和2格范围内另一个谋攻最高的我方部队施加1层「智」（其他我方部队「智」提升一半谋攻）。",
+    "lv": [
+      "施放技策或战法后为自身和2格范围内另一个谋攻最高的我方部队施加1层「智」（其他我方部队「智」提升一半谋攻）。",
+      "「智」改为提升10%的谋攻。",
+      "回合开始时为自身和2格范围内另一个谋攻最高的我方部队施加1层「智」（其他我方部队「智」提升一半谋攻）。"
+    ],
+    "ed_fx_list": [
+      {
+        "type": "resource",
+        "name": "智",
+        "value": 1.0,
+        "max": 9.0,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "智",
+        "turns": 3.0,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "resource",
+        "name": "智",
+        "value": 1.0,
+        "max": 9.0,
+        "trigger": "on_turn_end",
+        "min_lv": 3.0
+      }
+    ],
+    "from_official": true
+  },
+  "liu_ye_talent": {
+    "name": "佐世之才",
+    "type": "attack",
+    "desc": "普攻和战法造成谋略伤害；施放技策或战法后，自身获得「蓄势」。",
+    "lv": [
+      "普攻和战法造成谋略伤害；施放技策或战法后，自身获得「蓄势」。",
+      "「蓄势」的溅射伤害范围提升至一圈。",
+      "「蓄势」的普攻与溅射伤害额外提升20%。"
+    ],
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "蓄势",
+        "turns": 2.0,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "蓄势",
+        "turns": 2.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
         "min_lv": 3.0
       }
     ],
