@@ -580,6 +580,7 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 						dmg = mini(dmg, int(tgt["hp"]))
 						tgt["hp"] = int(tgt["hp"]) - dmg
 						hits += 1
+						u["_turn_dmg"] = int(u.get("_turn_dmg", 0)) + dmg
 						if int(tgt["hp"]) > 0:
 							_set_anim(tgt, "hurt")
 							tgt["anim_hold"] = 0.35
@@ -669,6 +670,81 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 			RULEZ.SFX_ZOC:
 				u["zoc"] = maxi(int(u.get("zoc", 0)), int(fx.get("value", 1)))
 				_emit("  → %s 获得 %d 格「阻挡领域」" % [u["name"], int(u["zoc"])], "info")
+			RULEZ.SFX_STEAL:
+				# 偷取：从敌军吸取战意（或资源）到自己身上
+				var what := str(fx.get("what", "战意"))
+				var amt := int(fx.get("value", 20))
+				var s_targets: Array = foes if not foes.is_empty() else []
+				if s_targets.is_empty():
+					var st = unit_at(target) if target != Vector2i(-1, -1) else null
+					if st != null:
+						s_targets = [st]
+				for st2 in s_targets:
+					if not st2["alive"]:
+						continue
+					if what == "战意":
+						var got := mini(amt, int(st2.get("zhanyi", 0)))
+						add_zhanyi(st2, -got)
+						add_zhanyi(u, got)
+					else:
+						var gt := mini(amt, get_resource(st2, what))
+						add_resource(st2, what, -gt)
+						add_resource(u, what, gt)
+			RULEZ.SFX_TRANSFER:
+				# 传递：把敌军自身的减益传递给周围其他敌军
+				var tf_radius := int(fx.get("value", 1))
+				var tf_tgts: Array = foes if not foes.is_empty() else []
+				for tf in tf_tgts:
+					if not tf["alive"]:
+						continue
+					var my_deb: Array = tf.get("debuffs", [])
+					if my_deb.is_empty():
+						continue
+					for other in units:
+						if other == tf or not other["alive"] or int(other["side"]) != int(tf["side"]):
+							continue
+						var dd: Vector2i = other["pos"] - tf["pos"]
+						if absi(dd.x) + absi(dd.y) > tf_radius:
+							continue
+						for deb in my_deb:
+							var bd2: Dictionary = deb
+							_add_debuff(other, str(bd2.get("name", "")), int(bd2.get("turns", 1)), u)
+				_emit("  → 减益已传递给周围敌军", "info")
+			RULEZ.SFX_FIRST_STRIKE:
+				u["first_strike"] = true
+			RULEZ.SFX_MUST_LAST:
+				u["must_last"] = true
+			RULEZ.SFX_COMBO:
+				u["can_combo"] = true
+			RULEZ.SFX_LIFELINK_HIT:
+				# 攻心：本次技能造成的伤害按比例回血（在伤害处累计，这里只设标记）
+				u["lifesteal"] = float(fx.get("value", 0.2))
+			RULEZ.SFX_EXECUTE:
+				# 斩杀：对作用范围内兵力低于阈值的敌军直接击杀
+				var thr := float(fx.get("value", 0.15))
+				var ex_tgts: Array = foes if not foes.is_empty() else []
+				for ex in ex_tgts:
+					if not ex["alive"]:
+						continue
+					if float(ex["hp"]) / maxf(1.0, float(ex["max_hp"])) <= thr:
+						_emit("  → 斩杀 %s（兵力低于 %.0f%%）" % [ex["name"], thr * 100.0], "hit")
+						ex["hp"] = 0
+						_kill(ex, u)
+			RULEZ.SFX_TRAIT:
+				# 按性格/兵种特攻
+				var trait_k := str(fx.get("trait", ""))
+				var debuff_k := str(fx.get("debuff", ""))
+				var turns_k := int(fx.get("turns", 1))
+				if trait_k != "" and debuff_k != "":
+					var tr_tgts: Array = foes if not foes.is_empty() else []
+					for tr_u in tr_tgts:
+						if not tr_u["alive"]:
+							continue
+						var t_trait := str(tr_u.get("trait", tr_u.get("xingge", "")))
+						var t_arm := str(tr_u.get("arm", ""))
+						if t_trait == trait_k or t_arm == trait_k:
+							_add_debuff(tr_u, debuff_k, turns_k, u)
+							_emit("  → %s（%s）被施加「%s」" % [tr_u["name"], trait_k, debuff_k], "info")
 			RULEZ.SFX_ZHANYI:
 				# 战意：正数回复自身；负数降低敌军（作用范围内的敌军，无命中时取目标点单位）
 				var zv := int(fx.get("value", 10))
@@ -787,9 +863,21 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 					_emit("  → %s 获得「%s」" % [u["name"], String(b0["name"])], "info")
 					break
 	_emit("  作用格：%d" % cells.size(), "info")
+	# 攻心：本次技能造成的伤害按比例回复自身兵力
+	var ls := float(u.get("lifesteal", 0.0))
+	if ls > 0.0 and int(u.get("_turn_dmg", 0)) > 0:
+		var heal_ls := int(round(float(u["_turn_dmg"]) * ls))
+		if heal_ls > 0:
+			u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + heal_ls)
+			_emit("  → 攻心：%s 回复 %d 兵力" % [u["name"], heal_ls], "heal")
+		u["lifesteal"] = 0.0
+	u["_turn_dmg"] = 0
 	changed.emit()
-	# 「无法被反击」只对本次攻击有效，用完即清
+	# 一次性标记：用完即清
 	u["no_counter"] = false
+	u["first_strike"] = false
+	u["must_last"] = false
+	u["can_combo"] = false
 	return {"ok": true, "hits": hits}
 
 

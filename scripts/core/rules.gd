@@ -588,6 +588,15 @@ const SFX_SWITCH := "switch_skill"    # 技能形态切换（切换为 / 升级�
 const SFX_RESOURCE := "resource"      # 资源层数（智/深谋/斗气/机巧/备战/武魂…）
 const SFX_CONSUME := "consume"        # 消耗资源
 const SFX_ZOC := "zoc"                # 阻挡领域（ZOC）
+# —— P3 小机制 ——
+const SFX_STEAL := "steal"            # 偷取（战意/资源）
+const SFX_TRANSFER := "transfer"      # 传递减益给周围敌军
+const SFX_FIRST_STRIKE := "first_strike"  # 先攻（先手攻击）
+const SFX_MUST_LAST := "must_last"    # 必定后手攻击
+const SFX_COMBO := "combo"            # 可触发合击
+const SFX_LIFELINK_HIT := "lifesteal" # 攻心（造成的伤害按比例回血）
+const SFX_EXECUTE := "execute"        # 处决/斩杀（低血秒杀）
+const SFX_TRAIT := "trait"            # 按性格/兵种筛选生效
 
 const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_DISPEL, SFX_SELF_DISPEL, SFX_SELF_HEAL, SFX_CD_DOWN, SFX_EXTRA_MOVE,
@@ -595,7 +604,9 @@ const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_SILENCE, SFX_DISARM, SFX_SUMMON, SFX_TELEPORT, SFX_EXTRA_TURN,
 	SFX_REVIVE, SFX_CRIT_UP, SFX_LIFELINK, SFX_COPY_BUFF, SFX_STEAL_BUFF, SFX_FIXED,
 	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI, SFX_COUNTER_UP, SFX_SWITCH,
-	SFX_RESOURCE, SFX_CONSUME, SFX_ZOC]
+	SFX_RESOURCE, SFX_CONSUME, SFX_ZOC,
+	SFX_STEAL, SFX_TRANSFER, SFX_FIRST_STRIKE, SFX_MUST_LAST, SFX_COMBO,
+	SFX_LIFELINK_HIT, SFX_EXECUTE, SFX_TRAIT]
 
 # 资源名（用于层数系统）
 const RESOURCES := ["智", "深谋", "斗气", "机巧", "备战", "武魂", "凤羽", "凤衣", "威严", "被动层数"]
@@ -619,6 +630,14 @@ const SFX_LABELS := {
 	SFX_RESOURCE: "资源层数",
 	SFX_CONSUME: "消耗资源",
 	SFX_ZOC: "阻挡领域",
+	SFX_STEAL: "偷取",
+	SFX_TRANSFER: "传递减益",
+	SFX_FIRST_STRIKE: "先攻",
+	SFX_MUST_LAST: "必定后手",
+	SFX_COMBO: "可触发合击",
+	SFX_LIFELINK_HIT: "攻心",
+	SFX_EXECUTE: "斩杀",
+	SFX_TRAIT: "性格/兵种特攻",
 }
 # 常用状态名（可自由输入其它名字）
 const COMMON_STATUS := ["低迷", "虚弱", "定身", "眩晕", "撕裂", "溃逃", "缴械", "封技",
@@ -710,6 +729,22 @@ static func default_sfx(type: String) -> Dictionary:
 			return {"type": type, "name": ""}
 		SFX_ZOC:
 			return {"type": type, "value": 1}
+		SFX_STEAL:
+			return {"type": type, "what": "战意", "value": 20}
+		SFX_TRANSFER:
+			return {"type": type, "value": 1}
+		SFX_FIRST_STRIKE:
+			return {"type": type}
+		SFX_MUST_LAST:
+			return {"type": type}
+		SFX_COMBO:
+			return {"type": type}
+		SFX_LIFELINK_HIT:
+			return {"type": type, "value": 0.2}
+		SFX_EXECUTE:
+			return {"type": type, "value": 0.15}
+		SFX_TRAIT:
+			return {"type": type, "trait": "", "debuff": "", "turns": 1}
 		_:
 			return {"type": type, "value": 0}
 
@@ -805,6 +840,23 @@ static func sfx_text(fx: Dictionary) -> String:
 			return "消耗所有「%s」" % String(fx.get("name", ""))
 		SFX_ZOC:
 			return "获得 %d 格「阻挡领域」" % int(fx.get("value", 1))
+		SFX_STEAL:
+			var sn := String(fx.get("what", "战意"))
+			return "偷取敌军 %d 点%s" % [int(fx.get("value", 20)), sn]
+		SFX_TRANSFER:
+			return "将自身减益传递给周围 %d 圈敌军" % int(fx.get("value", 1))
+		SFX_FIRST_STRIKE:
+			return "先攻（先于目标出手）"
+		SFX_MUST_LAST:
+			return "必定后手攻击"
+		SFX_COMBO:
+			return "本次攻击可触发合击"
+		SFX_LIFELINK_HIT:
+			return "攻心：造成伤害的 %.0f%% 回复为兵力" % (float(fx.get("value", 0.2)) * 100.0)
+		SFX_EXECUTE:
+			return "斩杀：目标兵力低于 %.0f%% 时直接击杀" % (float(fx.get("value", 0.15)) * 100.0)
+		SFX_TRAIT:
+			return "对「%s」目标额外施加「%s」" % [String(fx.get("trait", "")), String(fx.get("debuff", ""))]
 	return t
 
 

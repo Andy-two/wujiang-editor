@@ -1843,6 +1843,27 @@
         "type": "cd_down",
         "value": 2.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "trait",
+        "trait": "勇",
+        "debuff": "定身",
+        "turns": 1.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "trait",
+        "trait": "严",
+        "debuff": "缴械",
+        "turns": 1.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "trait",
+        "trait": "巧",
+        "debuff": "封技",
+        "turns": 1.0,
+        "min_lv": 1.0
       }
     ],
     "range": 2.0,
@@ -3862,6 +3883,11 @@
       {
         "type": "extra_move",
         "min_lv": 2.0
+      },
+      {
+        "type": "transfer",
+        "value": 1.0,
+        "min_lv": 1.0
       }
     ],
     "radius": 1.0,
@@ -9765,6 +9791,10 @@
         "magic": false,
         "times": 1.0,
         "ignore_def": 0.0
+      },
+      {
+        "type": "must_last",
+        "min_lv": 1.0
       }
     ]
   },
@@ -16947,6 +16977,12 @@
         "type": "zhanyi",
         "value": -20.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "steal",
+        "what": "战意",
+        "value": 20.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -18667,6 +18703,12 @@
       {
         "type": "zhanyi",
         "value": -20.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "steal",
+        "what": "战意",
+        "value": 20.0,
         "min_lv": 1.0
       }
     ]
@@ -20633,6 +20675,10 @@
         "type": "damage",
         "value": 1.0,
         "magic": true,
+        "min_lv": 1.0
+      },
+      {
+        "type": "combo",
         "min_lv": 1.0
       }
     ]
