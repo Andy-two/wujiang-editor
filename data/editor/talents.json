@@ -1135,66 +1135,6 @@
       }
     ]
   },
-  "zch_talent": {
-    "name": "沉断",
-    "type": "天赋",
-    "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin2056e3e83dff423caeaa3c0b6dbbee97UI/UIRes/Texture/IconSkill/ta_1031301.png",
-    "lv": [
-      "自身施加减益时，减益持续时间+1；主动攻击后，使目标随机2层可驱散减益的持续时间延长1回合（优先选择持续时间最短的）；回合结束时，对自身3格范围内兵力最高的1名敌军施加2个随机减益，持续1回合。",
-      "主动攻击后，延长目标可驱散减益数量提升至4层，将目标身上的随机1层「可升级减益」升1级。",
-      "自身施加减益时，减益持续时间提升至+2；回合结束时，施加的随机减益数量提升至3个。"
-    ],
-    "ed_fx_list": [
-      {
-        "type": "debuff",
-        "value": "虚弱",
-        "turns": 2.0,
-        "stacks": 1.0,
-        "trigger": "on_hit",
-        "min_lv": 1.0
-      },
-      {
-        "type": "debuff",
-        "value": "破绽",
-        "turns": 2.0,
-        "stacks": 1.0,
-        "trigger": "on_hit",
-        "min_lv": 1.0
-      },
-      {
-        "type": "debuff",
-        "value": "虚弱",
-        "turns": 2.0,
-        "stacks": 2.0,
-        "trigger": "on_turn_end",
-        "min_lv": 1.0
-      },
-      {
-        "type": "debuff",
-        "value": "虚弱",
-        "turns": 2.0,
-        "stacks": 4.0,
-        "trigger": "on_hit",
-        "min_lv": 2.0
-      },
-      {
-        "type": "debuff",
-        "value": "虚弱",
-        "turns": 3.0,
-        "stacks": 1.0,
-        "trigger": "on_hit",
-        "min_lv": 3.0
-      },
-      {
-        "type": "debuff",
-        "value": "破绽",
-        "turns": 2.0,
-        "stacks": 3.0,
-        "trigger": "on_turn_end",
-        "min_lv": 3.0
-      }
-    ]
-  },
   "zm_talent": {
     "name": "洛水惊鸿",
     "type": "天赋",
@@ -1387,7 +1327,7 @@
       }
     ]
   },
-  "cr_talent": {
+  "10183111": {
     "name": "贲育弗加",
     "type": "天赋",
     "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin56c696a1527e49d4952e3aeac2e9a740UI/UIRes/Texture/IconSkill/ta_1004301.png",
@@ -1420,27 +1360,40 @@
       }
     ]
   },
-  "10183111": {
-    "name": "破阵无前",
-    "type": "天赋",
-    "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_adminf5ae22ed3f7d43459b558c3b12aadf58UI/UIRes/Texture/IconSkill/ta_1018311.png",
-    "lv": [
-      "「攻心」提升15%，每损失10%兵力，「攻心」额外提升5%（上限25%）；自身触发「攻心」时，伤害值计算溢出部分；自身反击触发「攻心」时，若兵力回复超出最大上限，则超出部分将按100%比例转化为储存伤害（上限300%攻击力），本次反击消耗全部存储伤害对敌军额外造成等同存储伤害的固定伤害。",
-      "反击伤害提升25%；反击时「攻心」提升10%，且会为目标施加「断粮」，持续1回合。",
-      "数值提升至超出部分按比例转化为储存伤害（上限380%攻击力），反击时根据场上「镇军」人数提升物攻10%和「攻心」%（上限计算4个「镇军」人数）。"
-    ],
-    "ed_fx_list": []
-  },
   "10193021": {
-    "name": "奇正",
-    "type": "天赋",
-    "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin3c780ec50d0f4624a78713fccb44e958UI/UIRes/Texture/IconSkill/ta_1019302.png",
+    "name": "雍容辩才",
+    "type": "attack",
+    "desc": "主动攻击敌军时每拥有一个减益伤害提升5%，最多15%；造成伤害前为敌军施加「松懈·壹」，持续2回合。",
     "lv": [
-      "主动攻击或追击时克制所有敌军并额外回复25点战意；战意上限增加50点；自身拥有护盾时增伤减伤提升10%；主动攻击<style=red>[勇]</style>性格敌军时为自身施加「高级奋勇」，持续2回合；主动攻击[严]性格敌军时为自身施加「高级坚甲」，持续2回合；主动攻击<style=blue1>[巧]</color>性格敌军时为自身施加「疾行·贰」，持续2回合。",
-      "受到谋略伤害时用物防代替谋防承受伤害；对敌军造成伤害时选择其物防和谋防中最低的一项承受攻击。",
-      "主动攻击或追击敌军时获得物攻10%的护盾，持续2回合；追击和战法伤害提升30%。"
+      "主动攻击敌军时每拥有一个减益伤害提升5%，最多15%；造成伤害前为敌军施加「松懈·壹」，持续2回合。",
+      "主动攻击敌军时每拥有一个减益伤害提升5%，最多15%。",
+      "造成伤害前为敌军施加「松懈」，持续2回合。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "松懈·壹",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "松懈",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 3.0
+      }
+    ],
+    "from_official": true
   },
   "10113011": {
     "name": "七擒",
@@ -1477,24 +1430,96 @@
     ]
   },
   "10273011": {
-    "name": "悲鸿",
-    "type": "天赋",
-    "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin659eb47c7ba349528216f7c9f4b90d34UI/UIRes/Texture/IconSkill/ta_1027301.png",
+    "name": "多财善贾",
+    "type": "support",
+    "desc": "施放伤害技策时谋攻提升8%；施放技策或战法后，为兵力最低的其他我方部队回复谋攻65%的兵力。",
     "lv": [
-      "施放技策或战法后自身获得1层「专注」；「专注」被移除时自身获得「凝神」和谋攻50%的护盾，持续2回合；对我方部队施放技策或战法后为其施加1层「清心」，持续2回合；对敌军施放技策或战法后对其施加1层「乱心」，持续2回合。",
-      "自身减益小于3时除兵力外全属性提升15%；「清心」触发时改为回复施加者谋攻40%的兵力；「乱心」触发时改为降低20%伤害。",
-      "施放技策或战法后改为自身获得2层「专注」；对我方部队施放技策或战法改为施加2层「清心」；对敌军施放技策或战法后改为施加2层「乱心」。"
+      "施放伤害技策时谋攻提升8%；施放技策或战法后，为兵力最低的其他我方部队回复谋攻65%的兵力。",
+      "施放伤害技策时谋攻提升8%。",
+      "施放技策或战法后，为兵力最低的其他我方部队回复谋攻65%的兵力。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "heal",
+        "value": 0.65,
+        "magic": true,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "heal",
+        "value": 0.65,
+        "magic": true,
+        "trigger": "on_cast",
+        "min_lv": 3.0
+      }
+    ],
+    "from_official": true
   },
   "10283011": {
-    "name": "烈女",
+    "name": "沉断",
     "type": "天赋",
-    "icon": "",
+    "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin2056e3e83dff423caeaa3c0b6dbbee97UI/UIRes/Texture/IconSkill/ta_1031301.png",
     "lv": [
-      "行动结束时对自身2格范围内的敌军施加1层「溃逃」，持续2回合。",
-      "自身2格范围内每有一个敌军谋攻提升8%（最多16%）。",
-      "「溃逃」改为施加2层。"
+      "自身施加减益时，减益持续时间+1；主动攻击后，使目标随机2层可驱散减益的持续时间延长1回合（优先选择持续时间最短的）；回合结束时，对自身3格范围内兵力最高的1名敌军施加2个随机减益，持续1回合。",
+      "主动攻击后，延长目标可驱散减益数量提升至4层，将目标身上的随机1层「可升级减益」升1级。",
+      "自身施加减益时，减益持续时间提升至+2；回合结束时，施加的随机减益数量提升至3个。"
+    ],
+    "ed_fx_list": [
+      {
+        "type": "debuff",
+        "value": "虚弱",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "破绽",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "虚弱",
+        "turns": 2.0,
+        "stacks": 2.0,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "虚弱",
+        "turns": 2.0,
+        "stacks": 4.0,
+        "trigger": "on_hit",
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "虚弱",
+        "turns": 3.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 3.0
+      },
+      {
+        "type": "debuff",
+        "value": "破绽",
+        "turns": 2.0,
+        "stacks": 3.0,
+        "trigger": "on_turn_end",
+        "min_lv": 3.0
+      }
     ]
   },
   "sun_ce_talent": {
@@ -2592,74 +2617,6 @@
         "value": 0.5,
         "ignore_def": 0.75,
         "trigger": "on_hurt",
-        "min_lv": 3.0
-      }
-    ],
-    "from_official": true
-  },
-  "jian_yong_talent": {
-    "name": "雍容辩才",
-    "type": "attack",
-    "desc": "主动攻击敌军时每拥有一个减益伤害提升5%，最多15%；造成伤害前为敌军施加「松懈·壹」，持续2回合。",
-    "lv": [
-      "主动攻击敌军时每拥有一个减益伤害提升5%，最多15%；造成伤害前为敌军施加「松懈·壹」，持续2回合。",
-      "主动攻击敌军时每拥有一个减益伤害提升5%，最多15%。",
-      "造成伤害前为敌军施加「松懈」，持续2回合。"
-    ],
-    "ed_fx_list": [
-      {
-        "type": "buff",
-        "value": "昂扬",
-        "turns": 99.0,
-        "min_lv": 1.0
-      },
-      {
-        "type": "debuff",
-        "value": "松懈·壹",
-        "turns": 2.0,
-        "stacks": 1.0,
-        "trigger": "on_hit",
-        "min_lv": 1.0
-      },
-      {
-        "type": "debuff",
-        "value": "松懈",
-        "turns": 2.0,
-        "stacks": 1.0,
-        "trigger": "on_hit",
-        "min_lv": 3.0
-      }
-    ],
-    "from_official": true
-  },
-  "mi_zhu_talent": {
-    "name": "多财善贾",
-    "type": "support",
-    "desc": "施放伤害技策时谋攻提升8%；施放技策或战法后，为兵力最低的其他我方部队回复谋攻65%的兵力。",
-    "lv": [
-      "施放伤害技策时谋攻提升8%；施放技策或战法后，为兵力最低的其他我方部队回复谋攻65%的兵力。",
-      "施放伤害技策时谋攻提升8%。",
-      "施放技策或战法后，为兵力最低的其他我方部队回复谋攻65%的兵力。"
-    ],
-    "ed_fx_list": [
-      {
-        "type": "buff",
-        "value": "昂扬",
-        "turns": 99.0,
-        "min_lv": 1.0
-      },
-      {
-        "type": "heal",
-        "value": 0.65,
-        "magic": true,
-        "trigger": "on_cast",
-        "min_lv": 1.0
-      },
-      {
-        "type": "heal",
-        "value": 0.65,
-        "magic": true,
-        "trigger": "on_cast",
         "min_lv": 3.0
       }
     ],
