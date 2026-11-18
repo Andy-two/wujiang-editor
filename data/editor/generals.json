@@ -15415,7 +15415,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "talent": "sun_talent",
+    "talent": "sun_quan_talent",
     "talent_lv": 1.0,
     "talent_name": "坐断东南",
     "talent_desc": "自身3格范围内我方部队主动攻击时，获得谋攻15%的护盾，持续3回合（同一我方部队每次行动最多触发1次）；自身3格范围内我方部队受到主动攻击时，获得1层 「 借势 」 （同一我方部队每次行动最多触发1次）。",
@@ -23856,7 +23856,7 @@
       "move": 4.0,
       "range": 1.0
     },
-    "talent": "xhd_talent",
+    "talent": "chen_dao_talent",
     "talent_lv": 1.0,
     "talent_name": "白毦兵",
     "talent_desc": "受到主动单体攻击或反击伤害后对伤害来源施加1层 「 撕裂 」 ，持续2回合。",
@@ -24325,7 +24325,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "talent": "sm_talent",
+    "talent": "chen_deng_talent",
     "talent_lv": 1.0,
     "talent_name": "智将",
     "talent_desc": "行动结束时对自身2格范围内的敌军施加1层 「 溃逃 」 ，持续2回合。",

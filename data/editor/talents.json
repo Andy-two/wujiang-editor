@@ -323,7 +323,33 @@
       "攻击范围内的敌军被合击时，对其发起物攻50%的「追击」（对每个敌军每回合最多攻击1次）。",
       "合击或「追击」前为自身回复兵力上限10%的兵力。"
     ],
-    "ed_fx_list": []
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 2.0,
+        "trigger": "on_cast",
+        "min_lv": 1.0
+      },
+      {
+        "type": "heal",
+        "value": 0.1,
+        "trigger": "on_combo",
+        "min_lv": 1.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "trigger": "on_combo",
+        "min_lv": 2.0
+      },
+      {
+        "type": "self_heal",
+        "value": 0.1,
+        "trigger": "on_combo",
+        "min_lv": 3.0
+      }
+    ]
   },
   "ma_chao_talent": {
     "name": "神威天将",
@@ -1764,6 +1790,127 @@
       {
         "type": "self_heal",
         "value": 0.15,
+        "trigger": "on_turn_end",
+        "min_lv": 3.0
+      }
+    ],
+    "from_official": true
+  },
+  "chen_dao_talent": {
+    "name": "忠克勇烈",
+    "type": "attack",
+    "desc": "自身2格范围内每有一个拥有「撕裂」的敌军物攻物防提升5%（最多15%）；受到主动单体攻击或反击伤害后对伤害来源造成物攻20%的固定伤害并施加1层「撕裂」，持续2回合。",
+    "lv": [
+      "自身2格范围内每有一个拥有「撕裂」的敌军物攻物防提升5%（最多15%）；受到主动单体攻击或反击伤害后对伤害来源造成物攻20%的固定伤害并施加1层「撕裂」，持续2回合。",
+      "自身2格范围内每有一个拥有「撕裂」的敌军物攻物防提升5%（最多15%）。",
+      "受到主动单体攻击或反击伤害后对伤害来源造成物攻20%的固定伤害。"
+    ],
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "坚壁",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "fixed",
+        "value": 20.0,
+        "trigger": "on_hurt",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "撕裂",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hurt",
+        "min_lv": 1.0
+      }
+    ],
+    "from_official": true
+  },
+  "sun_quan_talent": {
+    "name": "制衡八方",
+    "type": "support",
+    "desc": "自身3格范围内我方部队主动攻击时，获得谋攻15%的护盾，持续3回合（同一我方部队每次行动最多触发1次）；自身3格范围内我方部队受到主动攻击时，获得1层「借势」（同一我方部队每次行动最多触发1次）。",
+    "lv": [
+      "自身3格范围内我方部队主动攻击时，获得谋攻15%的护盾，持续3回合（同一我方部队每次行动最多触发1次）；自身3格范围内我方部队受到主动攻击时，获得1层「借势」（同一我方部队每次行动最多触发1次）。",
+      "自身3格范围内我方部队主动攻击时，获得的护盾提升至谋攻25%；「借势」主动攻击时，施加的「灼烧」层数增加至2层；对敌军施加「灼烧」时，对其造成谋攻35%的固定伤害，若目标已拥有5层「灼烧」，则对其额外施加「卸势」，持续2回合。",
+      "触发制衡八方施加护盾或施加「借势」时，孙权获得1层「权衡」，持续2回合。"
+    ],
+    "ed_fx_list": [
+      {
+        "type": "shield",
+        "value": 15.0,
+        "turns": 3.0,
+        "trigger": "on_hit",
+        "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "借势",
+        "turns": 2.0,
+        "trigger": "on_hurt",
+        "min_lv": 1.0
+      },
+      {
+        "type": "shield",
+        "value": 25.0,
+        "turns": 3.0,
+        "trigger": "on_hit",
+        "min_lv": 2.0
+      },
+      {
+        "type": "fixed",
+        "value": 35.0,
+        "trigger": "on_hit",
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "权衡",
+        "turns": 2.0,
+        "trigger": "on_hit",
+        "min_lv": 3.0
+      }
+    ],
+    "from_official": true
+  },
+  "chen_deng_talent": {
+    "name": "强龙见伏",
+    "type": "attack",
+    "desc": "自身2格范围内每有1个敌军谋攻提升8%（最多16%）；行动结束时对自身2格范围内的敌军施加2层「溃逃」，持续2回合。",
+    "lv": [
+      "自身2格范围内每有1个敌军谋攻提升8%（最多16%）；行动结束时对自身2格范围内的敌军施加2层「溃逃」，持续2回合。",
+      "自身2格范围内每有1个敌军谋攻提升8%（最多16%）。",
+      "「溃逃」改为施加2层。"
+    ],
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "溃逃",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_turn_end",
+        "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "溃逃",
+        "turns": 2.0,
+        "stacks": 2.0,
         "trigger": "on_turn_end",
         "min_lv": 3.0
       }
