@@ -596,6 +596,7 @@ const SFX_PRIORITY := "priority"      # 先攻（抢先出手：本回合首次�
 const SFX_BLOCK := "block"           # 格挡（按概率免伤 / 减伤）
 const SFX_DODGE := "dodge"            # 闪避（按概率完全回避一次攻击）
 const SFX_IMMUNITY := "immunity"      # 免疫（免疫控制 / 属性减益 / 移动减益 / 地形减益）
+const SFX_RESIST := "resist"          # 抵抗（每回合首次抵抗某类减益）
 const SFX_COMBO := "combo"            # 合击（对同目标的相邻友军联合攻击）
 
 const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
@@ -605,7 +606,7 @@ const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_REVIVE, SFX_CRIT_UP, SFX_LIFELINK, SFX_COPY_BUFF, SFX_STEAL_BUFF, SFX_FIXED,
 	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI, SFX_COUNTER_UP, SFX_SWITCH,
 	SFX_RESOURCE, SFX_CONSUME, SFX_ZOC,
-	SFX_PRIORITY, SFX_BLOCK, SFX_DODGE, SFX_IMMUNITY, SFX_COMBO]
+	SFX_PRIORITY, SFX_BLOCK, SFX_DODGE, SFX_IMMUNITY, SFX_RESIST, SFX_COMBO]
 
 # 资源名（用于层数系统）
 const RESOURCES := ["智", "深谋", "斗气", "机巧", "备战", "武魂", "凤羽", "凤衣", "威严", "被动层数"]
@@ -633,6 +634,7 @@ const SFX_LABELS := {
 	SFX_BLOCK: "格挡",
 	SFX_DODGE: "闪避",
 	SFX_IMMUNITY: "免疫",
+	SFX_RESIST: "抵抗",
 	SFX_COMBO: "合击",
 }
 # 常用状态名（可自由输入其它名字）
@@ -733,6 +735,8 @@ static func default_sfx(type: String) -> Dictionary:
 			return {"type": type, "value": 0.2, "turns": 2}
 		SFX_IMMUNITY:
 			return {"type": type, "value": "控制", "turns": 2}
+		SFX_RESIST:
+			return {"type": type, "value": "眩晕", "turns": 2}
 		SFX_COMBO:
 			return {"type": type, "value": 1}
 		_:
@@ -841,6 +845,9 @@ static func sfx_text(fx: Dictionary) -> String:
 		SFX_IMMUNITY:
 			return "获得「免疫%s」，持续 %d 回合" % [String(fx.get("value", "控制")),
 				int(fx.get("turns", 2))]
+		SFX_RESIST:
+			return "获得「抵抗%s」：每回合首次受到该类减益时抵消，持续 %d 回合" % [
+				String(fx.get("value", "眩晕")), int(fx.get("turns", 2))]
 		SFX_COMBO:
 			return "可触发合击（相邻友军对同一目标联合攻击）"
 	return t

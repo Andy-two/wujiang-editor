@@ -91,12 +91,15 @@ func add_unit(t: Dictionary, pos: Vector2i, side: int) -> Dictionary:
 		"form_state": {},        # 技能形态状态 {原技能id: 当前形态id}
 		"res": {},               # 资源层数 {"智": 0, "深谋": 0, ...}
 		"zoc": 0,                # 阻挡领域格数（0=无）
+		"ignore_zoc": false,      # 移动时无视阻挡领域（如「龙行」）
 		"priority": 0,           # 先攻层数（>0 时本回合行动优先）
 		"block": 0.0,            # 格挡减伤比例（0.2 = 减伤20%）
 		"block_turns": 0,        # 格挡剩余回合
 		"dodge": 0.0,            # 闪避概率（0.2 = 20% 回避）
 		"dodge_turns": 0,        # 闪避剩余回合
 		"immunity": {},          # 免疫 {"控制": 2, "属性减益": 2, ...}（值为剩余回合）
+		"resist": {},            # 抵抗 {"眩晕": 2, ...}（每回合首次抵抗该类减益）
+		"resist_once": {},       # 本回合已抵抗的减益 {"眩晕": true, ...}（每回合首次抵抗）
 		"combo_used": 0,         # 本回合已触发合击次数
 		"moved_tiles": 0,
 		"face": "down",          # 当前朝向
@@ -396,7 +399,8 @@ func move_cells(u) -> Dictionary:
 	occ.erase(u["pos"])
 	var cells := RULEZ.reachable(u["pos"], int(u["move"]), occ)
 	# 阻挡领域（ZOC）：进入敌方 ZOC 的格子会消耗全部剩余移动力（该格可进，但不能再往外走）
-	if not cells.is_empty():
+	# 「无视阻挡领域」（如救危主 Lv2「龙行」）则不受此限制
+	if not cells.is_empty() and not bool(u.get("ignore_zoc", false)):
 		var side := int(u["side"])
 		var z_blocks := {}
 		for cell in cells.keys():
@@ -439,7 +443,7 @@ func basic_attack(attacker, target) -> Dictionary:
 	var arm_mul := RULEZ.arm_multiplier(String(attacker["arm"]), String(target["arm"]))
 	_face_towards(attacker, target["pos"])
 	# P3 闪避：目标可能完全回避这次攻击
-	if try_dodge(target):
+	if try_dodge(target, attacker):
 		return {"ok": true, "dmg": 0, "crit": false, "dodged": true}
 	# 融合进来的被动（如「袭扰」= 普攻物攻 +8%）——按被融合技能名识别
 	var passive_bonus := 1.0
@@ -586,7 +590,7 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 						if not tgt["alive"]:
 							continue
 						# P3 闪避：目标可能完全回避这次技能伤害
-						if try_dodge(tgt):
+						if try_dodge(tgt, u):
 							continue
 						var magic := bool(fx.get("magic", false)) or float(u["matk"]) > float(u["atk"]) * 1.2
 						var am := RULEZ.arm_multiplier(String(u["arm"]), String(tgt["arm"]))
@@ -636,13 +640,15 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 						_push(u, tgt5, int(fx.get("value", 1)))
 						_emit("  → %s 被击退 %d 格" % [tgt5["name"], int(fx.get("value", 1))], "info")
 			RULEZ.SFX_DISPEL:
+				var dpn := int(fx.get("value", 1))
 				for tgt6 in foes:
 					if tgt6["alive"]:
-						_dispel_buff(tgt6)
-						_emit("  → 驱散 %s 的增益" % tgt6["name"], "info")
+						_dispel_buff(tgt6, dpn)
+						_emit("  → 驱散 %s 的 %d 个增益" % [tgt6["name"], dpn], "info")
 			RULEZ.SFX_SELF_DISPEL:
-				_dispel_debuff(u)
-				_emit("  → %s 净化了自身减益" % u["name"], "info")
+				var sdn := int(fx.get("value", 1))
+				_dispel_debuff(u, sdn)
+				_emit("  → %s 净化了自身 %d 个减益" % [u["name"], sdn], "info")
 			RULEZ.SFX_SELF_HEAL:
 				var sh := int(round(float(u["max_hp"]) * float(fx.get("value", 0.3))))
 				u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + sh)
@@ -702,6 +708,11 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 				var ikind := str(fx.get("value", "控制"))
 				for tgt_i in (allies if not allies.is_empty() else [u]):
 					grant_immunity(tgt_i, ikind, int(fx.get("turns", 2)))
+			RULEZ.SFX_RESIST:
+				# 抵抗：每回合首次抵抗某类减益
+				var rkind := str(fx.get("value", "眩晕"))
+				for tgt_r in (allies if not allies.is_empty() else [u]):
+					grant_resist(tgt_r, rkind, int(fx.get("turns", 2)))
 			RULEZ.SFX_COMBO:
 				# 合击：本次攻击可触发相邻友军联合攻击
 				u["can_combo"] = true
@@ -927,6 +938,9 @@ func _add_debuff(t, name: String, turns: int, src = null) -> void:
 	if debuff_blocked_by_immunity(name, t):
 		_emit("  → %s 免疫了「%s」" % [t["name"], name], "info")
 		return
+	# 抵抗拦截：每回合首次抵抗某类减益（如「抵抗每回合首次受到的眩晕」）
+	if try_resist(t, name):
+		return
 	t["debuffs"].append({"name": name, "turns": maxi(1, turns), "src": int(src["uid"]) if src != null else -1})
 
 
@@ -955,22 +969,41 @@ func _has_buff(t, name: String) -> bool:
 	return false
 
 
-func _dispel_buff(t) -> void:
-	if t == null:
-		return
-	if (t["buffs"] as Array).is_empty():
-		return
-	(t["buffs"] as Array).remove_at(0)
+# 目标是否拥有指定状态（增益或减益均可）
+func _has_status(t, name: String) -> bool:
+	if t == null or name == "":
+		return false
+	for b in t["buffs"]:
+		if String(b["name"]) == name:
+			return true
+	for d in t["debuffs"]:
+		if String(d["name"]) == name:
+			return true
+	return false
 
 
-func _dispel_debuff(t) -> void:
+func _dispel_buff(t, n: int = 1) -> void:
 	if t == null:
 		return
-	for i in range((t["debuffs"] as Array).size() - 1, -1, -1):
-		var d: Dictionary = t["debuffs"][i]
-		if bool(d.get("dispellable", true)):
-			t["debuffs"].remove_at(i)
+	var arr: Array = t["buffs"]
+	for _i in maxi(1, n):
+		if arr.is_empty():
 			break
+		arr.remove_at(0)
+
+
+func _dispel_debuff(t, n: int = 1) -> void:
+	if t == null:
+		return
+	var arr: Array = t["debuffs"]
+	var removed := 0
+	for i in range(arr.size() - 1, -1, -1):
+		if removed >= maxi(1, n):
+			break
+		var d: Dictionary = arr[i]
+		if bool(d.get("dispellable", true)):
+			arr.remove_at(i)
+			removed += 1
 
 
 func _push(u, t, n: int) -> void:
@@ -1095,6 +1128,7 @@ func start_side(side: int) -> void:
 			u["counter_used"] = 0
 			u["combo_used"] = 0
 			u["can_combo"] = false
+			u["resist_once"] = {}
 			for sid in (u["cd"] as Dictionary).keys():
 				u["cd"][sid] = maxi(0, int(u["cd"][sid]) - 1)
 			_tick_statuses(u)
@@ -1184,6 +1218,9 @@ func _apply_passive_startup() -> void:
 					if bn != "":
 						_add_buff(u, bn, int(fd.get("turns", 99)), int(fd.get("stacks", 1)))
 						n += 1
+					var sf0 := str(fd.get("set_flag", ""))
+					if sf0 != "":
+						u[sf0] = true
 				RULEZ.SFX_SHIELD:
 					_add_buff(u, "护盾", int(fd.get("turns", 99)), int(fd.get("value", 50)))
 					n += 1
@@ -1205,6 +1242,9 @@ func _apply_passive_startup() -> void:
 					n += 1
 				RULEZ.SFX_IMMUNITY:
 					grant_immunity(u, str(fd.get("value", "控制")), int(fd.get("turns", 2)))
+					n += 1
+				RULEZ.SFX_RESIST:
+					grant_resist(u, str(fd.get("value", "眩晕")), int(fd.get("turns", 2)))
 					n += 1
 		if n > 0:
 			_emit("%s 的被动生效：%d 项（开局型）" % [u["name"], n], "info")
@@ -1233,6 +1273,10 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 				if bn != "":
 					_add_buff(u, bn, int(fd.get("turns", 2)), int(fd.get("stacks", 1)))
 					_emit("  「%s」触发：%s 获得「%s」" % [src, u["name"], bn], "info")
+				# 附带标记（如「龙行」附带 ignore_zoc = 移动时无视阻挡领域）
+				var sf := str(fd.get("set_flag", ""))
+				if sf != "":
+					u[sf] = true
 			RULEZ.SFX_CD_DOWN:
 				for k in (u["cd"] as Dictionary).keys():
 					u["cd"][k] = maxi(0, int(u["cd"][k]) - int(fd.get("value", 1)))
@@ -1248,11 +1292,17 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 				grant_dodge(u, float(fd.get("value", 0.2)), int(fd.get("turns", 2)))
 			RULEZ.SFX_IMMUNITY:
 				grant_immunity(u, str(fd.get("value", "控制")), int(fd.get("turns", 2)))
+			RULEZ.SFX_RESIST:
+				grant_resist(u, str(fd.get("value", "眩晕")), int(fd.get("turns", 2)))
 			RULEZ.SFX_COMBO:
 				u["can_combo"] = true
 			_:
 				# 对目标施加的被动（如 on_hit 施加减益）
 				var tgt = ctx.get("target", null)
+				# 条件触发：要求目标拥有指定状态（如「对拥有『撕裂』的敌军造成伤害时…」）
+				var req := str(fd.get("require_status", ""))
+				if req != "" and tgt != null and not _has_status(tgt, req):
+					continue
 				if tgt != null and tgt["alive"]:
 					if t == RULEZ.SFX_DEBUFF:
 						var dn := str(fd.get("value", ""))
@@ -1264,6 +1314,22 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 						fdmg = mini(fdmg, int(tgt["hp"]))
 						tgt["hp"] = int(tgt["hp"]) - fdmg
 						_emit("  「%s」触发：%s 受到 %d 固定伤害" % [src, tgt["name"], fdmg], "hit")
+						if int(tgt["hp"]) <= 0:
+							_kill(tgt, u)
+					elif t == RULEZ.SFX_PURSUIT:
+						# 被动追击（如红缨绕影：闪避后对敌军造成追击）
+						do_pursuit(u, tgt, fd)
+					elif t == RULEZ.SFX_DAMAGE:
+						# 被动伤害（如骁姿绝尘：对移动力更小的敌军造成伤害时无视防御）
+						var am2 := RULEZ.arm_multiplier(String(u["arm"]), String(tgt["arm"]))
+						var mult2 := float(fd.get("value", 1.0)) * status_damage_mult(u, tgt)
+						var r2 := RULEZ.roll_damage(u, tgt, mult2, am2,
+							{"magic": bool(fd.get("magic", false)),
+							 "ignore_def": float(fd.get("ignore_def", 0.0))})
+						var d2 := _apply_incoming(tgt, _apply_outgoing(u, int(r2["dmg"])))
+						d2 = mini(d2, int(tgt["hp"]))
+						tgt["hp"] = int(tgt["hp"]) - d2
+						_emit("  「%s」触发：%s 受到 %d 伤害" % [src, tgt["name"], d2], "hit")
 						if int(tgt["hp"]) <= 0:
 							_kill(tgt, u)
 
@@ -1377,6 +1443,13 @@ func _tick_p3_state(u) -> void:
 		if int(im[k]) <= 0:
 			im.erase(k)
 	u["immunity"] = im
+	# 抵抗
+	var rs: Dictionary = u.get("resist", {}) if u.get("resist") is Dictionary else {}
+	for k2 in rs.keys():
+		rs[k2] = int(rs[k2]) - 1
+		if int(rs[k2]) <= 0:
+			rs.erase(k2)
+	u["resist"] = rs
 	# 先攻层数：每回合递减（先攻只在本回合有效）
 	if int(u.get("priority", 0)) > 0:
 		u["priority"] = int(u["priority"]) - 1
@@ -1424,7 +1497,8 @@ func grant_dodge(u, ratio: float, turns: int) -> void:
 
 
 # 判定一次攻击是否被闪避（命中则消耗一次闪避层）
-func try_dodge(defender) -> bool:
+# 传入 attacker 可触发被闪避方的「on_dodge」被动（如红缨绕影：闪避后追击）
+func try_dodge(defender, attacker = null) -> bool:
 	if defender == null or not defender["alive"]:
 		return false
 	if int(defender.get("dodge_turns", 0)) <= 0:
@@ -1435,6 +1509,44 @@ func try_dodge(defender) -> bool:
 	if randf() < chance:
 		_emit("  → %s 闪避了这次攻击" % defender["name"], "info")
 		defender["dodge_turns"] = int(defender["dodge_turns"]) - 1
+		# 被动触发：闪避后（如「闪避」后对敌军造成追击）
+		passive_on("on_dodge", defender, {"source": attacker, "target": attacker})
+		return true
+	return false
+
+
+# ---- 抵抗：每回合首次抵抗某类减益（如「抵抗每回合首次受到的眩晕」）----
+# 单位 resist 字段：{"眩晕": 2, "缴械": 2, ...}（值为剩余回合）+ resist_once 记录本回合已抵抗过
+func grant_resist(u, kind: String, turns: int) -> void:
+	if u == null or not u["alive"] or kind == "":
+		return
+	var r: Dictionary = u.get("resist", {}) if u.get("resist") is Dictionary else {}
+	r[kind] = maxi(int(r.get(kind, 0)), int(turns))
+	u["resist"] = r
+	_emit("  → %s 获得「抵抗%s」（%d 回合，每回合首次）" % [u["name"], kind, int(turns)], "info")
+
+
+# 尝试抵抗一次减益（成功则拦截）
+func try_resist(t, debuff_name: String) -> bool:
+	if t == null:
+		return false
+	var r: Dictionary = t.get("resist", {}) if t.get("resist") is Dictionary else {}
+	if r.is_empty():
+		return false
+	var n := String(debuff_name)
+	for kind in r.keys():
+		if int(r[kind]) <= 0:
+			continue
+		# 状态名以该类开头（如「眩晕」「眩晕·贰」），或包含
+		if not (n == String(kind) or n.begins_with(String(kind)) or n.contains(String(kind))):
+			continue
+		# 每回合只能抵抗一次同一类
+		var once: Dictionary = t.get("resist_once", {}) if t.get("resist_once") is Dictionary else {}
+		if bool(once.get(String(kind), false)):
+			continue
+		once[String(kind)] = true
+		t["resist_once"] = once
+		_emit("  → %s 抵抗了「%s」" % [t["name"], n], "info")
 		return true
 	return false
 

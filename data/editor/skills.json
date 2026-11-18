@@ -1761,6 +1761,18 @@
         "type": "zoc",
         "value": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 2.0,
+        "min_lv": 2.0,
+        "scope": "ally_in_radius",
+        "value": 10.0
       }
     ],
     "range": 3.0,
@@ -1843,6 +1855,12 @@
         "type": "cd_down",
         "value": 2.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "shield",
+        "value": 100.0,
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ],
     "range": 2.0,
@@ -2191,6 +2209,11 @@
         "value": 25.0,
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "min_lv": 2.0
       }
     ],
     "range": 3.0,
@@ -2735,6 +2758,19 @@
         "value": 2.0,
         "max": 99.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "fixed",
+        "value": 10.0,
+        "by_max_hp": true,
+        "value_pct": 0.1,
+        "min_lv": 2.0
+      },
+      {
+        "type": "stun",
+        "value": 1.0,
+        "turns": 1.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -2757,6 +2793,16 @@
         "type": "damage",
         "value": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "self_heal",
+        "value": 0.2,
+        "min_lv": 2.0
+      },
+      {
+        "type": "fixed",
+        "value": 20.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -3140,6 +3186,22 @@
         "magic": false,
         "times": 1.0,
         "ignore_def": 0.0
+      },
+      {
+        "type": "damage",
+        "value": 0.7,
+        "min_lv": 1.0
+      },
+      {
+        "type": "push",
+        "value": 1.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "priority",
+        "value": 1.0,
+        "min_lv": 2.0,
+        "trigger": "on_counter"
       }
     ]
   },
@@ -3170,6 +3232,13 @@
         "min_lv": 1.0,
         "ignore_def": 0.0,
         "trigger": "on_hit"
+      },
+      {
+        "type": "buff",
+        "value": "免伤强化",
+        "turns": 3.0,
+        "stacks": 3.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -3925,6 +3994,11 @@
       {
         "type": "no_counter",
         "min_lv": 3.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "min_lv": 2.0
       }
     ],
     "range": 1.0,
@@ -4132,6 +4206,22 @@
         "type": "switch_skill",
         "to": "ma_chao_baiche_jie",
         "min_lv": 1.0
+      },
+      {
+        "type": "damage",
+        "value": 0.5,
+        "min_lv": 2.0
+      },
+      {
+        "type": "block",
+        "value": 0.1,
+        "turns": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 1.0,
+        "min_lv": 3.0
       }
     ],
     "range": 2.0,
@@ -4275,6 +4365,22 @@
         "type": "switch_skill",
         "to": "ma_chao_yiqi_jie",
         "min_lv": 1.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "block",
+        "value": 0.1,
+        "turns": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 1.0,
+        "min_lv": 2.0
       }
     ],
     "range": 2.0,
@@ -4315,6 +4421,16 @@
         "to": "ma_chao_xinbu_jie",
         "min_lv": 1.0,
         "trigger": "on_turn_end"
+      },
+      {
+        "type": "self_dispel",
+        "value": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "self_dispel",
+        "value": 3.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -4797,6 +4913,11 @@
         "type": "damage",
         "value": 0.5,
         "min_lv": 1.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "min_lv": 2.0
       }
     ],
     "range": 2.0,
@@ -5483,6 +5604,10 @@
         "value": "撕裂",
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "extra_move",
+        "min_lv": 2.0
       }
     ],
     "range": 3.0,
@@ -5671,6 +5796,10 @@
         "type": "stun",
         "value": 1.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -6244,6 +6373,11 @@
         "type": "fixed",
         "value": 100.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -6363,6 +6497,11 @@
       {
         "type": "heal",
         "value": 0.8
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -6616,6 +6755,18 @@
         "min_lv": 1.0,
         "ignore_def": 0.0,
         "trigger": "on_hit"
+      },
+      {
+        "type": "disarm",
+        "value": 1.0,
+        "turns": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "silence",
+        "value": 1.0,
+        "turns": 1.0,
+        "min_lv": 3.0
       }
     ],
     "range": 2.0,
@@ -7014,6 +7165,12 @@
         "to": "ma_yunlu_takuan_jie",
         "min_lv": 1.0,
         "trigger": "on_turn_end"
+      },
+      {
+        "type": "resist",
+        "value": "缴械",
+        "turns": 1.0,
+        "min_lv": 3.0
       }
     ],
     "range": 2.0,
@@ -7055,6 +7212,25 @@
         "to": "ma_yunlu_xiaozi_jie",
         "min_lv": 1.0,
         "trigger": "on_turn_end"
+      },
+      {
+        "type": "resist",
+        "value": "牵制",
+        "turns": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "resist",
+        "value": "定身",
+        "turns": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "damage",
+        "value": 1.0,
+        "ignore_def": 0.15,
+        "min_lv": 3.0,
+        "trigger": "on_hit"
       }
     ]
   },
@@ -7095,6 +7271,18 @@
         "value": 0.3,
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "resist",
+        "value": "眩晕",
+        "turns": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "min_lv": 2.0,
+        "trigger": "on_dodge"
       }
     ]
   },
@@ -7170,6 +7358,13 @@
         "type": "switch_skill",
         "to": "huang_zhengzhuang",
         "min_lv": 1.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "magic": true,
+        "min_lv": 2.0,
+        "trigger": "on_turn_end"
       }
     ],
     "range": 1.0,
@@ -7207,6 +7402,29 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "fixed",
+        "value": 25.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 2.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "block",
+        "value": 0.15,
+        "turns": 2.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 2.0,
+        "min_lv": 3.0,
+        "require_status": "撕裂",
+        "value": 15.0
       }
     ]
   },
@@ -7445,6 +7663,34 @@
         "value": 0.7,
         "magic": true,
         "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "破甲·贰",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "灰心·贰",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "撕裂",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "debuff",
+        "value": "溃逃",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -7771,6 +8017,12 @@
         "magic": false,
         "min_lv": 1.0,
         "ignore_def": 0.5
+      },
+      {
+        "type": "taunt",
+        "value": 1.0,
+        "turns": 1.0,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -8011,6 +8263,12 @@
         "value": "坚壁",
         "turns": 99.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "block",
+        "value": 0.1,
+        "turns": 99.0,
+        "min_lv": 1.0
       }
     ]
   },
@@ -8100,6 +8358,11 @@
       {
         "type": "no_counter",
         "min_lv": 3.0
+      },
+      {
+        "type": "zhanyi",
+        "value": 10.0,
+        "min_lv": 2.0
       }
     ],
     "range": 2.0,
@@ -8773,6 +9036,11 @@
         "type": "crit_up",
         "turns": 1.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "zhanyi",
+        "value": 2.0,
+        "min_lv": 3.0
       }
     ],
     "range": 1.0,
@@ -9733,6 +10001,19 @@
         "value": "控制",
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "buff",
+        "value": "龙行·无视ZOC",
+        "turns": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "龙行",
+        "turns": 2.0,
+        "min_lv": 2.0,
+        "set_flag": "ignore_zoc"
       }
     ],
     "range": 3.0,
@@ -9789,6 +10070,11 @@
         "magic": false,
         "times": 1.0,
         "ignore_def": 0.0
+      },
+      {
+        "type": "self_heal",
+        "value": 0.15,
+        "min_lv": 2.0
       }
     ]
   },
@@ -9871,6 +10157,11 @@
         "magic": false,
         "times": 1.0,
         "ignore_def": 0.0
+      },
+      {
+        "type": "fixed",
+        "value": 25.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -10838,6 +11129,13 @@
       {
         "type": "fixed",
         "value": 20.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "撕裂",
+        "turns": 2.0,
+        "stacks": 1.0,
         "min_lv": 2.0
       }
     ],
@@ -12202,6 +12500,13 @@
       {
         "type": "extra_turn",
         "min_lv": 3.0
+      },
+      {
+        "type": "damage",
+        "value": 1.0,
+        "min_lv": 2.0,
+        "trigger": "on_hit",
+        "repeat_by": "深谋"
       }
     ],
     "range": 3.0,
@@ -13862,6 +14167,13 @@
         "type": "cd_down",
         "value": 1.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "debuff",
+        "value": "牵制·贰",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 3.0
       }
     ],
     "range": 3.0,
@@ -14341,6 +14653,16 @@
         "value": "昂扬",
         "turns": 99.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "damage",
+        "value": 0.7,
+        "min_lv": 2.0
+      },
+      {
+        "type": "push",
+        "value": 1.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -15497,6 +15819,11 @@
         "magic": true,
         "times": 1.0,
         "ignore_def": 0.0
+      },
+      {
+        "type": "self_dispel",
+        "value": 1.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -15519,6 +15846,11 @@
         "type": "self_heal",
         "value": 0.2,
         "min_lv": 2.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -16182,6 +16514,13 @@
         "type": "fixed",
         "value": 80.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "debuff",
+        "value": "灰心·贰",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -16314,6 +16653,10 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 3.0
       }
     ]
   },
@@ -16505,6 +16848,11 @@
         "type": "zhanyi",
         "value": 50.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "zhanyi",
+        "value": 75.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -16536,6 +16884,11 @@
         "type": "zhanyi",
         "value": 30.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "zhanyi",
+        "value": 50.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -16647,6 +17000,19 @@
         "type": "zoc",
         "value": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "stun",
+        "value": 1.0,
+        "turns": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "fixed",
+        "value": 15.0,
+        "by_max_hp": true,
+        "value_pct": 0.15,
+        "min_lv": 3.0
       }
     ]
   },
@@ -16904,6 +17270,13 @@
         "type": "silence",
         "value": 1.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "damage",
+        "value": 1.0,
+        "ignore_def": 0.5,
+        "min_lv": 3.0,
+        "trigger": "on_hit"
       }
     ]
   },
@@ -17081,6 +17454,10 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 3.0
       }
     ]
   },
@@ -17302,6 +17679,24 @@
       {
         "type": "extra_move",
         "min_lv": 1.0
+      },
+      {
+        "type": "damage",
+        "value": 0.5,
+        "min_lv": 2.0
+      },
+      {
+        "type": "debuff",
+        "value": "破甲·贰",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "shield",
+        "value": 100.0,
+        "turns": 2.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -17339,6 +17734,24 @@
         "value": "游龙",
         "turns": 3.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "dispel",
+        "value": 5.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "寒芒",
+        "turns": 3.0,
+        "stacks": 5.0,
+        "min_lv": 2.0,
+        "trigger": "on_hit"
       }
     ]
   },
@@ -18056,6 +18469,13 @@
         "type": "crit_up",
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 1.0,
+        "min_lv": 3.0,
+        "require_status": "撕裂",
+        "value": 15.0
       }
     ]
   },
@@ -18268,6 +18688,21 @@
         "value": "疾行·壹",
         "turns": 1.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "buff",
+        "value": "回复强化",
+        "turns": 2.0,
+        "stacks": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "回复强化",
+        "turns": 2.0,
+        "stacks": 2.0,
+        "min_lv": 2.0,
+        "trigger": "on_cast"
       }
     ]
   },
@@ -18547,6 +18982,19 @@
         "type": "zoc",
         "value": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "战意回复强化",
+        "turns": 2.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "战意回复强化",
+        "turns": 2.0,
+        "min_lv": 2.0,
+        "trigger": "on_cast"
       }
     ]
   },
@@ -18676,6 +19124,17 @@
         "type": "zhanyi",
         "value": 80.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 3.0
+      },
+      {
+        "type": "damage",
+        "value": 1.0,
+        "ignore_def": 0.3,
+        "min_lv": 2.0,
+        "trigger": "on_hit"
       }
     ],
     "range": 0.0,
@@ -19147,6 +19606,10 @@
         "value": "连营",
         "turns": 3.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 3.0
       }
     ]
   },
@@ -19394,6 +19857,11 @@
         "type": "push",
         "value": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "fixed",
+        "value": 100.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -19813,6 +20281,11 @@
         "value": 1.0,
         "min_lv": 2.0,
         "trigger": "on_counter"
+      },
+      {
+        "type": "zhanyi",
+        "value": -20.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -19971,6 +20444,17 @@
         "type": "dispel",
         "value": 1.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "dispel",
+        "value": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "dispel",
+        "value": 1.0,
+        "min_lv": 3.0,
+        "trigger": "on_hit"
       }
     ]
   },
@@ -20450,6 +20934,13 @@
         "magic": true,
         "times": 1.0,
         "ignore_def": 0.0
+      },
+      {
+        "type": "debuff",
+        "value": "灰心·贰",
+        "turns": 1.0,
+        "stacks": 1.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -20579,6 +21070,10 @@
         "type": "cd_down",
         "value": 1.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 3.0
       }
     ]
   },
@@ -20601,6 +21096,10 @@
         "type": "cd_down",
         "value": 1.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 3.0
       }
     ]
   },
@@ -20623,6 +21122,10 @@
         "type": "cd_down",
         "value": 1.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 3.0
       }
     ]
   },
@@ -20654,6 +21157,11 @@
         "value": 1.3,
         "magic": true,
         "min_lv": 1.0
+      },
+      {
+        "type": "fixed",
+        "value": 50.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -20759,6 +21267,21 @@
         "max": 99.0,
         "min_lv": 1.0,
         "trigger": "on_hit"
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "ignore_def": 0.5,
+        "min_lv": 3.0,
+        "trigger": "on_hit"
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "ignore_def": 0.5,
+        "min_lv": 3.0,
+        "trigger": "on_hit",
+        "require_status": "凤衣"
       }
     ]
   },
@@ -20790,6 +21313,16 @@
         "type": "switch_skill",
         "to": "huang_jiashe",
         "min_lv": 1.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "self_heal",
+        "value": 0.2,
+        "min_lv": 2.0
       }
     ]
   },
@@ -20824,6 +21357,18 @@
         "value": 0.3,
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "resist",
+        "value": "眩晕",
+        "turns": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "min_lv": 2.0,
+        "trigger": "on_dodge"
       }
     ]
   },
@@ -20852,6 +21397,18 @@
         "value": 0.3,
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "resist",
+        "value": "眩晕",
+        "turns": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "pursuit",
+        "value": 0.5,
+        "min_lv": 2.0,
+        "trigger": "on_dodge"
       }
     ]
   },
@@ -20887,6 +21444,12 @@
         "to": "ma_yunlu_takuan_chao",
         "min_lv": 1.0,
         "trigger": "on_turn_end"
+      },
+      {
+        "type": "resist",
+        "value": "缴械",
+        "turns": 1.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -20916,6 +21479,12 @@
         "min_lv": 1.0,
         "ignore_def": 0.0,
         "trigger": "on_hit"
+      },
+      {
+        "type": "resist",
+        "value": "缴械",
+        "turns": 1.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -20944,6 +21513,25 @@
         "to": "ma_yunlu_xiaozi_chao",
         "min_lv": 1.0,
         "trigger": "on_turn_end"
+      },
+      {
+        "type": "resist",
+        "value": "牵制",
+        "turns": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "resist",
+        "value": "定身",
+        "turns": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "damage",
+        "value": 1.0,
+        "ignore_def": 0.15,
+        "min_lv": 3.0,
+        "trigger": "on_hit"
       }
     ]
   },
@@ -20966,6 +21554,25 @@
         "value": "疾行·贰",
         "turns": 99.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "resist",
+        "value": "牵制",
+        "turns": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "resist",
+        "value": "定身",
+        "turns": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "damage",
+        "value": 1.0,
+        "ignore_def": 0.15,
+        "min_lv": 3.0,
+        "trigger": "on_hit"
       }
     ]
   },
@@ -21034,6 +21641,22 @@
         "type": "switch_skill",
         "to": "ma_chao_baiche_chao",
         "min_lv": 1.0
+      },
+      {
+        "type": "damage",
+        "value": 0.5,
+        "min_lv": 2.0
+      },
+      {
+        "type": "block",
+        "value": 0.1,
+        "turns": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 1.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -21055,6 +21678,22 @@
         "type": "damage",
         "value": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "damage",
+        "value": 0.5,
+        "min_lv": 2.0
+      },
+      {
+        "type": "block",
+        "value": 0.1,
+        "turns": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 1.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -21082,6 +21721,16 @@
         "to": "ma_chao_xinbu_chao",
         "min_lv": 1.0,
         "trigger": "on_turn_end"
+      },
+      {
+        "type": "self_dispel",
+        "value": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "self_dispel",
+        "value": 3.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -21109,6 +21758,20 @@
         "value": "奋勇·贰",
         "turns": 2.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "extra_turn",
+        "min_lv": 1.0
+      },
+      {
+        "type": "self_dispel",
+        "value": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "self_dispel",
+        "value": 3.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -21149,6 +21812,22 @@
         "type": "switch_skill",
         "to": "ma_chao_yiqi_chao",
         "min_lv": 1.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "block",
+        "value": 0.1,
+        "turns": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 1.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -21189,6 +21868,22 @@
         "type": "damage",
         "value": 0.5,
         "min_lv": 1.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "min_lv": 3.0
+      },
+      {
+        "type": "block",
+        "value": 0.1,
+        "turns": 1.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "crit_up",
+        "turns": 1.0,
+        "min_lv": 2.0
       }
     ]
   },
@@ -21315,6 +22010,12 @@
         "value": 0.2,
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "damage",
+        "value": 0.45,
+        "ignore_def": 0.3,
+        "min_lv": 2.0
       }
     ]
   },
@@ -21513,6 +22214,13 @@
         "type": "self_dispel",
         "value": 1.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "坚壁强化",
+        "turns": 2.0,
+        "stacks": 3.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -21542,6 +22250,13 @@
         "type": "self_dispel",
         "value": 1.0,
         "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "坚壁强化",
+        "turns": 2.0,
+        "stacks": 3.0,
+        "min_lv": 3.0
       }
     ]
   },

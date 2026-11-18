@@ -2430,11 +2430,12 @@ func _build_effect_editor(box: Control, sid: String, d: Dictionary) -> void:
 						data.dirty = true
 						_mark_dirty())
 					row.add_child(rt)
-				RULEZ.SFX_IMMUNITY:
+				RULEZ.SFX_IMMUNITY, RULEZ.SFX_RESIST:
 					var ik := LineEdit.new()
 					ik.custom_minimum_size = Vector2(110, 0)
-					ik.placeholder_text = "控制/属性减益/移动减益/地形减益"
-					ik.text = String(fx.get("value", "控制"))
+					ik.placeholder_text = ("控制/属性减益/移动减益/地形减益" if t == RULEZ.SFX_IMMUNITY
+						else "眩晕/缴械/牵制/定身")
+					ik.text = String(fx.get("value", "控制" if t == RULEZ.SFX_IMMUNITY else "眩晕"))
 					ik.text_changed.connect(func(x: String) -> void:
 						fx["value"] = x
 						data.dirty = true
