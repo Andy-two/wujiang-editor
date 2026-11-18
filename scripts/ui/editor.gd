@@ -2452,6 +2452,41 @@ func _build_effect_editor(box: Control, sid: String, d: Dictionary) -> void:
 						data.dirty = true
 						_mark_dirty())
 					row.add_child(it)
+				RULEZ.SFX_SPLASH:
+					row.add_child(THEME.label("倍率", 12, THEME.MUTED))
+					var spv := SpinBox.new()
+					spv.min_value = 0.0
+					spv.max_value = 3.0
+					spv.step = 0.05
+					spv.custom_minimum_size = Vector2(80, 0)
+					spv.value = float(fx.get("value", 0.5))
+					spv.value_changed.connect(func(x: float) -> void:
+						fx["value"] = x
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(spv)
+					row.add_child(THEME.label("圈", 12, THEME.MUTED))
+					var spr := SpinBox.new()
+					spr.min_value = 1
+					spr.max_value = 5
+					spr.custom_minimum_size = Vector2(60, 0)
+					spr.value = int(fx.get("radius", 1))
+					spr.value_changed.connect(func(x: float) -> void:
+						fx["radius"] = int(x)
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(spr)
+					row.add_child(THEME.label("形状", 12, THEME.MUTED))
+					var ssp := OptionButton.new()
+					ssp.custom_minimum_size = Vector2(96, 0)
+					ssp.add_item("方形一圈")
+					ssp.add_item("十字")
+					ssp.selected = 0 if String(fx.get("shape", "circle")) == "circle" else 1
+					ssp.item_selected.connect(func(i3: int) -> void:
+						fx["shape"] = "circle" if i3 == 0 else "diamond"
+						data.dirty = true
+						_mark_dirty())
+					row.add_child(ssp)
 				_:
 					pass
 			# 生效等级：从第几级开始生效

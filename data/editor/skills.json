@@ -1842,8 +1842,10 @@
         "min_lv": 1.0
       },
       {
-        "type": "damage",
+        "type": "splash",
         "value": 1.0,
+        "radius": 1.0,
+        "shape": "diamond",
         "min_lv": 1.0
       },
       {
@@ -1861,6 +1863,15 @@
         "value": 100.0,
         "turns": 2.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "splash",
+        "value": 1.0,
+        "radius": 1.0,
+        "shape": "circle",
+        "min_lv": 3.0,
+        "magic": false,
+        "ignore_def": 0.0
       }
     ],
     "range": 2.0,
@@ -5367,8 +5378,10 @@
         "min_lv": 1.0
       },
       {
-        "type": "damage",
+        "type": "splash",
         "value": 0.5,
+        "radius": 1.0,
+        "shape": "circle",
         "min_lv": 2.0
       }
     ],

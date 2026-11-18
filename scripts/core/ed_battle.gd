@@ -578,8 +578,19 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 	# ---- 按「效果块」依次执行（只执行当前等级已生效的块）----
 	var skill_lv := int(u["skill_lv"].get(sid, 1))
 	var effects: Array = RULEZ.skill_effects_at(d, skill_lv)
+	# 溅射：同一技能若有多个溅射块，只生效等级最高的那个（如 Lv1 十字 → Lv3 一圈）
+	var splash_idx := -1
+	for i in range(effects.size()):
+		if String((effects[i] as Dictionary).get("type", "")) == RULEZ.SFX_SPLASH:
+			if splash_idx < 0:
+				splash_idx = i
+			elif int((effects[i] as Dictionary).get("min_lv", 1)) > \
+					int((effects[splash_idx] as Dictionary).get("min_lv", 1)):
+				splash_idx = i
 	for fx in effects:
 		var t := String(fx.get("type", ""))
+		if t == RULEZ.SFX_SPLASH and effects.find(fx) != splash_idx:
+			continue
 		match t:
 			RULEZ.SFX_DAMAGE:
 				var times := maxi(1, int(fx.get("times", 1)))
@@ -615,6 +626,9 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 						# P3 合击：技能带「合击」标记时，相邻友军对同一目标追加攻击
 						elif can_combo(u) and tgt["alive"]:
 							trigger_combo(u, tgt)
+			RULEZ.SFX_SPLASH:
+				# 溅射：对目标周围一圈的其它敌人造成伤害（不含主目标）
+				hits += do_splash(u, foes, target, fx)
 			RULEZ.SFX_HEAL:
 				var pool2: Array = allies if not allies.is_empty() else [u]
 				for tgt2 in pool2:
@@ -918,6 +932,76 @@ func do_pursuit(u, tgt, fx: Dictionary) -> int:
 		_kill(tgt, u)
 		passive_on("on_kill", u, {"target": tgt})
 	return dmg
+
+
+# ------------------------------------------------------------
+# 溅射：对主目标周围一圈的「其它」敌人造成伤害
+#   radius：溅射圈数（1 = 紧邻一圈）
+#   shape ："circle"（方形一圈 8 格）/ "diamond"（十字 4 格）
+#   主目标本身不再受伤；溅射伤害不触发反击
+# ------------------------------------------------------------
+func do_splash(u, foes: Array, target: Vector2i, fx: Dictionary) -> int:
+	if u == null or not u["alive"]:
+		return 0
+	# 溅射中心：优先用主目标所在格；没有则用作用范围内的第一个敌人
+	var center := target
+	var center_unit: Dictionary = {}
+	if foes.size() > 0:
+		var cu0 = foes[0]
+		if cu0 is Dictionary:
+			center_unit = cu0
+	elif target != Vector2i(-1, -1):
+		var cu1 = unit_at(target)
+		if cu1 is Dictionary:
+			center_unit = cu1
+	if center_unit.is_empty():
+		return 0
+	center = center_unit["pos"]
+
+	var radius := maxi(1, int(fx.get("radius", 1)))
+	var shape := String(fx.get("shape", "circle"))
+	var offsets := RULEZ.splash_cells(radius, shape)
+	var magic := bool(fx.get("magic", false))
+	var mult := float(fx.get("value", 0.5))
+	var hits := 0
+
+	for off in offsets:
+		var cell: Vector2i = center + off
+		if not in_bounds(cell):
+			continue
+		var tu_raw = unit_at(cell)
+		if not (tu_raw is Dictionary):
+			continue
+		var tu: Dictionary = tu_raw
+		if not tu["alive"]:
+			continue
+		# 溅射只打敌人，且跳过主目标本身
+		if int(tu["side"]) == int(u["side"]):
+			continue
+		if tu == center_unit:
+			continue
+		if try_dodge(tu, u):
+			continue
+		var am := RULEZ.arm_multiplier(String(u["arm"]), String(tu["arm"]))
+		var res := RULEZ.roll_damage(u, tu, mult * status_damage_mult(u, tu), am, {
+			"magic": magic,
+			"ignore_def": float(fx.get("ignore_def", 0.0)),
+			"no_counter": true,
+		})
+		var dmg := _apply_incoming(tu, _apply_outgoing(u, int(res["dmg"])))
+		dmg = mini(dmg, int(tu["hp"]))
+		tu["hp"] = int(tu["hp"]) - dmg
+		hits += 1
+		_set_anim(tu, "hurt")
+		tu["anim_hold"] = 0.35
+		_emit("  → 溅射 %s：%d 伤害%s" % [tu["name"], dmg, "（暴击）" if res["crit"] else ""], "hit")
+		if bool(res["crit"]):
+			passive_on("on_crit", u, {"target": tu})
+		passive_on("on_hurt", tu, {"source": u})
+		if int(tu["hp"]) <= 0:
+			_kill(tu, u)
+			passive_on("on_kill", u, {"target": tu})
+	return hits
 
 
 func _apply_outgoing(u, dmg: int) -> int:

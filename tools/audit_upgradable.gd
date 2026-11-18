@@ -34,7 +34,7 @@ const MECH := {
 	"减伤": ["debuff", "block"], "增伤": ["debuff", "crit_up"],
 	"无视": ["damage"], "重复": ["damage"], "层": ["debuff", "buff", "resource"],
 	# 引擎完全没有（用 NONE 表示空集）
-	"溅射": [NONE], "转移": [NONE], "地形": [NONE], "营寨": [NONE],
+	"溅射": ["splash"], "转移": [NONE], "地形": [NONE], "营寨": [NONE],
 	"粮仓": [NONE], "收获": [NONE], "特殊地形": [NONE], "连决": [NONE],
 }
 
@@ -96,6 +96,12 @@ func _covered(kw: String, blocks: Array, text: String = "") -> bool:
 	if kw == "地形" and text.contains("免疫地形"):
 		if _has_type(blocks, "immunity"):
 			return true
+	if kw == "回复" and text.contains("回复量"):
+		if _has_type(blocks, "buff"):
+			return true
+	if kw == "回复" and text.contains("战意回复"):
+		if _has_type(blocks, "buff"):
+			return true
 	# 带条件参数的块（require_status / scope / set_flag / repeat_by）也算承载
 	for b in blocks:
 		if str(b.get("require_status", "")) != "":
@@ -107,6 +113,8 @@ func _covered(kw: String, blocks: Array, text: String = "") -> bool:
 		if str(b.get("repeat_by", "")) != "":
 			return true
 		if str(b.get("trigger", "")) == "on_hit" and str(b.get("type")) in ["crit_up", "dispel", "buff", "damage"]:
+			return true
+		if str(b.get("trigger", "")) == "on_cast" and str(b.get("type")) in ["buff", "crit_up"]:
 			return true
 	match kw:
 		"无视":

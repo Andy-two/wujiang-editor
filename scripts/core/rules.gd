@@ -598,6 +598,8 @@ const SFX_DODGE := "dodge"            # 闪避（按概率完全回避一次攻�
 const SFX_IMMUNITY := "immunity"      # 免疫（免疫控制 / 属性减益 / 移动减益 / 地形减益）
 const SFX_RESIST := "resist"          # 抵抗（每回合首次抵抗某类减益）
 const SFX_COMBO := "combo"            # 合击（对同目标的相邻友军联合攻击）
+# —— P5 机制 ——
+const SFX_SPLASH := "splash"          # 溅射（对目标周围一圈的其它敌人造成伤害）
 
 const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_DISPEL, SFX_SELF_DISPEL, SFX_SELF_HEAL, SFX_CD_DOWN, SFX_EXTRA_MOVE,
@@ -606,7 +608,8 @@ const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_REVIVE, SFX_CRIT_UP, SFX_LIFELINK, SFX_COPY_BUFF, SFX_STEAL_BUFF, SFX_FIXED,
 	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI, SFX_COUNTER_UP, SFX_SWITCH,
 	SFX_RESOURCE, SFX_CONSUME, SFX_ZOC,
-	SFX_PRIORITY, SFX_BLOCK, SFX_DODGE, SFX_IMMUNITY, SFX_RESIST, SFX_COMBO]
+	SFX_PRIORITY, SFX_BLOCK, SFX_DODGE, SFX_IMMUNITY, SFX_RESIST, SFX_COMBO,
+	SFX_SPLASH]
 
 # 资源名（用于层数系统）
 const RESOURCES := ["智", "深谋", "斗气", "机巧", "备战", "武魂", "凤羽", "凤衣", "威严", "被动层数"]
@@ -636,6 +639,7 @@ const SFX_LABELS := {
 	SFX_IMMUNITY: "免疫",
 	SFX_RESIST: "抵抗",
 	SFX_COMBO: "合击",
+	SFX_SPLASH: "溅射",
 }
 # 常用状态名（可自由输入其它名字）
 const COMMON_STATUS := ["低迷", "虚弱", "定身", "眩晕", "撕裂", "溃逃", "缴械", "封技",
@@ -737,6 +741,9 @@ static func default_sfx(type: String) -> Dictionary:
 			return {"type": type, "value": "控制", "turns": 2}
 		SFX_RESIST:
 			return {"type": type, "value": "眩晕", "turns": 2}
+		SFX_SPLASH:
+			return {"type": type, "value": 0.5, "radius": 1, "shape": "circle",
+				"magic": false, "ignore_def": 0.0}
 		SFX_COMBO:
 			return {"type": type, "value": 1}
 		_:
@@ -850,6 +857,12 @@ static func sfx_text(fx: Dictionary) -> String:
 				String(fx.get("value", "眩晕")), int(fx.get("turns", 2))]
 		SFX_COMBO:
 			return "可触发合击（相邻友军对同一目标联合攻击）"
+		SFX_SPLASH:
+			var shp := String(fx.get("shape", "circle"))
+			return "溅射：对目标周围 %d 圈（%s）的其它敌人造成%s%.0f%%伤害" % [
+				int(fx.get("radius", 1)), "方形圈" if shp == "circle" else "十字",
+				"谋攻" if bool(fx.get("magic", false)) else "物攻",
+				float(fx.get("value", 0.5)) * 100.0]
 	return t
 
 
@@ -1269,6 +1282,27 @@ static func dilate(area: Array, n: int) -> Array:
 		for c in add:
 			set[c] = true
 	return set.keys()
+
+
+# 溅射范围（以某点为中心的偏移格）
+#   shape = "diamond"：曼哈顿距离 ≤ radius（十字形，radius=1 时为上下左右 4 格）
+#   shape = "circle"  ：切比雪夫距离 ≤ radius（方形，radius=1 时为周围 8 格「一圈」）
+# 不含中心格自身
+static func splash_cells(radius: int, shape: String) -> Array:
+	var r := maxi(1, radius)
+	var out: Array = []
+	for y in range(-r, r + 1):
+		for x in range(-r, r + 1):
+			if x == 0 and y == 0:
+				continue
+			if shape == "circle":
+				if maxi(absi(x), absi(y)) > r:
+					continue
+			else:
+				if absi(x) + absi(y) > r:
+					continue
+			out.append(Vector2i(x, y))
+	return out
 
 
 static func face_dir(from_pos: Vector2i, to_pos: Vector2i) -> Vector2i:
