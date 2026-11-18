@@ -13547,7 +13547,7 @@
       "range": 1.0
     },
     "portrait": "res://assets/xu_huang.png",
-    "talent": "10183111",
+    "talent": "xu_huang_talent",
     "talent_lv": 1.0,
     "skills": [
       "10184111",
@@ -22449,7 +22449,7 @@
       "move": 4.0,
       "range": 2.0
     },
-    "talent": "biyue_xiuhua",
+    "talent": "gan_mei_talent",
     "talent_lv": 1.0,
     "talent_name": "贤内助",
     "talent_desc": "自身兵力100%时谋攻提升15%；对我方部队施放技策后为其施加 「 疗愈 」 ，持续1回合。",
