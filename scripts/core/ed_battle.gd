@@ -1697,6 +1697,9 @@ func _add_debuff(t, name: String, turns: int, src = null) -> void:
 	if try_resist(t, name):
 		return
 	t["debuffs"].append({"name": name, "turns": maxi(1, turns), "src": int(src["uid"]) if src != null else -1})
+	# 副将天赋：施加减益后触发（如司马干威逼：减益升级后固伤）
+	if src != null:
+		passive_on("on_debuff_applied", src, {"target": t, "debuff": name})
 
 
 func _add_buff(t, name: String, turns: int, stacks: int = 1) -> void:
@@ -1788,11 +1791,16 @@ func _push(u, t, n: int) -> void:
 		dir = Vector2i(0, dy)
 	if dir == Vector2i.ZERO:
 		dir = Vector2i(1, 0)
+	var pushed := false
 	for i in n:
 		var nxt: Vector2i = t["pos"] + dir
 		if not in_bounds(nxt) or blocked.has(nxt) or unit_at(nxt) != null:
 			break
 		t["pos"] = nxt
+		pushed = true
+	# 副将天赋：击退敌军后触发（周循审时叠层）
+	if pushed:
+		passive_on("on_push", u, {"target": t})
 
 
 # 回合结束推进状态层数
@@ -1830,6 +1838,11 @@ func status_damage_mult(attacker, defender) -> float:
 
 func _apply_incoming(u, dmg: int) -> int:
 	var cut := float(u["ext"].get("damage_cut", 0.0))
+	# 副将天赋：每回合首次受到的伤害降低（鲍信御锋15% / 毛玠先佐11%）
+	var fhc := float(u["ext"].get("first_hit_cut", 0.0))
+	if fhc > 0.0 and not bool(u.get("_first_hit_used", false)):
+		cut += fhc
+		u["_first_hit_used"] = true
 	var d := int(maxf(1.0, round(float(dmg) * (1.0 - clampf(cut, 0.0, 0.9)))))
 	# P3 格挡：按比例降低受到的伤害
 	if u != null and int(u.get("block_turns", 0)) > 0:
@@ -1945,6 +1958,7 @@ func start_side(side: int) -> void:
 			u["combo_used"] = 0
 			u["can_combo"] = false
 			u["resist_once"] = {}
+			u["_first_hit_used"] = false
 			for sid in (u["cd"] as Dictionary).keys():
 				u["cd"][sid] = maxi(0, int(u["cd"][sid]) - 1)
 			_tick_statuses(u)
@@ -2124,6 +2138,10 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 		var fd: Dictionary = fx
 		var trig := str(fd.get("trigger", ""))
 		if trig != event:
+			continue
+		# 通用条件：移动格数（如臧霸长驱：移动2格以上才触发）
+		var min_move := int(fd.get("min_move", 0))
+		if min_move > 0 and int(ctx.get("move_tiles", int(u.get("moved_tiles", 0)))) < min_move:
 			continue
 		var t := str(fd.get("type", ""))
 		var src := str(fd.get("_from", ""))

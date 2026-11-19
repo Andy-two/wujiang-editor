@@ -874,7 +874,8 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 				"cut_counter": "counter_cut", "cut_normal": "normal_cut",
 				"general_add": "damage_bonus", "general_cut": "damage_cut",
 				"crit_damage": "crit_damage", "heal": "heal_bonus",
-				"shield_bonus": "shield_bonus", "crit": "crit_bonus"}
+				"shield_bonus": "shield_bonus", "crit": "crit_bonus",
+				"first_hit_cut": "first_hit_cut"}
 			for ek in ext_map.keys():
 				var ev := float(tmech.get(ek, 0.0))
 				if ev != 0.0:
