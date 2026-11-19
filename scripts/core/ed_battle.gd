@@ -755,6 +755,7 @@ func basic_attack(attacker, target) -> Dictionary:
 		return {"ok": false, "msg": "已行动"}
 	if not attack_area(attacker).has(target["pos"] - attacker["pos"]):
 		return {"ok": false, "msg": "超出普攻射程"}
+	attacker["_turn_attacked"] = true
 	var arm_mul := RULEZ.arm_multiplier(String(attacker["arm"]), String(target["arm"]))
 	_face_towards(attacker, target["pos"])
 	# P3 闪避：目标可能完全回避这次攻击
@@ -1831,6 +1832,10 @@ func _check_end() -> void:
 # ------------------------------------------------------------
 func end_unit_turn(u) -> void:
 	if u != null:
+		# 羁绊/天赋：行动结束时触发（如赵娥枕戈未攻击得战意、戏志才残谋回血）
+		passive_on("on_turn_end", u, {"attacked": bool(u.get("_turn_attacked", false))})
+		trigger_bonds("on_turn_end", u, [])
+		u["_turn_attacked"] = false
 		# 设施收获：单位站在己方设施上时，结束行动自动收获（如开屯护民的粮仓）
 		var f := facility_at_unit(u)
 		if not f.is_empty() and int(f.get("side", 0)) == int(u["side"]) \
@@ -2023,7 +2028,15 @@ func _apply_passive_startup() -> void:
 func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 	if u == null or not u["alive"]:
 		return
-	for fx in unit_passives(u) + (u.get("talent_passives", []) as Array):
+	# 汇总三类被动：技能被动 / 主将天赋被动 / 副将天赋触发块
+	var all_fx: Array = unit_passives(u) + (u.get("talent_passives", []) as Array)
+	if u.get("ext") is Dictionary:
+		var vt: Array = (u["ext"] as Dictionary).get("vice_talent_fx", []) if (u["ext"] as Dictionary).get("vice_talent_fx") is Array else []
+		for vfx in vt:
+			var vf: Dictionary = (vfx as Dictionary).duplicate(true)
+			vf["_from"] = String(vf.get("_from", "副将天赋"))
+			all_fx.append(vf)
+	for fx in all_fx:
 		var fd: Dictionary = fx
 		var trig := str(fd.get("trigger", ""))
 		if trig != event:
@@ -2032,9 +2045,25 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 		var src := str(fd.get("_from", ""))
 		match t:
 			RULEZ.SFX_SELF_HEAL:
+				# 条件：兵力低于阈值（如戏志才残谋：兵力<50%才回血）
+				var hp_below := float(fd.get("require_hp_below", 0.0))
+				if hp_below > 0.0 and float(u["hp"]) / maxf(1.0, float(u["max_hp"])) >= hp_below:
+					continue
 				var sh := int(round(float(u["max_hp"]) * float(fd.get("value", 0.1))))
-				u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + sh)
-				_emit("  「%s」触发：%s 回复 %d 兵力" % [src, u["name"], sh], "heal")
+				var heal_target = u
+				# target=lowest_ally：给兵力最低的另一名友军回复（如糜芮慈援）
+				if str(fd.get("target", "self")) == "lowest_ally":
+					var lowu = null
+					for other in units:
+						if other == u or not other["alive"] or int(other["side"]) != int(u["side"]):
+							continue
+						if lowu == null or int(other["hp"]) < int(lowu["hp"]):
+							lowu = other
+					if lowu != null:
+						heal_target = lowu
+				sh = _mod_heal(u, heal_target, sh)
+				heal_target["hp"] = mini(int(heal_target["max_hp"]), int(heal_target["hp"]) + sh)
+				_emit("  「%s」触发：%s 回复 %d 兵力" % [src, heal_target["name"], sh], "heal")
 			RULEZ.SFX_BUFF:
 				var bn := str(fd.get("value", ""))
 				if bn != "":
@@ -2104,9 +2133,21 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 					var ffx2 := fd.duplicate(true)
 					ffx2["owner_uid"] = int(u["uid"])
 					add_facility(str(fd.get("value", "粮仓")), fpos2, int(u["side"]), ffx2)
+			RULEZ.SFX_ZHANYI:
+				# 被动战意变化（如赵娥枕戈：行动结束未攻击得18战意）
+				var zv2 := int(fd.get("value", 10))
+				# 条件：require_not_attacked——本回合未主动攻击才触发
+				var need_noatk := bool(fd.get("require_not_attacked", false))
+				if need_noatk and bool(ctx.get("attacked", false)):
+					continue
+				add_zhanyi(u, zv2)
+				_emit("  「%s」触发：%s 战意 %+d" % [src, u["name"], zv2], "info")
 			_:
 				# 对目标施加的被动（如 on_hit 施加减益）
 				var tgt = ctx.get("target", null)
+				# target_source：以事件来源为目标（如受反击后反击回去，文丑追袭）
+				if bool(fd.get("target_source", false)) and tgt == null:
+					tgt = ctx.get("source", null)
 				# 条件触发：要求目标拥有指定状态（如「对拥有『撕裂』的敌军造成伤害时…」）
 				var req := str(fd.get("require_status", ""))
 				if req != "" and tgt != null and not _has_status(tgt, req):
@@ -2118,9 +2159,20 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 							_add_debuff(tgt, dn, int(fd.get("turns", 2)), u)
 							_emit("  「%s」触发：%s 被施加「%s」" % [src, tgt["name"], dn], "info")
 					elif t == RULEZ.SFX_FIXED:
-						var fdmg := int(round(float(fd.get("value", 20))))
+						var fbase := float(fd.get("value", 20))
+						# 按属性百分比计算固伤（副将天赋：物攻25% / 物防40% / 谋攻20%）
+						if bool(fd.get("of_atk", false)):
+							fbase = float(u["atk"]) * fbase
+						elif bool(fd.get("of_def", false)):
+							fbase = float(u["def"]) * fbase
+						elif bool(fd.get("of_matk", false)):
+							fbase = float(u["matk"]) * fbase
+						var fdmg := int(round(fbase))
 						fdmg = mini(fdmg, int(tgt["hp"]))
 						tgt["hp"] = int(tgt["hp"]) - fdmg
+						# 回血：按固伤等量回复（文丑追袭）
+						if float(fd.get("heal_back", 0.0)) > 0.0:
+							u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + int(round(fdmg * float(fd.get("heal_back")))))
 						_emit("  「%s」触发：%s 受到 %d 固定伤害" % [src, tgt["name"], fdmg], "hit")
 						if int(tgt["hp"]) <= 0:
 							_kill(tgt, u)

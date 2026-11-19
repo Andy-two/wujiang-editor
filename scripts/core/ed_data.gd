@@ -831,8 +831,13 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 				ext["fortune_bonus"] = float(ext.get("fortune_bonus", 0.0)) + float(vmul[mk])
 				continue
 			ext[mk] = float(ext.get(mk, 0.0)) + float(vmul[mk])
-		# ---- 副将天赋机制（常驻数值加成） ----
-		var tmech := RULEZ.vice_talent_mech(vice_of(g), vice_lv)
+		# ---- 副将天赋机制（常驻数值加成 + 触发型） ----
+		var vice_data := vice_of(g)
+		# 触发型效果块随 ext 带入战斗，由 passive_on 统一处理
+		var vtrig: Array = vice_data.get("talent_triggers", []) if vice_data.get("talent_triggers") is Array else []
+		if not vtrig.is_empty():
+			ext["vice_talent_fx"] = (vtrig as Array).duplicate(true)
+		var tmech := RULEZ.vice_talent_mech(vice_data, vice_lv)
 		if not tmech.is_empty():
 			# 属性倍率
 			for sk in ["atk", "matk", "def", "mdef"]:
