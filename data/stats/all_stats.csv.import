@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dfd2df6hme6e8"
+
+[deps]
+
+files=["res://data/stats/all_stats.等级.translation", "res://data/stats/all_stats.技能阶.translation", "res://data/stats/all_stats.天赋阶.translation", "res://data/stats/all_stats.神兵等级.translation", "res://data/stats/all_stats.副将.translation", "res://data/stats/all_stats.技能.translation", "res://data/stats/all_stats.群伤.translation", "res://data/stats/all_stats.治疗.translation", "res://data/stats/all_stats.持续伤害.translation"]
+
+source_file="res://data/stats/all_stats.csv"
+dest_files=["res://data/stats/all_stats.等级.translation", "res://data/stats/all_stats.技能阶.translation", "res://data/stats/all_stats.天赋阶.translation", "res://data/stats/all_stats.神兵等级.translation", "res://data/stats/all_stats.副将.translation", "res://data/stats/all_stats.技能.translation", "res://data/stats/all_stats.群伤.translation", "res://data/stats/all_stats.治疗.translation", "res://data/stats/all_stats.持续伤害.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true
