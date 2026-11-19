@@ -831,6 +831,36 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 				ext["fortune_bonus"] = float(ext.get("fortune_bonus", 0.0)) + float(vmul[mk])
 				continue
 			ext[mk] = float(ext.get(mk, 0.0)) + float(vmul[mk])
+		# ---- 副将天赋机制（常驻数值加成） ----
+		var tmech := RULEZ.vice_talent_mech(vice_of(g), vice_lv)
+		if not tmech.is_empty():
+			# 属性倍率
+			for sk in ["atk", "matk", "def", "mdef"]:
+				var vadd := float(tmech.get("stat_" + sk, 0.0))
+				if vadd != 0.0:
+					stats[sk] = int(round(float(stats[sk]) * (1.0 + vadd)))
+			var hp_add := float(tmech.get("stat_hp", 0.0))
+			if hp_add != 0.0:
+				stats["max_hp"] = int(round(float(stats["max_hp"]) * (1.0 + hp_add)))
+			# 各伤害类型 -> ext 乘区键
+			var dmg_map := {"dmg_normal": "normal_damage", "dmg_skill": "skill_damage",
+				"dmg_counter": "counter_damage", "dmg_pursue": "pursue_damage",
+				"dmg_combo": "combo_damage", "dmg_fixed": "fixed_damage",
+				"dmg_restrict": "restrict_damage", "dmg_physical": "multi_hit_add"}
+			for dk in dmg_map.keys():
+				var dv := float(tmech.get(dk, 0.0))
+				if dv != 0.0:
+					ext[String(dmg_map[dk])] = float(ext.get(String(dmg_map[dk]), 0.0)) + dv
+			# 减伤 / 通用 / 暴击 / 治疗 -> ext
+			var ext_map := {"cut_all": "damage_cut", "cut_skill": "skill_cut",
+				"cut_counter": "counter_cut", "cut_normal": "normal_cut",
+				"general_add": "damage_bonus", "general_cut": "damage_cut",
+				"crit_damage": "crit_damage", "heal": "heal_bonus",
+				"shield_bonus": "shield_bonus", "crit": "crit_bonus"}
+			for ek in ext_map.keys():
+				var ev := float(tmech.get(ek, 0.0))
+				if ev != 0.0:
+					ext[String(ext_map[ek])] = float(ext.get(String(ext_map[ek]), 0.0)) + ev
 	# 升星额外属性加成（如 8 星全属性 +8%）
 	var sb_mult := star_bonus_mult(g)
 	if sb_mult != 1.0:

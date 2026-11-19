@@ -1624,6 +1624,11 @@ func _add_debuff(t, name: String, turns: int, src = null) -> void:
 func _add_buff(t, name: String, turns: int, stacks: int = 1) -> void:
 	if t == null or not t["alive"]:
 		return
+	# 护盾量加成（副将天赋「护盾率提升N%」，如孙乾预攻/伊籍预谋）
+	if name == "护盾" and stacks > 1 and (t.get("ext") is Dictionary):
+		var sb := float((t["ext"] as Dictionary).get("shield_bonus", 0.0))
+		if sb != 0.0:
+			stacks = int(round(float(stacks) * (1.0 + sb)))
 	for b in t["buffs"]:
 		if String(b["name"]) == name:
 			b["turns"] = maxi(int(b["turns"]), turns)

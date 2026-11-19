@@ -635,6 +635,52 @@ static func vice_modifiers(vice: Dictionary, lv: int = 1) -> Dictionary:
 	return {"stat": stat, "mul": mul, "flat": flat, "dmg": dmg}
 
 
+# ============================================================
+# 副将天赋机制（常驻数值加成）
+#   talent_mech 为效果块数组，元素形如：
+#     {"min_lv": 1, "stat_matk": 0.05, "dmg_pursue": 0.15, ...}
+#   只取 min_lv <= 当前副将等级的最高一层（向上继承），
+#   与 skill_effects_at 的规则一致。
+#   支持的键（均为倍率增减，0.15 = +15%）：
+#     stat_atk / stat_matk / stat_def / stat_mdef / stat_all
+#     dmg_normal / dmg_skill / dmg_counter / dmg_pursue / dmg_combo
+#     dmg_fixed / dmg_restrict / dmg_physical
+#     cut_normal / cut_skill / cut_counter / cut_all
+#     crit / crit_damage / heal / general_add / general_cut
+# ============================================================
+static func vice_talent_mech(vice: Dictionary, lv: int = 25) -> Dictionary:
+	var blocks: Array = vice.get("talent_mech", []) if vice.get("talent_mech") is Array else []
+	if blocks.is_empty():
+		return {}
+	# 取 min_lv <= lv 的最高一层
+	var best := -1
+	var chosen: Dictionary = {}
+	for b in blocks:
+		if not (b is Dictionary):
+			continue
+		var bd: Dictionary = b
+		var n := int(bd.get("min_lv", 1))
+		if n <= lv and n > best:
+			best = n
+			chosen = bd
+	if chosen.is_empty():
+		return {}
+	# 汇总：stat_all 同时加到四项属性
+	var out := {}
+	var all := float(chosen.get("stat_all", 0.0))
+	if all != 0.0:
+		out["stat_atk"] = all
+		out["stat_matk"] = all
+		out["stat_def"] = all
+		out["stat_mdef"] = all
+	for k in chosen.keys():
+		var ks := String(k)
+		if ks == "min_lv" or ks == "stat_all":
+			continue
+		out[ks] = float(chosen[k]) + float(out.get(ks, 0.0))
+	return out
+
+
 # ---------------- 升星 ----------------
 static func star_rule() -> Dictionary:
 	var out := STAR_DEFAULTS.duplicate(true)
@@ -1254,6 +1300,8 @@ static func _kind_cut(ext: Dictionary, kind: String) -> float:
 			return -float(ext.get("skill_cut", 0.0))
 		"counter":
 			return -float(ext.get("counter_cut", 0.0))
+		"normal":
+			return -float(ext.get("normal_cut", 0.0))
 	return 0.0
 
 
