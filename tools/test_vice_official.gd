@@ -127,7 +127,7 @@ func _init() -> void:
 		ok((cfg.get("members", []) as Array).size() == 2, "%s 应 2 名成员" % String(bid))
 		if not (cfg.get("fx", []) as Array).is_empty():
 			implemented += 1
-	ok(implemented == 2, "已实装羁绊应 2 组，实际 %d" % implemented)
+	ok(implemented == 12, "已实装羁绊应 12 组，实际 %d" % implemented)
 	print("  12 组羁绊，其中已实装 %d 组" % implemented)
 
 	# ---------- 4. 固定属性插值 ----------

@@ -303,42 +303,269 @@ func active_bonds_for(side: int) -> Array:
 
 
 # 在指定时机触发羁绊效果
-func trigger_bonds(event: String, u, targets: Array) -> void:
+#   event : 触发时机（on_crit / on_attack_before / on_skill_after ...）
+#   u     : 触发者（携带羁绊副将的我方单位）
+#   targets: 相关目标单位数组
+#   ctx   : 附加上下文（如 {"move_tiles": 3, "hit_count": 1, "is_area": true}）
+func trigger_bonds(event: String, u, targets: Array, ctx: Dictionary = {}) -> void:
 	if u == null or not u["alive"]:
 		return
 	for cfg in active_bonds_for(int(u["side"])):
 		var c: Dictionary = cfg
-		if str(c.get("trigger", "")) != event:
+		# trigger 支持字符串或字符串数组（一个羁绊可在多个时机触发）
+		var trig = c.get("trigger", "")
+		var trig_match := false
+		if trig is Array:
+			for tv in (trig as Array):
+				if str(tv) == event:
+					trig_match = true
+					break
+		else:
+			trig_match = (str(trig) == event)
+		if not trig_match:
 			continue
+		# 条件检查：如 min_move（需移动格数）、max_hit / min_hit（命中数）
+		if not _bond_cond_ok(c, u, targets, ctx):
+			continue
+		# 每大回合次数上限（如「每大回合最多触发3次」）
+		var per_round: int = int(c.get("per_round", 0))
+		if per_round > 0:
+			var ckey := "bond_cnt_" + String(c.get("id", ""))
+			if int(u.get(ckey, 0)) >= per_round:
+				continue
 		var fx_list: Array = c.get("fx", []) if c.get("fx") is Array else []
+		var fired := false
 		for fx in fx_list:
+			fired = _apply_bond_fx(c, fx, u, targets, ctx) or fired
+		if fired and per_round > 0:
+			var ckey2 := "bond_cnt_" + String(c.get("id", ""))
+			u[ckey2] = int(u.get(ckey2, 0)) + 1
+
+
+# 羁绊触发条件检查
+func _bond_cond_ok(c: Dictionary, u, targets: Array, ctx: Dictionary) -> bool:
+	var min_move := int(c.get("min_move", 0))
+	if min_move > 0 and int(ctx.get("move_tiles", 0)) < min_move:
+		return false
+	var need_debuff := str(c.get("need_target_debuff", ""))
+	if need_debuff != "":
+		var found := false
+		for t in targets:
+			if t != null and t["alive"] and _has_debuff(t, need_debuff):
+				found = true
+				break
+		if not found:
+			return false
+	# is_area：仅范围伤害（命中>1 或显式标记）
+	if bool(c.get("require_area", false)) and not bool(ctx.get("is_area", false)):
+		return false
+	return true
+
+
+# 应用单条羁绊效果，返回是否真正产生了效果
+func _apply_bond_fx(c: Dictionary, fx: Dictionary, u, targets: Array, ctx: Dictionary) -> bool:
+	var t := str(fx.get("type", ""))
+	var cname := String(c.get("name", ""))
+	var did := false
+	match t:
+		"fixed", "fixed_damage":
+			var base := _bond_damage_base(fx, u)
+			var area_radius := int(fx.get("area_radius", 0))
+			var hit_list: Array = targets
+			# area_radius>0：对触发者周围 radius 格内的敌军造成固伤（颜良文丑）
+			if area_radius > 0:
+				hit_list = []
+				for other in units:
+					if not other["alive"] or int(other["side"]) == int(u["side"]):
+						continue
+					var dd: Vector2i = other["pos"] - u["pos"]
+					if absi(dd.x) + absi(dd.y) <= area_radius:
+						hit_list.append(other)
+			var single_bonus := float(fx.get("single_bonus", 0.0))
+			if single_bonus > 0.0 and hit_list.size() <= 1:
+				base *= (1.0 + single_bonus)
+			for tgt in hit_list:
+				if tgt == null or not tgt["alive"] or int(tgt["hp"]) <= 0 or tgt == u:
+					continue
+				var dm := int(round(base))
+				dm = clampi(dm, 0, int(tgt["hp"]))
+				if dm <= 0:
+					continue
+				tgt["hp"] = int(tgt["hp"]) - dm
+				if float(fx.get("heal_back", 0.0)) > 0.0:
+					u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + dm)
+				did = true
+				_emit("  「%s」羁绊：%s 受到 %d 固定伤害" % [cname, tgt["name"], dm], "hit")
+				if int(tgt["hp"]) <= 0:
+					_kill(tgt, u)
+		"shield":
+			# 按自身兵力上限或谋攻百分比给护盾（target=self / lowest_ally）
+			var pct := float(fx.get("value", 0.1))
+			var by := str(fx.get("by", "max_hp"))  # max_hp / matk
+			var amount := int(round((float(u["max_hp"]) if by == "max_hp" else float(u["matk"])) * pct))
+			var who := str(fx.get("target", "self"))
+			var receivers: Array = [u]
+			if who == "lowest_ally":
+				var low = null
+				for other in units:
+					if not other["alive"] or int(other["side"]) != int(u["side"]):
+						continue
+					if other == u:
+						continue
+					if low == null or int(other["hp"]) < int(low["hp"]):
+						low = other
+				if low != null:
+					receivers = [low]
+			for r in receivers:
+				if r != null and r["alive"] and amount > 0:
+					_add_buff(r, "护盾", int(fx.get("turns", 2)), amount)
+					_emit("  「%s」羁绊：%s 获得护盾 %d" % [cname, r["name"], amount], "info")
+					did = true
+		"self_cost_shield":
+			# 消耗自身兵力上限 pct_cost，换 by*pct_gain 护盾（杨阜戏志才）
+			var cost_pct := float(fx.get("cost_pct", 0.15))
+			var cost := int(round(float(u["max_hp"]) * cost_pct))
+			if int(u["hp"]) > cost and int(u["hp"]) - cost > 0:
+				u["hp"] = int(u["hp"]) - cost
+				var gain := int(round(float(u["max_hp"]) * float(fx.get("gain_pct", 0.1))))
+				_add_buff(u, "护盾", int(fx.get("turns", 2)), gain)
+				_emit("  「%s」羁绊：%s 消耗 %d 兵力，获得护盾 %d" % [cname, u["name"], cost, gain], "info")
+				did = true
+		"dispel_debuff":
+			# 给 targets（友军）驱散减益（王允严珩：回复战意时给友军）
+			for tgt in targets:
+				if tgt != null and tgt["alive"] and int(tgt["side"]) == int(u["side"]):
+					_dispel_debuff(tgt, int(fx.get("value", 1)))
+					_emit("  「%s」羁绊：%s 被额外驱散减益" % [cname, tgt["name"]], "info")
+					did = true
+		"dispel_buff":
+			for tgt in targets:
+				if tgt != null and tgt["alive"] and int(tgt["side"]) != int(u["side"]):
+					_dispel_buff(tgt, int(fx.get("value", 1)))
+					_emit("  「%s」羁绊：%s 被驱散 %d 增益" % [cname, tgt["name"], int(fx.get("value", 1))], "info")
+					did = true
+		"add_debuff_random":
+			# 给目标施加随机减益（诸葛均明远）
+			var pool: Array = fx.get("pool", ["识破", "破绽", "低迷", "虚弱"])
+			if not pool.is_empty():
+				for tgt in targets:
+					if tgt != null and tgt["alive"] and int(tgt["side"]) != int(u["side"]):
+						var nm := String(pool[RULEZ.RNG.randi() % pool.size()])
+						_add_debuff(tgt, nm, int(fx.get("turns", 2)), u)
+						_emit("  「%s」羁绊：%s 被施加「%s」" % [cname, tgt["name"], nm], "info")
+						did = true
+		"add_buff":
+			for tgt in targets:
+				if tgt != null and tgt["alive"] and int(tgt["side"]) == int(u["side"]):
+					_add_buff(tgt, str(fx.get("buff", "坚壁")), int(fx.get("turns", 2)), int(fx.get("stacks", 1)))
+					_emit("  「%s」羁绊：%s 获得「%s」" % [cname, tgt["name"], str(fx.get("buff", "坚壁"))], "info")
+					did = true
+	return did
+
+
+# 计算羁绊对本次伤害的倍率加成（只读，不改状态）
+#   kind: normal / counter / pursue / skill
+#   target: 可选，用于条件判断（如目标是否带嘲讽）
+func bond_damage_mult(u, kind: String, is_area: bool = false, target = null, hit_count: int = -1) -> float:
+	if u == null or not u["alive"]:
+		return 1.0
+	var mult := 1.0
+	for cfg in active_bonds_for(int(u["side"])):
+		var c: Dictionary = cfg
+		var trig := str(c.get("trigger", ""))
+		# 范围伤害增伤（成廉曹性）：on_area_damage
+		if trig == "on_area_damage" and is_area:
+			var bonus := 0.0
+			var single_extra := 0.0
+			for fx in (c.get("fx", []) as Array):
+				var fd: Dictionary = fx
+				if str(fd.get("type", "")) == "dmg_bonus":
+					bonus += float(fd.get("value", 0.0))
+					if bool(fd.get("single_extra", false)):
+						single_extra = float(fd.get("single_extra_value", 0.25))
+			# 只命中 1 名敌军时额外加成（文案：若范围伤害只命中1名敌军则额外提升25%）
+			if hit_count == 1:
+				bonus += single_extra
+			mult *= (1.0 + bonus)
+		# 嘲讽目标增伤（张绍夏侯昭）：on_counter_pursuit_taunt
+		if trig == "on_counter_pursuit_taunt" and (kind == "counter" or kind == "pursue"):
+			if target != null and _has_debuff(target, "嘲讽"):
+				for fx in (c.get("fx", []) as Array):
+					var fd2: Dictionary = fx
+					if str(fd2.get("type", "")) == "dmg_bonus":
+						mult *= (1.0 + float(fd2.get("value", 0.0)))
+	return mult
+
+
+# 羁绊：自身施加给敌军的减益被驱散时反伤（夏侯兰向朗）
+#   t         : 减益被驱散的单位（敌军）
+#   removed   : 被驱散层数
+#   src_uids  : 这些减益的施加者 uid 列表
+func _bond_dispel_retaliation(t, removed: int, src_uids: Array) -> void:
+	if t == null or not t["alive"]:
+		return
+	# 找出这些减益的施加者中，谁带「on_dispel_debuff」羁绊
+	var credited: Dictionary = {}
+	for uid in src_uids:
+		var src_raw = get_unit(int(uid))
+		if not (src_raw is Dictionary):
+			continue
+		var su: Dictionary = src_raw
+		if not bool(su.get("alive", false)):
+			continue
+		if credited.has(int(uid)):
+			continue
+		for cfg in active_bonds_for(int(su.get("side", 0))):
+			var c: Dictionary = cfg
+			if str(c.get("trigger", "")) != "on_dispel_debuff":
+				continue
+			for fx in (c.get("fx", []) as Array):
+				var fd: Dictionary = fx
+				if str(fd.get("type", "")) != "retaliate_dispel":
+					continue
+				var per_layer := float(fd.get("value", 0.25))
+				var cap := float(fd.get("cap", 0.75))
+				var dmg_base := float(su.get("atk", 0)) * minf(float(removed) * per_layer, cap)
+				var dm := clampi(int(round(dmg_base)), 0, int(t["hp"]))
+				if dm > 0:
+					t["hp"] = int(t["hp"]) - dm
+					_emit("  「%s」羁绊：%s 减益被驱散，受到 %d 伤害" % [
+						String(c.get("name", "")), t["name"], dm], "hit")
+					credited[int(uid)] = true
+					if int(t["hp"]) <= 0:
+						_kill(t, su)
+				break
+
+
+# 羁绊：反击/追击命中带嘲讽的敌军后，给自己叠「坚壁」（张绍夏侯昭）
+func _bond_taunt_buff(u, target) -> void:
+	if u == null or target == null or not u["alive"]:
+		return
+	if not _has_debuff(target, "嘲讽"):
+		return
+	for cfg in active_bonds_for(int(u["side"])):
+		var c: Dictionary = cfg
+		if str(c.get("trigger", "")) != "on_counter_pursuit_taunt":
+			continue
+		for fx in (c.get("fx", []) as Array):
 			var fd: Dictionary = fx
-			var t := str(fd.get("type", ""))
-			match t:
-				"fixed":
-					var base := float(fd.get("value", 0.0))
-					# of_atk：按攻击者物攻百分比计算固伤
-					if bool(fd.get("of_atk", false)):
-						base = float(u["atk"]) * base
-					for tgt in targets:
-						if tgt == null or not tgt["alive"] or int(tgt["hp"]) <= 0:
-							continue
-						var dm := int(round(base))
-						dm = clampi(dm, 0, int(tgt["hp"]))
-						if dm <= 0:
-							continue
-						tgt["hp"] = int(tgt["hp"]) - dm
-						# 回血：按造成的伤害量回复自身
-						if float(fd.get("heal_back", 0.0)) > 0.0:
-							u["hp"] = mini(int(u["max_hp"]), int(u["hp"]) + dm)
-						_emit("  「%s」羁绊：%s 受到 %d 固定伤害" % [
-							String(c.get("name", "")), tgt["name"], dm], "hit")
-						if int(tgt["hp"]) <= 0:
-							_kill(tgt, u)
-				"heal_by_damage":
-					# 上一条 fixed 已处理，这里保留兼容（不重复回血）
-					pass
-	# 给 fixed 块打回血标记（在触发前处理，简单起见直接在上方完成）
+			if str(fd.get("type", "")) == "add_buff_self":
+				_add_buff(u, str(fd.get("buff", "坚壁")), int(fd.get("turns", 2)), int(fd.get("stacks", 1)))
+				_emit("  「%s」羁绊：%s 获得「%s」" % [
+					String(c.get("name", "")), u["name"], str(fd.get("buff", "坚壁"))], "info")
+
+
+# 计算羁绊固伤基础值
+func _bond_damage_base(fx: Dictionary, u) -> float:
+	var base := float(fx.get("value", 0.0))
+	if bool(fx.get("of_atk", false)):
+		base = float(u["atk"]) * base
+	elif bool(fx.get("of_matk", false)):
+		base = float(u["matk"]) * base
+	elif bool(fx.get("of_atk_matk", false)):
+		# 物攻+谋攻各占一段（陈宫臧霸：谋25%+物25%）
+		base = float(u["atk"]) * float(fx.get("atk_pct", 0.0)) + float(u["matk"]) * float(fx.get("matk_pct", 0.0))
+	return base
 
 
 func bind_data(generals: Dictionary, skills: Dictionary, talents: Dictionary, arm_shapes: Dictionary = {}, bonds: Dictionary = {}) -> void:
@@ -540,6 +767,9 @@ func basic_attack(attacker, target) -> Dictionary:
 			passive_bonus *= 1.08
 		if pn.contains("奋勇"):
 			passive_bonus *= 1.20
+	# 羁绊：主动攻击前（范围伤害增伤在 roll_damage 前通过 ext 处理）
+	trigger_bonds("on_attack_before", attacker, [target], {"move_tiles": int(attacker.get("moved_tiles", 0))})
+	passive_bonus *= bond_damage_mult(attacker, "normal", false)
 	var res := RULEZ.roll_damage(attacker, target, passive_bonus * status_damage_mult(attacker, target), arm_mul, {"kind": "normal"})
 	var dmg := int(res["dmg"])
 	dmg = _apply_outgoing(attacker, dmg)
@@ -556,6 +786,8 @@ func basic_attack(attacker, target) -> Dictionary:
 		passive_on("on_crit", attacker, {"target": target})
 		trigger_bonds("on_crit", attacker, [target])
 	passive_on("on_hit", attacker, {"target": target})
+	# 羁绊：主动攻击后（徐庶司马徽：固伤+驱散增益）
+	trigger_bonds("on_attack_after", attacker, [target])
 	passive_on("on_hurt", target, {"source": attacker})
 	if int(target["hp"]) <= 0:
 		_kill(target, attacker)
@@ -572,8 +804,11 @@ func basic_attack(attacker, target) -> Dictionary:
 		if not no_counter and can_counter and attack_area(target).has(attacker["pos"] - target["pos"]) and attacker["alive"]:
 			_face_towards(target, attacker["pos"])
 			target["counter_used"] = int(target.get("counter_used", 0)) + 1
-			# 反击增强：倍率加成
+			# 羁绊：反击前（张绍夏侯昭：嘲讽目标增伤）
+			trigger_bonds("on_counter_before", target, [attacker])
 			var c_mul := RULEZ.get_f("mult_counter") * (1.0 + float(target.get("counter_mul", 0.0)))
+			# 羁绊增伤：反击且目标带嘲讽
+			c_mul *= bond_damage_mult(target, "counter", false, attacker)
 			var back := RULEZ.roll_damage(target, attacker, c_mul,
 				RULEZ.arm_multiplier(String(target["arm"]), String(attacker["arm"])), {"kind": "counter"})
 			# 被反击方可能带减伤
@@ -589,6 +824,10 @@ func basic_attack(attacker, target) -> Dictionary:
 			_emit("%s 反击 %s：%d 伤害" % [target["name"], attacker["name"], bd], "hit")
 			# 反击时触发被动
 			passive_on("on_counter", target, {"target": attacker})
+			# 羁绊：反击后（徐庶司马徽固伤+驱散）
+			trigger_bonds("on_counter_after", target, [attacker])
+			# 羁绊：反击命中嘲讽目标（张绍夏侯昭施加坚壁）
+			_bond_taunt_buff(target, attacker)
 			passive_on("on_be_countered", attacker, {"source": target})
 			if int(attacker["hp"]) <= 0:
 				_kill(attacker, target)
@@ -689,6 +928,9 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 		match t:
 			RULEZ.SFX_DAMAGE:
 				var times := maxi(1, int(fx.get("times", 1)))
+				# 羁绊：范围伤害增伤（成廉曹性：范围+15%，只命中1个再+25%）
+				var v_area := cells.size() > 1
+				var v_area_mult := bond_damage_mult(u, "skill", v_area, null, foes.size())
 				for _r in times:
 					if foes.is_empty():
 						break
@@ -700,7 +942,7 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 							continue
 						var magic := bool(fx.get("magic", false)) or float(u["matk"]) > float(u["atk"]) * 1.2
 						var am := RULEZ.arm_multiplier(String(u["arm"]), String(tgt["arm"]))
-						var res := RULEZ.roll_damage(u, tgt, float(fx.get("value", 1.0)) * status_damage_mult(u, tgt), am,
+						var res := RULEZ.roll_damage(u, tgt, float(fx.get("value", 1.0)) * status_damage_mult(u, tgt) * v_area_mult, am,
 							{"magic": magic, "ignore_def": float(fx.get("ignore_def", 0.0)), "kind": "skill"})
 						var dmg := _apply_incoming(tgt, _apply_outgoing(u, int(res["dmg"])))
 						dmg = mini(dmg, int(tgt["hp"]))
@@ -1032,6 +1274,8 @@ func _cast_one(u, sid: String, target: Vector2i, group_id: String) -> Dictionary
 					_emit("  → %s 获得「%s」" % [u["name"], String(b0["name"])], "info")
 					break
 	_emit("  作用格：%d" % cells.size(), "info")
+	# 羁绊：施放战法后（张昭张纮：给兵力最低友军护盾）
+	trigger_bonds("on_skill_after", u, allies)
 	# 攻心：本次技能造成的伤害按比例回复自身兵力
 	var ls := float(u.get("lifesteal", 0.0))
 	if ls > 0.0 and int(u.get("_turn_dmg", 0)) > 0:
@@ -1177,6 +1421,9 @@ func add_zhanyi(u, delta: int) -> void:
 	# 获得战意时的被动触发（如「临阵决机」每获得10点战意得1层备战）
 	if delta > 0:
 		passive_on("on_zhanyi", u, {"delta": delta})
+		# 羁绊：王允严珩——为我方部队回复战意时额外驱散1个减益
+		#   （由施法方在同一技能里先调用，这里以 u 为接受者触发）
+		trigger_bonds("on_zhanyi_given", u, [u])
 
 
 # 对范围内战意最高的敌军吸战意
@@ -1254,9 +1501,12 @@ func transfer_zhanyi(u, amount: int, radius: int) -> int:
 func do_pursuit(u, tgt, fx: Dictionary) -> int:
 	if u == null or tgt == null or not u["alive"] or not tgt["alive"]:
 		return 0
+	# 羁绊：追击时（张绍夏侯昭：嘲讽目标增伤 + 施加坚壁）
+	trigger_bonds("on_pursuit_before", u, [tgt])
+	var p_mult := bond_damage_mult(u, "pursue", false, tgt)
 	var magic := bool(fx.get("magic", false))
 	var am := RULEZ.arm_multiplier(String(u["arm"]), String(tgt["arm"]))
-	var res := RULEZ.roll_damage(u, tgt, float(fx.get("value", 0.5)), am, {
+	var res := RULEZ.roll_damage(u, tgt, float(fx.get("value", 0.5)) * p_mult, am, {
 		"magic": magic, "ignore_def": float(fx.get("ignore_def", 0.0)),
 		"no_counter": true,
 		"kind": "pursue",
@@ -1265,6 +1515,10 @@ func do_pursuit(u, tgt, fx: Dictionary) -> int:
 	dmg = mini(dmg, int(tgt["hp"]))
 	tgt["hp"] = int(tgt["hp"]) - dmg
 	_emit("  → 追击 %s：%d 伤害%s" % [tgt["name"], dmg, "（暴击）" if res["crit"] else ""], "hit")
+	# 羁绊：追击后（诸葛均明远：随机减益）
+	trigger_bonds("on_pursuit_after", u, [tgt])
+	# 羁绊：反击/追击命中嘲讽目标（张绍夏侯昭额外施加坚壁）
+	_bond_taunt_buff(u, tgt)
 	if int(tgt["hp"]) <= 0:
 		_kill(tgt, u)
 		passive_on("on_kill", u, {"target": tgt})
@@ -1420,13 +1674,18 @@ func _dispel_debuff(t, n: int = 1) -> void:
 		return
 	var arr: Array = t["debuffs"]
 	var removed := 0
+	var src_uids: Array = []
 	for i in range(arr.size() - 1, -1, -1):
 		if removed >= maxi(1, n):
 			break
 		var d: Dictionary = arr[i]
 		if bool(d.get("dispellable", true)):
+			src_uids.append(int(d.get("src", -1)))
 			arr.remove_at(i)
 			removed += 1
+	# 羁绊：夏侯兰向朗——自身施加给敌军的减益被驱散时，对被驱散者反伤
+	if removed > 0:
+		_bond_dispel_retaliation(t, removed, src_uids)
 
 
 func _push(u, t, n: int) -> void:

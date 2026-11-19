@@ -8,8 +8,15 @@
     ],
     "desc": "同时上阵杨阜、戏志才可激活：主动攻击前消耗自身兵力上限15%兵力（若兵力不足15%不会触发）并获得自身兵力上限10%的护盾，持续2回合。",
     "source": "official_api",
-    "trigger": "",
-    "fx": []
+    "trigger": "on_attack_before",
+    "fx": [
+      {
+        "type": "self_cost_shield",
+        "cost_pct": 0.15,
+        "gain_pct": 0.1,
+        "turns": 2.0
+      }
+    ]
   },
   "bond_570021": {
     "name": "严珩·王允",
@@ -20,8 +27,13 @@
     ],
     "desc": "同时上阵王允、严珩可激活：为我方部队回复战意时额外为其驱散1个减益。",
     "source": "official_api",
-    "trigger": "",
-    "fx": []
+    "trigger": "on_zhanyi_given",
+    "fx": [
+      {
+        "type": "dispel_debuff",
+        "value": 1.0
+      }
+    ]
   },
   "bond_570031": {
     "name": "颜良·文丑",
@@ -32,8 +44,19 @@
     ],
     "desc": "同时上阵颜良、文丑可激活：主动攻击或反击前对自身1圈范围内的敌军造成物攻15%的固定伤害并为自身回复等量兵力。",
     "source": "official_api",
-    "trigger": "",
-    "fx": []
+    "trigger": [
+      "on_attack_before",
+      "on_counter_before"
+    ],
+    "fx": [
+      {
+        "type": "fixed",
+        "of_atk": true,
+        "value": 0.15,
+        "area_radius": 1.0,
+        "heal_back": 1.0
+      }
+    ]
   },
   "bond_570041": {
     "name": "偃月双锋",
@@ -63,8 +86,16 @@
     ],
     "desc": "同时上阵陈宫、臧霸可激活：主动单体攻击前若移动过2格以上对敌军造成谋攻25%和物攻25%的固定伤害。",
     "source": "official_api",
-    "trigger": "",
-    "fx": []
+    "trigger": "on_attack_before",
+    "fx": [
+      {
+        "type": "fixed",
+        "of_atk_matk": true,
+        "atk_pct": 0.25,
+        "matk_pct": 0.25
+      }
+    ],
+    "min_move": 2.0
   },
   "bond_570061": {
     "name": "徐庶·司马徽",
@@ -75,8 +106,21 @@
     ],
     "desc": "同时上阵徐庶、司马徽可激活：主动攻击或反击后对敌军额外造成谋攻20%的固定伤害并驱散1个增益。",
     "source": "official_api",
-    "trigger": "",
-    "fx": []
+    "trigger": [
+      "on_attack_after",
+      "on_counter_after"
+    ],
+    "fx": [
+      {
+        "type": "fixed",
+        "of_matk": true,
+        "value": 0.2
+      },
+      {
+        "type": "dispel_buff",
+        "value": 1.0
+      }
+    ]
   },
   "bond_570071": {
     "name": "张昭·张纮",
@@ -87,8 +131,16 @@
     ],
     "desc": "同时上阵张昭、张纮可激活：施放战法后，为另一个兵力最低的我方部队施加谋攻60%的护盾，持续2回合。",
     "source": "official_api",
-    "trigger": "",
-    "fx": []
+    "trigger": "on_skill_after",
+    "fx": [
+      {
+        "type": "shield",
+        "by": "matk",
+        "value": 0.6,
+        "target": "lowest_ally",
+        "turns": 2.0
+      }
+    ]
   },
   "bond_570081": {
     "name": "诸葛均·明远",
@@ -99,8 +151,22 @@
     ],
     "desc": "同时上阵明远、诸葛均可激活：追击后，为目标施加1个随机的减益效果（每大回合最多触发3次）。",
     "source": "official_api",
-    "trigger": "",
-    "fx": []
+    "trigger": "on_pursuit_after",
+    "fx": [
+      {
+        "type": "add_debuff_random",
+        "turns": 2.0,
+        "pool": [
+          "识破",
+          "破绽",
+          "低迷",
+          "虚弱",
+          "缭乱",
+          "被动"
+        ]
+      }
+    ],
+    "per_round": 3.0
   },
   "bond_570091": {
     "name": "向朗·夏侯兰",
@@ -111,8 +177,14 @@
     ],
     "desc": "同时上阵夏侯兰、向朗可激活：自身对敌军施加的减益被驱散或移除时，每被驱散或移除1层对其造成物攻25%（最多75%）的伤害。",
     "source": "official_api",
-    "trigger": "",
-    "fx": []
+    "trigger": "on_dispel_debuff",
+    "fx": [
+      {
+        "type": "retaliate_dispel",
+        "value": 0.25,
+        "cap": 0.75
+      }
+    ]
   },
   "bond_570101": {
     "name": "岐黄相济",
@@ -150,8 +222,20 @@
     ],
     "desc": "同时上阵张绍、夏侯昭可激活：反击和追击时，若敌军携带嘲讽状态，则本次伤害提升18%，并为自身施加1层#「坚壁」#link1，持续2回合。",
     "source": "official_api",
-    "trigger": "",
-    "fx": []
+    "trigger": "on_counter_pursuit_taunt",
+    "fx": [
+      {
+        "type": "dmg_bonus",
+        "value": 0.18
+      },
+      {
+        "type": "add_buff_self",
+        "buff": "坚壁",
+        "stacks": 1.0,
+        "turns": 2.0
+      }
+    ],
+    "need_target_debuff": "嘲讽"
   },
   "bond_570121": {
     "name": "曹性·成廉",
@@ -162,7 +246,14 @@
     ],
     "desc": "同时上阵成廉、曹性可激活：造成范围伤害时，伤害提升15%，若范围伤害只命中1名敌军，则额外提升25%。",
     "source": "official_api",
-    "trigger": "",
-    "fx": []
+    "trigger": "on_area_damage",
+    "fx": [
+      {
+        "type": "dmg_bonus",
+        "value": 0.15,
+        "single_extra": true,
+        "single_extra_value": 0.25
+      }
+    ]
   }
 }
