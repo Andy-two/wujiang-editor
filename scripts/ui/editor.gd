@@ -4201,6 +4201,17 @@ func _page_ext() -> Control:
 	_ext_line(g2, "武器特效说明", "weapon_effect")
 	_ext_line(g2, "防具特效说明", "armor_effect")
 	_ext_line(g2, "饰品特效说明", "accessory_effect")
+	# 专属神兵【生效】：19 名武将有专属神兵，养成到 11/14/17 级 → 3 个计策 4 阶；
+	# 20 级 → 天赋 4 阶。控件常驻，具体神兵名在 select_general 时更新。
+	var ssb := _section("专属神兵【生效】")
+	v.add_child(ssb)
+	var gsb := VBoxContainer.new()
+	ssb.add_child(gsb)
+	gsb.add_child(THEME.hint("神兵等级 11/14/17 → 3 个计策升四阶；20 → 天赋升四阶。"))
+	_ext_spin(gsb, "神兵等级", "shenbing_lv", 0, 30)
+	var sb_name_label := THEME.label("当前武将：无专属神兵", 12)
+	sb_name_label.name = "sb_name_label"
+	gsb.add_child(sb_name_label)
 	var s3 := _section("战斗系数【生效】")
 	v.add_child(s3)
 	var g3 := VBoxContainer.new()
@@ -4656,6 +4667,11 @@ func load_general(key: String) -> void:
 				opts.append(o.get_item_text(i))
 			var idx2 := opts.find(String(v) if v != null else "")
 			o.selected = maxi(0, idx2)
+	# 专属神兵名
+	var sb_lbl := find_child("sb_name_label", true, false)
+	if sb_lbl is Label:
+		var sbi: Dictionary = data.shenbings.get(cur_key, {})
+		(sb_lbl as Label).text = ("专属神兵：%s" % String(sbi.get("weapon", ""))) if not sbi.is_empty() else "当前武将：无专属神兵"
 	var cf := find_child("custom_fields", true, false)
 	if cf is TextEdit:
 		var lines: Array = []

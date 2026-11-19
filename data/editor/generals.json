@@ -82,6 +82,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -546,6 +547,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1,
@@ -1013,6 +1015,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -1481,6 +1484,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -1949,6 +1953,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -2416,6 +2421,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -2884,6 +2890,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -3352,6 +3359,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -3819,6 +3827,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -4287,6 +4296,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -4755,6 +4765,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -5223,6 +5234,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -5691,6 +5703,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -6159,6 +6172,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -6626,6 +6640,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -7094,6 +7109,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -7562,6 +7578,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -8030,6 +8047,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -8498,6 +8516,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -8966,6 +8985,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -9434,6 +9454,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -9902,6 +9923,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -10370,6 +10392,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -10838,6 +10861,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -11306,6 +11330,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -11774,6 +11799,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -12242,6 +12268,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -12710,6 +12737,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -13178,6 +13206,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -13646,6 +13675,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -14114,6 +14144,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -14582,6 +14613,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -15050,6 +15082,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -15520,6 +15553,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -15990,6 +16024,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -16459,6 +16494,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -16929,6 +16965,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -17399,6 +17436,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -17869,6 +17907,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -18339,6 +18378,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -18809,6 +18849,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -19279,6 +19320,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -19749,6 +19791,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -20219,6 +20262,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -20689,6 +20733,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -21159,6 +21204,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -21629,6 +21675,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -22099,6 +22146,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -22569,6 +22617,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -23039,6 +23088,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -23509,6 +23559,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -23979,6 +24030,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -24449,6 +24501,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -24919,6 +24972,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -25389,6 +25443,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,
@@ -25859,6 +25914,7 @@
       "vice_id": 0.0,
       "vice_dmg": 0.0,
       "vice_lv": 1.0,
+      "shenbing_lv": 0.0,
       "frames": {}
     },
     "ed_level": 1.0,

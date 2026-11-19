@@ -16,6 +16,7 @@ const SKILLS_PATH := "res://data/editor/skills.json"
 const TALENTS_PATH := "res://data/editor/talents.json"
 const VICE_PATH := "res://data/vice_generals.json"
 const BONDS_PATH := "res://data/editor/bonds.json"
+const SHENBING_PATH := "res://data/editor/shenbing.json"
 const SETTINGS_PATH := "res://data/editor/settings.json"
 const LIBRARY_PATH := "res://data/editor/art_library.json"
 const DS_URL_PATH := "res://data/editor/datasource.json"
@@ -56,6 +57,7 @@ const EXT_DEFAULTS := {
 	"vice_id": 0,
 	"vice_dmg": 0.0,
 	"vice_lv": 1,               # 副将等级（1~25，0=随主将等级）
+	"shenbing_lv": 0,           # 专属神兵等级（0=未养成；11/14/17→3计策4阶，20→天赋4阶）
 	"frames": {},               # 精灵图信息（旧）
 }
 
@@ -135,6 +137,7 @@ var skills: Dictionary = {}
 var talents: Dictionary = {}
 var vices: Dictionary = {}
 var bonds: Dictionary = {}
+var shenbings: Dictionary = {}     # 专属神兵：general_key -> 神兵数据
 var library: Dictionary = {}       # 美术素材库：abs_path -> 元信息
 var _arm_shapes_cache: Dictionary = {}
 var _arm_shapes_cache_loaded := false
@@ -193,6 +196,8 @@ func load_all() -> bool:
 	vices = v if v is Dictionary else {}
 	var bd = read_json(BONDS_PATH)
 	bonds = bd if bd is Dictionary else {}
+	var sb = read_json(SHENBING_PATH)
+	shenbings = sb if sb is Dictionary else {}
 	var lib = read_json(LIBRARY_PATH)
 	library = lib if lib is Dictionary else {}
 	var ds = read_json(DS_URL_PATH)
@@ -907,6 +912,24 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 	var skill_lvs: Dictionary = {}
 	for sid in (g.get("skills", []) as Array):
 		skill_lvs[String(sid)] = int((g.get("ed_skill_lv", {}) as Dictionary).get(sid, 1))
+	# ---- 专属神兵：按神兵等级把对应计策/天赋提升到 4 阶 ----
+	#   神兵等级 11/14/17 → 3 个计策 4 阶；20 → 天赋 4 阶
+	#   取 max(原等级, 4)，只升不降。
+	var sb_lv := int(ext.get("shenbing_lv", 0))
+	var sb_data: Dictionary = shenbings.get(key, {})
+	var eff_skill_lv := int(g.get("ed_talent_lv", 1))
+	if sb_lv > 0 and not sb_data.is_empty():
+		for node in (sb_data.get("skills", []) as Array):
+			var nd: Dictionary = node
+			if sb_lv >= int(nd.get("level", 99)):
+				for skey in (nd.get("keys", []) as Array):
+					var sk := String(skey)
+					if skill_lvs.has(sk):
+						skill_lvs[sk] = maxi(int(skill_lvs[sk]), 4)
+		for node2 in (sb_data.get("talent", []) as Array):
+			var nd2: Dictionary = node2
+			if sb_lv >= int(nd2.get("level", 99)):
+				eff_skill_lv = maxi(eff_skill_lv, 4)
 	var out: Dictionary = {
 		"key": key,
 		"name": String(g.get("name", key)),
@@ -916,7 +939,7 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 		"level": lv_c,
 		"star": st_c,
 		"talent": String(g.get("talent", "")),
-		"talent_lv": int(g.get("ed_talent_lv", 1)),
+		"talent_lv": eff_skill_lv,
 		"skills": (g.get("skills", []) as Array).duplicate(),
 		"skill_lv": skill_lvs,
 		"stats": stats,
