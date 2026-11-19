@@ -844,6 +844,12 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 			for srn in (vstack as Dictionary).keys():
 				sa[srn] = (vstack as Dictionary)[srn]
 			ext["stack_attrs"] = sa
+		# 条件属性定义（供战斗引擎 _update_cond_mult 动态计算）
+		var vcond = vice_data.get("talent_cond_attrs", [])
+		if vcond is Array and not (vcond as Array).is_empty():
+			var ca: Array = ext.get("cond_attrs", []) if ext.get("cond_attrs") is Array else []
+			ca.append_array(vcond as Array)
+			ext["cond_attrs"] = ca
 		var tmech := RULEZ.vice_talent_mech(vice_data, vice_lv)
 		if not tmech.is_empty():
 			# 属性倍率

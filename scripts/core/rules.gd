@@ -1322,6 +1322,15 @@ static func stack_stat_mult(unit: Dictionary, stat: String) -> float:
 	return mult
 
 
+# 副将天赋「条件属性」：战斗引擎在关键时刻把满足条件的属性倍率
+# 算好写入 unit["cond_mult"]，这里读取并乘到攻防上。
+static func cond_stat_mult(unit: Dictionary, stat: String) -> float:
+	var cm = unit.get("cond_mult", {})
+	if not (cm is Dictionary):
+		return 1.0
+	return maxf(0.0, float((cm as Dictionary).get(stat, 1.0)))
+
+
 # 按伤害来源类型取减伤键（受技策伤害减免 / 受反击伤害降低）
 static func _kind_cut(ext: Dictionary, kind: String) -> float:
 	match kind:
@@ -1348,11 +1357,13 @@ static func damage_direct(attacker: Dictionary, target: Dictionary, opt: Diction
 	var ia := int(opt.get("magic", false))
 	var atk_base := float(attacker.get("matk", 0)) if ia == 1 else float(attacker.get("atk", 0))
 	var def_base := float(target.get("mdef", 0)) if ia == 1 else float(target.get("def", 0))
-	# 副将天赋叠层属性（物攻/谋攻/物防/谋防按资源层数动态加成）
+	# 副将天赋叠层属性 + 条件属性（物攻/谋攻/物防/谋防动态加成）
 	var atk_stat := "matk" if ia == 1 else "atk"
 	var def_stat := "mdef" if ia == 1 else "def"
 	atk_base *= stack_stat_mult(attacker, atk_stat)
 	def_base *= stack_stat_mult(target, def_stat)
+	atk_base *= cond_stat_mult(attacker, atk_stat)
+	def_base *= cond_stat_mult(target, def_stat)
 	# 攻击端加成
 	var atk_add := float(opt.get("attack_add", 0.0))
 	atk_base *= (1.0 + atk_add)

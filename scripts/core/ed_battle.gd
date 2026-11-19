@@ -193,6 +193,78 @@ func get_unit(uid: int):
 	return null
 
 
+# 刷新副将天赋「条件属性」倍率（兵力阈值 / 范围内敌我数 / 减益数）
+#   结果写入 u["cond_mult"] = {"atk":1.1, "def":1.08, ...}
+#   由 damage_direct 读取，影响攻防。
+func _update_cond_mult(u) -> void:
+	if u == null or not (u.get("ext") is Dictionary):
+		return
+	var ext: Dictionary = u["ext"]
+	var ca = ext.get("cond_attrs", [])
+	if not (ca is Array) or (ca as Array).is_empty():
+		return
+	var mult := {"atk":1.0, "matk":1.0, "def":1.0, "mdef":1.0,
+		"general_add":0.0, "general_cut":0.0}
+	var hp_pct := float(u["hp"]) / maxf(1.0, float(u["max_hp"]))
+	# 预统计附近单位（范围内敌我、带减益敌军）
+	var allies_near := 0
+	var foes_near := 0
+	var debuff_foes := 0
+	for other in units:
+		if other == u or not other["alive"]:
+			continue
+		var d := absi(int(other["pos"].x) - int(u["pos"].x)) + absi(int(other["pos"].y) - int(u["pos"].y))
+		if int(other["side"]) == int(u["side"]):
+			if d <= 3: allies_near += 1
+		else:
+			if d <= 2: foes_near += 1
+			if d <= 3 and not (other.get("debuffs", []) as Array).is_empty():
+				debuff_foes += 1
+	for c in (ca as Array):
+		var cd: Dictionary = c
+		var stat := str(cd.get("stat", "atk"))
+		var pct := float(cd.get("pct", 0.0))
+		var kind := str(cd.get("cond", ""))
+		var ok := false
+		match kind:
+			"hp_above":
+				ok = hp_pct >= float(cd.get("value", 0.8))
+			"hp_below":
+				ok = hp_pct < float(cd.get("value", 0.5))
+			"allies_near":
+				ok = allies_near >= int(cd.get("value", 1))
+			"allies_none_near":
+				ok = allies_near == 0
+			"foes_none_near":
+				ok = foes_near == 0
+			"foes_near":
+				ok = foes_near >= int(cd.get("value", 1))
+			"debuff_foes":
+				ok = debuff_foes >= int(cd.get("value", 1))
+			"buffs_count":
+				ok = (u.get("buffs", []) as Array).size() >= int(cd.get("value", 1))
+			"always":
+				ok = true
+		if ok:
+			if stat == "general_add" or stat == "general_cut":
+				mult[stat] = float(mult.get(stat, 0.0)) + pct
+			else:
+				mult[stat] = float(mult.get(stat, 1.0)) + pct
+	u["cond_mult"] = mult
+	# 通用增减伤并入 ext（damage_direct 已读 ext.damage_bonus/damage_cut）
+	if float(mult.get("general_add", 0.0)) > 0.0:
+		ext["_cond_damage_bonus"] = float(mult["general_add"])
+	if float(mult.get("general_cut", 0.0)) > 0.0:
+		ext["_cond_damage_cut"] = float(mult["general_cut"])
+
+
+# 刷新全场单位的条件属性
+func _refresh_all_cond_mult() -> void:
+	for u in units:
+		if u["alive"]:
+			_update_cond_mult(u)
+
+
 func alive(side: int) -> Array:
 	var out: Array = []
 	for u in units:
@@ -756,6 +828,9 @@ func basic_attack(attacker, target) -> Dictionary:
 	if not attack_area(attacker).has(target["pos"] - attacker["pos"]):
 		return {"ok": false, "msg": "超出普攻射程"}
 	attacker["_turn_attacked"] = true
+	# 刷新双方条件属性（兵力/范围内敌我变化）
+	_update_cond_mult(attacker)
+	_update_cond_mult(target)
 	var arm_mul := RULEZ.arm_multiplier(String(attacker["arm"]), String(target["arm"]))
 	_face_towards(attacker, target["pos"])
 	# P3 闪避：目标可能完全回避这次攻击
@@ -1861,6 +1936,8 @@ func start_side(side: int) -> void:
 		_talent_applied = true
 		_apply_talent_effects()
 		_apply_passive_startup()
+	# 刷新条件属性（兵力/范围内敌我变化后重算）
+	_refresh_all_cond_mult()
 	for u in units:
 		if int(u["side"]) == side and u["alive"]:
 			u["done"] = false
