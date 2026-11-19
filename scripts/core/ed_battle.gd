@@ -1516,6 +1516,8 @@ func do_pursuit(u, tgt, fx: Dictionary) -> int:
 	dmg = mini(dmg, int(tgt["hp"]))
 	tgt["hp"] = int(tgt["hp"]) - dmg
 	_emit("  → 追击 %s：%d 伤害%s" % [tgt["name"], dmg, "（暴击）" if res["crit"] else ""], "hit")
+	# 副将天赋：追击后叠属性（蔡阳猎敌等）
+	passive_on("on_pursuit", u, {"target": tgt})
 	# 羁绊：追击后（诸葛均明远：随机减益）
 	trigger_bonds("on_pursuit_after", u, [tgt])
 	# 羁绊：反击/追击命中嘲讽目标（张绍夏侯昭额外施加坚壁）
@@ -1630,12 +1632,17 @@ func _add_buff(t, name: String, turns: int, stacks: int = 1) -> void:
 		var sb := float((t["ext"] as Dictionary).get("shield_bonus", 0.0))
 		if sb != 0.0:
 			stacks = int(round(float(stacks) * (1.0 + sb)))
+	var existed := false
 	for b in t["buffs"]:
 		if String(b["name"]) == name:
 			b["turns"] = maxi(int(b["turns"]), turns)
 			b["stacks"] = maxi(int(b["stacks"]), stacks)
+			existed = true
 			return
 	t["buffs"].append({"name": name, "turns": maxi(1, turns), "stacks": maxi(1, stacks)})
+	# 获得增益时触发副将天赋（如张燕激昂/华歆德素：获增益叠属性）
+	if not existed:
+		passive_on("on_buff_gain", t, {"buff": name})
 
 
 func _has_debuff(t, name: String) -> bool:
@@ -2142,6 +2149,14 @@ func passive_on(event: String, u, ctx: Dictionary = {}) -> void:
 					continue
 				add_zhanyi(u, zv2)
 				_emit("  「%s」触发：%s 战意 %+d" % [src, u["name"], zv2], "info")
+			"stack_add":
+				# 副将天赋叠层属性：给指定资源加层（如高览叠锋：造成单体伤害后物攻+3%，5层）
+				var rname := str(fd.get("res", ""))
+				if rname != "":
+					var rmax := int(fd.get("max", 5))
+					add_resource(u, rname, int(fd.get("value", 1)), rmax)
+					_emit("  「%s」触发：%s「%s」层数 %d" % [
+						src, u["name"], rname, get_resource(u, rname)], "info")
 			_:
 				# 对目标施加的被动（如 on_hit 施加减益）
 				var tgt = ctx.get("target", null)

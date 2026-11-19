@@ -837,6 +837,13 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 		var vtrig: Array = vice_data.get("talent_triggers", []) if vice_data.get("talent_triggers") is Array else []
 		if not vtrig.is_empty():
 			ext["vice_talent_fx"] = (vtrig as Array).duplicate(true)
+		# 叠层属性定义（供 stack_stat_mult 按资源层数加成）
+		var vstack = vice_data.get("talent_stack_attrs", {})
+		if vstack is Dictionary and not (vstack as Dictionary).is_empty():
+			var sa: Dictionary = ext.get("stack_attrs", {}) if ext.get("stack_attrs") is Dictionary else {}
+			for srn in (vstack as Dictionary).keys():
+				sa[srn] = (vstack as Dictionary)[srn]
+			ext["stack_attrs"] = sa
 		var tmech := RULEZ.vice_talent_mech(vice_data, vice_lv)
 		if not tmech.is_empty():
 			# 属性倍率

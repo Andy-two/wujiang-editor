@@ -1293,6 +1293,35 @@ static func _kind_add(ext: Dictionary, kind: String, bucket: String) -> float:
 	return 0.0
 
 
+# ============================================================
+# 副将天赋「叠层属性」：用资源层数(unit.res)记录层数，
+# 每种资源名对应一组属性加成（每层 pct），在此汇总成攻击/防御倍率。
+#   ext.stack_attrs = {
+#     "叠锋": {"stat": "atk", "pct": 0.03, "max": 5}, ...
+#   }
+#   层数从 unit.res[资源名] 读取，返回 1 + pct*层数（封顶 max 层）。
+# ============================================================
+static func stack_stat_mult(unit: Dictionary, stat: String) -> float:
+	var ext: Dictionary = unit.get("ext", {}) if unit.get("ext") is Dictionary else {}
+	var sa = ext.get("stack_attrs", {})
+	if not (sa is Dictionary):
+		return 1.0
+	var res: Dictionary = unit.get("res", {}) if unit.get("res") is Dictionary else {}
+	var mult := 1.0
+	for rname in (sa as Dictionary).keys():
+		var cfg = (sa as Dictionary)[rname]
+		if not (cfg is Dictionary):
+			continue
+		var cd: Dictionary = cfg
+		if String(cd.get("stat", "")) != stat:
+			continue
+		var layers := clampi(int(res.get(String(rname), 0)), 0, int(cd.get("max", 99)))
+		if layers <= 0:
+			continue
+		mult += float(cd.get("pct", 0.0)) * float(layers)
+	return mult
+
+
 # 按伤害来源类型取减伤键（受技策伤害减免 / 受反击伤害降低）
 static func _kind_cut(ext: Dictionary, kind: String) -> float:
 	match kind:
@@ -1319,6 +1348,11 @@ static func damage_direct(attacker: Dictionary, target: Dictionary, opt: Diction
 	var ia := int(opt.get("magic", false))
 	var atk_base := float(attacker.get("matk", 0)) if ia == 1 else float(attacker.get("atk", 0))
 	var def_base := float(target.get("mdef", 0)) if ia == 1 else float(target.get("def", 0))
+	# 副将天赋叠层属性（物攻/谋攻/物防/谋防按资源层数动态加成）
+	var atk_stat := "matk" if ia == 1 else "atk"
+	var def_stat := "mdef" if ia == 1 else "def"
+	atk_base *= stack_stat_mult(attacker, atk_stat)
+	def_base *= stack_stat_mult(target, def_stat)
 	# 攻击端加成
 	var atk_add := float(opt.get("attack_add", 0.0))
 	atk_base *= (1.0 + atk_add)
