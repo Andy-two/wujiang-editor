@@ -595,10 +595,11 @@ static func parse_taolue(text: String) -> Dictionary:
 
 # 把一个副将数据换算成修正量字典
 #   {"stat": {stat_hp: 0.015, ...}, "mul": {damage_bonus: 0.02, ...}, "dmg": 0.03}
-static func vice_modifiers(vice: Dictionary) -> Dictionary:
+static func vice_modifiers(vice: Dictionary, lv: int = 1) -> Dictionary:
 	var stat := {}
 	var mul := {}
-	# ① taolue
+	var flat := {}
+	# ① taolue（韬略百分比加成，来自文案）
 	for line in (vice.get("taolue", []) as Array):
 		var p := parse_taolue(String(line))
 		if p.is_empty():
@@ -610,16 +611,28 @@ static func vice_modifiers(vice: Dictionary) -> Dictionary:
 			stat[sk] = float(stat.get(sk, 0.0)) + val
 		else:
 			mul[key] = float(mul.get(key, 0.0)) + val
-	# ② stats（本身就是百分比，如 {"hp": 1.5} 表示 +1.5%）
+	# ② 固定属性 base_attr / max_attr（官方 API）：
+	#    按副将等级在 1 级值与满级值之间线性插值，满级约 25 级。
+	#    这是「固定数值加成」，不是百分比，单独放进 flat。
+	var base: Dictionary = vice.get("base_attr", {}) if vice.get("base_attr") is Dictionary else {}
+	var maxa: Dictionary = vice.get("max_attr", {}) if vice.get("max_attr") is Dictionary else {}
+	var lvc := clampi(lv, 1, 25)
+	var t := float(lvc - 1) / 24.0
+	for k in ["hp", "atk", "def", "matk", "mdef", "cri"]:
+		var b := float(base.get(k, 0.0))
+		var m := float(maxa.get(k, 0.0))
+		if b == 0.0 and m == 0.0:
+			continue
+		flat[k] = int(round(b + (m - b) * t))
+	# ③ 兼容旧字段 stats / dmg（百分比，若数据里还保留）
 	var vs: Dictionary = vice.get("stats", {}) if vice.get("stats") is Dictionary else {}
-	for k in vs.keys():
-		var sk2 := String(k)
-		stat[sk2] = float(stat.get(sk2, 0.0)) + float(vs[k]) / 100.0
-	# ③ dmg（伤害加成百分比，进通用增伤乘区）
+	for k2 in vs.keys():
+		var sk2 := String(k2)
+		stat[sk2] = float(stat.get(sk2, 0.0)) + float(vs[k2]) / 100.0
 	var dmg := float(vice.get("dmg", 0.0)) / 100.0
 	if dmg != 0.0:
 		mul["damage_bonus"] = float(mul.get("damage_bonus", 0.0)) + dmg
-	return {"stat": stat, "mul": mul, "dmg": dmg}
+	return {"stat": stat, "mul": mul, "flat": flat, "dmg": dmg}
 
 
 # ---------------- 升星 ----------------

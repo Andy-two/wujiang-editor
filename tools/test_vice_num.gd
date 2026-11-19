@@ -114,10 +114,34 @@ func _init() -> void:
 		fails += 1
 		print("FAIL vice_modifiers dmg = %f, 期望 0.02" % float(mod["dmg"]))
 
+	# ---- 5b. 固定属性 attr 按等级插值 ----
+	total += 3
+	var vattr := {"base_attr": {"hp": 19, "atk": 9, "cri": 2},
+		"max_attr": {"hp": 454, "atk": 228, "cri": 49}}
+	# Lv1 = 基础值
+	var ma1 := RULEZ.vice_modifiers(vattr, 1)
+	if int(ma1["flat"].get("hp", 0)) != 19 or int(ma1["flat"].get("atk", 0)) != 9:
+		fails += 1
+		print("FAIL Lv1 固定属性 = %s, 期望 hp=19 atk=9" % str(ma1["flat"]))
+	# Lv25 = 满级值
+	var ma25 := RULEZ.vice_modifiers(vattr, 25)
+	if int(ma25["flat"].get("hp", 0)) != 454 or int(ma25["flat"].get("atk", 0)) != 228:
+		fails += 1
+		print("FAIL Lv25 固定属性 = %s, 期望 hp=454 atk=228" % str(ma25["flat"]))
+	# Lv13 = 中点（19 + (454-19)*0.5 = 236.5 -> 237 或 236）
+	var ma13 := RULEZ.vice_modifiers(vattr, 13)
+	var mid_hp := int(ma13["flat"].get("hp", 0))
+	if mid_hp < 235 or mid_hp > 238:
+		fails += 1
+		print("FAIL Lv13 固定属性 hp = %d, 期望约 237" % mid_hp)
+	print("固定属性插值: Lv1 hp=%d, Lv13 hp=%d, Lv25 hp=%d" % [
+		int(ma1["flat"].get("hp", 0)), mid_hp, int(ma25["flat"].get("hp", 0))])
+
 	# ---- 6. 空副将 ----
 	total += 1
 	var m2 := RULEZ.vice_modifiers({})
-	if not (m2["stat"] as Dictionary).is_empty() or not (m2["mul"] as Dictionary).is_empty():
+	if not (m2["stat"] as Dictionary).is_empty() or not (m2["mul"] as Dictionary).is_empty() \
+			or not (m2["flat"] as Dictionary).is_empty():
 		fails += 1
 		print("FAIL 空副将应返回空修正: %s" % m2)
 

@@ -27,9 +27,25 @@ func _init() -> void:
 	ok(vl.size() == 109, "vice_list 应有 109 条，实际 %d" % vl.size())
 	ok(int(vl[0]["id"]) < int(vl[vl.size() - 1]["id"]), "应按 ID 升序")
 	var v0: Dictionary = vl[0]
-	for f in ["id", "name", "quality", "effect_name", "taolue", "stats", "dmg"]:
+	for f in ["id", "name", "quality", "effect_name", "taolue", "base_attr", "max_attr",
+			"talent_initial", "talent_max", "recommends"]:
 		ok(v0.has(f), "副将条目缺字段 %s" % f)
 	print("  109 条，首条: %s「%s」" % [v0["name"], v0["effect_name"]])
+
+	# ---------- 1b. 官方对齐数据完整性 ----------
+	print("[1b] 官方对齐字段")
+	var talent_cnt := 0
+	var attr_cnt := 0
+	var rec_cnt := 0
+	for v in vl:
+		if not String((v["talent_max"] as Dictionary).get("name", "")).is_empty():
+			talent_cnt += 1
+		if not (v["base_attr"] as Dictionary).is_empty():
+			attr_cnt += 1
+		rec_cnt += (v["recommends"] as Array).size()
+	ok(talent_cnt == 109, "满级天赋应 109 条，实际 %d" % talent_cnt)
+	ok(attr_cnt == 109, "基础属性应 109 条，实际 %d" % attr_cnt)
+	print("  天赋 %d/109，属性 %d/109，推荐关系 %d 条" % [talent_cnt, attr_cnt, rec_cnt])
 
 	# ---------- 2. 未挂副将时无变化 ----------
 	print("[2] 未挂副将")
@@ -42,37 +58,39 @@ func _init() -> void:
 	print("  关羽 Lv%d 兵力=%d 物攻=%d 物防=%d" % [
 		int(t0["level"]), int(t0["stats"]["max_hp"]), int(t0["stats"]["atk"]), int(t0["stats"]["def"])])
 
-	# ---------- 3. 挂一个纯 stats 副将 ----------
-	print("[3] 挂载副将（stats 加成型）")
-	# 找一个只加 stats、无 taolue 的副将
-	var target_vice := {}
-	for v in vl:
-		if (v["taolue"] as Array).is_empty() and not (v["stats"] as Dictionary).is_empty() \
-				and float(v["dmg"]) == 0.0:
-			target_vice = v
-			break
-	ok(not target_vice.is_empty(), "应能找到纯 stats 副将")
-	if not target_vice.is_empty():
-		var vid := int(target_vice["id"])
-		(g["ed_ext"] as Dictionary)["vice_id"] = vid
-		var t1: Dictionary = d.unit_template(key)
-		var vdef: Dictionary = d.vices[str(vid)]
-		var vstats: Dictionary = vdef.get("stats", {})
-		print("  挂载: %s「%s」stats=%s" % [vdef["name"], vdef["effect_name"], vstats])
-		for sk in vstats.keys():
-			var want_pct := float(vstats[sk]) / 100.0
-			var stat_key := "max_hp" if String(sk) == "hp" else String(sk)
-			var before := float(t0["stats"][stat_key])
-			var after := float(t1["stats"][stat_key])
-			if before <= 0.0:
-				continue
-			var got_pct := (after / before) - 1.0
-			ok(absf(got_pct - want_pct) < 0.02,
-				"%s 加成应为 %.4f，实际 %.4f (before=%f after=%f)" % [
-					stat_key, want_pct, got_pct, before, after])
-			print("    %s: %d -> %d (+%.2f%%, 期望 +%.2f%%)" % [
-				stat_key, int(before), int(after), got_pct * 100.0, want_pct * 100.0])
-		(g["ed_ext"] as Dictionary)["vice_id"] = 0
+	# ---------- 3. 挂一个固定属性副将（官方 attr 加成） ----------
+	print("[3] 挂载副将（固定属性加成型）")
+	# 董袭 1335：1 级 兵力+19 物攻+9 运势+2，满级 兵力+454 物攻+228 运势+49
+	var vid := 1335
+	(g["ed_ext"] as Dictionary)["vice_id"] = vid
+	(g["ed_ext"] as Dictionary)["vice_lv"] = 1
+	var t1_lv1: Dictionary = d.unit_template(key)
+	(g["ed_ext"] as Dictionary)["vice_lv"] = 25
+	var t1_lv25: Dictionary = d.unit_template(key)
+	var vdef: Dictionary = d.vices[str(vid)]
+	var battr: Dictionary = vdef.get("base_attr", {})
+	var mattr: Dictionary = vdef.get("max_attr", {})
+	print("  挂载: %s「%s」base=%s max=%s" % [vdef["name"], vdef["effect_name"], battr, mattr])
+	# 1 级：加固定值
+	for fk in ["hp", "atk", "def", "matk", "mdef"]:
+		var want1 := int(battr.get(fk, 0))
+		if want1 == 0:
+			continue
+		var stat_key := "max_hp" if fk == "hp" else String(fk)
+		var delta1 := int(t1_lv1["stats"][stat_key]) - int(t0["stats"][stat_key])
+		ok(delta1 == want1, "%s 1级应 +%d，实际 +%d" % [stat_key, want1, delta1])
+		print("    Lv1 %s: +%d (期望 +%d)" % [stat_key, delta1, want1])
+	# 满级：加满级固定值
+	for fk2 in ["hp", "atk", "def", "matk", "mdef"]:
+		var want25 := int(mattr.get(fk2, 0))
+		if want25 == 0:
+			continue
+		var stat_key2 := "max_hp" if fk2 == "hp" else String(fk2)
+		var delta25 := int(t1_lv25["stats"][stat_key2]) - int(t0["stats"][stat_key2])
+		ok(delta25 == want25, "%s 满级应 +%d，实际 +%d" % [stat_key2, want25, delta25])
+		print("    Lv25 %s: +%d (期望 +%d)" % [stat_key2, delta25, want25])
+	(g["ed_ext"] as Dictionary)["vice_id"] = 0
+	(g["ed_ext"] as Dictionary).erase("vice_lv")
 
 	# ---------- 4. 挂韬略副将 ----------
 	print("[4] 挂载副将（韬略战斗类）")

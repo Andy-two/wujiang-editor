@@ -55,6 +55,7 @@ const EXT_DEFAULTS := {
 	"battle_quote": "",
 	"vice_id": 0,
 	"vice_dmg": 0.0,
+	"vice_lv": 1,               # 副将等级（1~25，0=随主将等级）
 	"frames": {},               # 精灵图信息（旧）
 }
 
@@ -721,11 +722,12 @@ func vice_of(g: Dictionary) -> Dictionary:
 
 
 # 取主将挂载的副将换算出的数值修正；未挂载或副将无效返回空字典
-func vice_mods_for(g: Dictionary) -> Dictionary:
+#   lv 为副将等级（默认随主将等级），用于固定属性在 1~25 级之间插值
+func vice_mods_for(g: Dictionary, lv: int = 1) -> Dictionary:
 	var v := vice_of(g)
 	if v.is_empty():
 		return {}
-	return RULEZ.vice_modifiers(v)
+	return RULEZ.vice_modifiers(v, lv)
 
 
 # 列出所有副将（按 ID 升序），供编辑器下拉框使用
@@ -740,7 +742,13 @@ func vice_list() -> Array:
 			"quality_name": String(v.get("quality_name", "")),
 			"effect_name": String(v.get("effect_name", "")),
 			"effect_desc": String(v.get("effect_desc", "")),
+			"talent_initial": (v.get("talent_initial", {}) as Dictionary).duplicate(),
+			"talent_max": (v.get("talent_max", {}) as Dictionary).duplicate(),
+			"base_attr": (v.get("base_attr", {}) as Dictionary).duplicate(),
+			"max_attr": (v.get("max_attr", {}) as Dictionary).duplicate(),
 			"taolue": (v.get("taolue", []) as Array).duplicate(),
+			"recommends": (v.get("recommends", []) as Array).duplicate(),
+			"jiban": (v.get("jiban", {}) as Dictionary).duplicate(),
 			"stats": (v.get("stats", {}) as Dictionary).duplicate(),
 			"dmg": float(v.get("dmg", 0.0)),
 			"intro": String(v.get("intro", "")),
@@ -790,19 +798,31 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 		stats["matk"] = int(round(float(stats["matk"]) * (1.0 - 0.01 * float(lv_c - 1) * 0.5)))
 	# 扩展项：装备/天赋面板加成
 	stats["atk"] = int(round(float(stats["atk"]) * (1.0 + float(ext.get("damage_bonus", 0.0)))))
-	# ---- 副将数值加成（stats / dmg / taolue） ----
+	# ---- 副将数值加成（固定属性 base_attr/max_attr + 百分比韬略 taolue） ----
 	#   副将数据来自 data/vice_generals.json，通过主将的 ed_ext.vice_id 挂载。
-	#   这里只应用「纯数值」部分；副将的 effect_desc 机制效果不在本段处理。
-	var vice_mod := vice_mods_for(g)
+	#   副将等级默认随主将等级（ed_ext.vice_lv 可单独指定）。
+	#   固定属性按等级插值后「加」到面板；百分比韬略并入 ext 乘区。
+	var vice_lv := int(ext.get("vice_lv", lv_c))
+	var vice_mod := vice_mods_for(g, vice_lv)
 	if not vice_mod.is_empty():
 		var vstat: Dictionary = vice_mod.get("stat", {})
-		var vs_mult := 1.0
 		for k4 in ["hp", "atk", "def", "matk", "mdef"]:
-			vs_mult = 1.0 + float(vstat.get(k4, 0.0))
+			var vs_mult := 1.0 + float(vstat.get(k4, 0.0))
 			if vs_mult == 1.0:
 				continue
 			var target_key := "max_hp" if k4 == "hp" else String(k4)
 			stats[target_key] = int(round(float(stats[target_key]) * vs_mult))
+		# 固定属性加成（官方 attr，按等级插值）
+		var vflat: Dictionary = vice_mod.get("flat", {})
+		for fk in ["hp", "atk", "def", "matk", "mdef"]:
+			var fv := int(vflat.get(fk, 0))
+			if fv == 0:
+				continue
+			var flat_key := "max_hp" if fk == "hp" else String(fk)
+			stats[flat_key] = int(stats[flat_key]) + fv
+		var vcri := int(vflat.get("cri", 0))
+		if vcri != 0:
+			ext["fortune_bonus"] = float(ext.get("fortune_bonus", 0.0)) + float(vcri)
 		# 战斗类乘区并入 ext（后续伤害计算直接读 ext）
 		var vmul: Dictionary = vice_mod.get("mul", {})
 		for mk in vmul.keys():
