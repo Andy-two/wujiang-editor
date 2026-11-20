@@ -1696,7 +1696,36 @@ func _add_debuff(t, name: String, turns: int, src = null) -> void:
 	# 抵抗拦截：每回合首次抵抗某类减益（如「抵抗每回合首次受到的眩晕」）
 	if try_resist(t, name):
 		return
-	t["debuffs"].append({"name": name, "turns": maxi(1, turns), "src": int(src["uid"]) if src != null else -1})
+	# DOT 状态：记录施加者属性快照与每层伤害（按官方定义，行动结束时结算）
+	var _dot := RULEZ.dot_def(name)
+	var rec := {"name": name, "turns": maxi(1, turns), "src": int(src["uid"]) if src != null else -1,
+		"stacks": 1}
+	if not _dot.is_empty() and src != null:
+		var k := str(_dot.get("kind", "matk"))
+		var atkval := int(src.get("matk", 0)) if k == "matk" else int(src.get("atk", 0))
+		rec["dot_kind"] = k
+		rec["dot_value"] = float(_dot.get("value", 0.0))
+		rec["dot_atk"] = atkval
+		rec["dot_cap"] = int(_dot.get("cap", 1))
+	t["debuffs"].append(rec)
+	# 同状态叠加：DOT 叠层上限
+	if not _dot.is_empty():
+		var cap := int(_dot.get("cap", 5))
+		var cnt := 0
+		for d in (t["debuffs"] as Array):
+			if String((d as Dictionary).get("name", "")) == name:
+				cnt += 1
+		if cnt > 1:
+			# 已有多个同名：只保留 cap 个（保留最新的）
+			var kept: Array = []
+			var seen := 0
+			for d in (t["debuffs"] as Array):
+				if String((d as Dictionary).get("name", "")) == name:
+					seen += 1
+					if seen > cap:
+						continue
+				kept.append(d)
+			t["debuffs"] = kept
 	# 副将天赋：施加减益后触发（如司马干威逼：减益升级后固伤）
 	if src != null:
 		passive_on("on_debuff_applied", src, {"target": t, "debuff": name})
@@ -1925,8 +1954,43 @@ func _check_end() -> void:
 # ------------------------------------------------------------
 # 回合
 # ------------------------------------------------------------
+# 持续伤害结算：行动结束时对每个带 dot 数据的减益结算伤害
+#   伤害 = 施加者属性快照 × 系数 × 层数（层数受 cap 限制），按官方定义
+func _settle_dot(u) -> void:
+	if u == null or not u["alive"]:
+		return
+	var total := 0
+	for d in (u.get("debuffs", []) as Array):
+		var fd: Dictionary = d
+		if not fd.has("dot_value"):
+			continue
+		var stacks := clampi(1, 1, int(fd.get("dot_cap", 5)))
+		var base := float(fd.get("dot_atk", 0)) * float(fd.get("dot_value", 0.0))
+		var dmg := int(round(base * float(stacks)))
+		if dmg <= 0:
+			continue
+		dmg = mini(dmg, int(u["hp"]))
+		u["hp"] = int(u["hp"]) - dmg
+		total += dmg
+		_emit("  → %s 受到「%s」持续伤害 %d（%d层）" % [
+			u["name"], String(fd.get("name", "")), dmg, stacks], "hit")
+	if total > 0:
+		if int(u["hp"]) <= 0:
+			var src_uid := -1
+			for d2 in (u.get("debuffs", []) as Array):
+				var fd2: Dictionary = d2
+				if fd2.has("dot_value"):
+					src_uid = int(fd2.get("src", -1))
+					break
+			_kill(u, get_unit(src_uid))
+		changed.emit()
+
+
 func end_unit_turn(u) -> void:
 	if u != null:
+		# 持续伤害（DOT）：行动结束时按官方定义结算（如溃逃=施加者谋攻25%/层）
+		if u["alive"]:
+			_settle_dot(u)
 		# 羁绊/天赋：行动结束时触发（如赵娥枕戈未攻击得战意、戏志才残谋回血）
 		passive_on("on_turn_end", u, {"attacked": bool(u.get("_turn_attacked", false))})
 		trigger_bonds("on_turn_end", u, [])
