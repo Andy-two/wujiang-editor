@@ -60,6 +60,20 @@
         "type": "crit_up",
         "turns": 99.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 2.0
+      },
+      {
+        "type": "resource",
+        "name": "斗气",
+        "value": 2.0,
+        "max": 3.0,
+        "trigger": "on_hit",
+        "min_lv": 3.0
       }
     ]
   },

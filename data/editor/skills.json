@@ -2766,6 +2766,19 @@
         "type": "dispel",
         "value": 1.0,
         "min_lv": 1.0
+      },
+      {
+        "type": "buff",
+        "value": "坚壁",
+        "turns": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 2.0
+      },
+      {
+        "type": "buff",
+        "value": "昂扬",
+        "turns": 99.0,
+        "min_lv": 3.0
       }
     ]
   },
@@ -3099,6 +3112,12 @@
         "value": 1.5,
         "ignore_def": 0.1,
         "min_lv": 3.0
+      },
+      {
+        "type": "cd_down",
+        "value": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 2.0
       }
     ],
     "range": 2.0,
@@ -17876,6 +17895,20 @@
         "turns": 2.0,
         "stacks": 1.0,
         "min_lv": 3.0
+      },
+      {
+        "type": "fixed",
+        "value": 80.0,
+        "trigger": "on_hit",
+        "min_lv": 4.0
+      },
+      {
+        "type": "debuff",
+        "value": "中毒",
+        "turns": 2.0,
+        "stacks": 1.0,
+        "trigger": "on_hit",
+        "min_lv": 4.0
       }
     ],
     "shenbing": true,
