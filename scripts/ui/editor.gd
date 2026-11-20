@@ -81,7 +81,9 @@ var effect_grid: RangeGrid
 var range_cd_spin: SpinBox
 var range_info: Label
 var range_brush_btn: Button
-var _range_ctx := {"owner": "", "sid": "basic", "layer": 1}
+var range_cond_opt: OptionButton      # 条件层下拉（无双/斗气/资源…）
+var range_cond_edit: LineEdit         # 条件表达式输入
+var _range_ctx := {"owner": "", "sid": "basic", "layer": 1, "cond": -1}
 # 立绘 / 动画
 var art_portrait_tex: TextureRect
 var art_illust_tex: TextureRect
@@ -3239,6 +3241,46 @@ func _page_range() -> Control:
 		layer_row.add_child(b)
 		range_layer_btns[i] = b
 	head.add_child(layer_row)
+	# ---------- 条件层：按状态切换形状（无双/斗气/资源/血量…） ----------
+	var cond_row := HBoxContainer.new()
+	cond_row.add_theme_constant_override("separation", 6)
+	cond_row.add_child(THEME.label("  条件层：", 13, THEME.MUTED))
+	range_cond_opt = OptionButton.new()
+	range_cond_opt.custom_minimum_size = Vector2(200, 0)
+	range_cond_opt.tooltip_text = "选「（无条件）」= 按升阶分层；选某个条件 = 该状态命中时用这一套形状，" + \
+		"优先级高于升阶分层"
+	range_cond_opt.item_selected.connect(func(i: int) -> void:
+		_range_ctx["cond"] = i - 1   # -1 表示无条件
+		_refresh_range_page())
+	cond_row.add_child(range_cond_opt)
+	var add_cond_btn := THEME.button("+ 加条件层", 12)
+	add_cond_btn.tooltip_text = "新增一套按状态生效的范围（例如「有无双时」横扫多打几格）"
+	add_cond_btn.pressed.connect(func() -> void:
+		_add_range_cond())
+	cond_row.add_child(add_cond_btn)
+	var del_cond_btn := THEME.button("✕ 删当前条件层", 12)
+	del_cond_btn.tooltip_text = "删掉当前选中的条件层（不影响升阶分层）"
+	del_cond_btn.pressed.connect(func() -> void:
+		_del_range_cond())
+	cond_row.add_child(del_cond_btn)
+	v.add_child(cond_row)
+	range_cond_edit = LineEdit.new()
+	range_cond_edit.placeholder_text = "条件表达式，例如 wushuang 或 douqi>=3 或 res:将令>=2"
+	range_cond_edit.custom_minimum_size = Vector2(360, 0)
+	range_cond_edit.tooltip_text = "支持的写法：\n" + \
+		"  wushuang            处于无双状态\n" + \
+		"  no_wushuang         没有无双\n" + \
+		"  douqi>=3            斗气 >= 3 层\n" + \
+		"  zhanyi>=50          战意 >= 50\n" + \
+		"  res:将令>=2         资源「将令」>= 2 层\n" + \
+		"  hp<=50              兵力 <= 50%\n" + \
+		"  buff:破甲           身上有「破甲」\n" + \
+		"  always              总是生效（当默认形状用）"
+	range_cond_edit.text_submitted.connect(func(t: String) -> void:
+		_set_range_cond_expr(t))
+	range_cond_edit.focus_exited.connect(func() -> void:
+		_set_range_cond_expr(range_cond_edit.text))
+	v.add_child(range_cond_edit)
 	var body := HBoxContainer.new()
 	body.add_theme_constant_override("separation", 18)
 	body.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -3349,6 +3391,178 @@ func _page_range() -> Control:
 func _fn_both(fn: Callable) -> void:
 	fn.call(cast_grid)
 	fn.call(effect_grid)
+# ---------- 条件层：按状态切换范围 ----------
+# 把 "wushuang" / "douqi>=3" / "res:将令>=2" / "hp<=50" / "buff:破甲" 解析成条件字典
+func _parse_cond_expr(t: String) -> Dictionary:
+	var s := t.strip_edges()
+	if s == "":
+		return {"type": "always"}
+	var low := s.to_lower()
+	if low == "wushuang":
+		return {"type": "wushuang"}
+	if low == "no_wushuang":
+		return {"type": "no_wushuang"}
+	if low == "always":
+		return {"type": "always"}
+	# res:名字>=N
+	if low.begins_with("res:"):
+		var rest := s.substr(4)
+		var op_i := rest.find(">=")
+		if op_i > 0:
+			return {"type": "res", "name": rest.substr(0, op_i).strip_edges(),
+				"min": int(rest.substr(op_i + 2).strip_edges())}
+		return {"type": "res", "name": rest.strip_edges(), "min": 1}
+	# buff:名字
+	if low.begins_with("buff:"):
+		return {"type": "buff", "name": s.substr(5).strip_edges()}
+	# key>=N / key<=N
+	for op in [">=", "<=", ">", "<", "="]:
+		var i := s.find(op)
+		if i > 0:
+			var key := s.substr(0, i).strip_edges().to_lower()
+			var val := int(s.substr(i + op.length()).strip_edges())
+			match key:
+				"douqi":
+					return {"type": "douqi", "min": val}
+				"zhanyi":
+					return {"type": "zhanyi", "min": val}
+				"hp":
+					if op == "<=" or op == "<":
+						return {"type": "hp_pct", "max": val}
+					return {"type": "hp_pct", "min": val}
+				_:
+					return {"type": "res", "name": key, "min": val}
+	return {"type": "always"}
+
+
+# 条件字典 → 可读表达式（回填到输入框）
+func _cond_to_expr(when: Dictionary) -> String:
+	var t := String(when.get("type", "always"))
+	match t:
+		"wushuang":
+			return "wushuang"
+		"no_wushuang":
+			return "no_wushuang"
+		"douqi":
+			return "douqi>=%d" % int(when.get("min", 1))
+		"zhanyi":
+			return "zhanyi>=%d" % int(when.get("min", 1))
+		"res":
+			return "res:%s>=%d" % [String(when.get("name", "")), int(when.get("min", 1))]
+		"hp_pct":
+			if when.has("max"):
+				return "hp<=%d" % int(when["max"])
+			return "hp>=%d" % int(when.get("min", 0))
+		"buff":
+			return "buff:%s" % String(when.get("name", ""))
+		"form":
+			return "form:%s" % String(when.get("form", ""))
+	return "always"
+
+
+func _range_entry() -> Dictionary:
+	var owner := str(_range_ctx.get("owner", ""))
+	if owner == "" or not data.generals.has(owner):
+		return {}
+	var sid := str(_range_ctx.get("sid", "basic"))
+	var g: Dictionary = data.generals[owner]
+	var er: Dictionary = g.get("ed_ranges", {}) if g.get("ed_ranges") is Dictionary else {}
+	var e = er.get(sid, {})
+	return e if e is Dictionary else {}
+
+
+func _add_range_cond() -> void:
+	if cur_key == "" or busy:
+		return
+	var owner := str(_range_ctx.get("owner", cur_key))
+	if owner == "" or not data.generals.has(owner):
+		status("请先选武将")
+		return
+	var sid := str(_range_ctx.get("sid", "basic"))
+	if sid == "basic":
+		status("普攻不支持条件层，请选一个技能")
+		return
+	var g: Dictionary = data.generals[owner]
+	if not (g.get("ed_ranges") is Dictionary):
+		g["ed_ranges"] = {}
+	var er: Dictionary = g["ed_ranges"]
+	var entry = er.get(sid, {})
+	if not (entry is Dictionary):
+		entry = {}
+	var conds: Array = entry.get("conds", []) if entry.get("conds") is Array else []
+	# 新条件层默认「有无双时」，并把当前形状复制一份方便微调
+	conds.append({"when": {"type": "wushuang"},
+		"cast": cast_grid.get_area_raw() if cast_grid != null else [],
+		"area": effect_grid.get_area_raw() if effect_grid != null else []})
+	entry["conds"] = conds
+	er[sid] = entry
+	g["ed_ranges"] = er
+	_range_ctx["cond"] = conds.size() - 1
+	data.dirty = true
+	_mark_dirty()
+	_refresh_range_page()
+	status("已为「%s」新增条件层，可改条件表达式" % data.skill_name(sid))
+
+
+func _del_range_cond() -> void:
+	if cur_key == "" or busy:
+		return
+	var owner := str(_range_ctx.get("owner", ""))
+	if owner == "" or not data.generals.has(owner):
+		return
+	var sid := str(_range_ctx.get("sid", "basic"))
+	var idx := int(_range_ctx.get("cond", -1))
+	if idx < 0:
+		status("当前选的是「（无条件）」，没有可删的条件层")
+		return
+	var g: Dictionary = data.generals[owner]
+	var er: Dictionary = g.get("ed_ranges", {}) if g.get("ed_ranges") is Dictionary else {}
+	if not er.has(sid):
+		return
+	var entry: Dictionary = er[sid]
+	var conds: Array = entry.get("conds", []) if entry.get("conds") is Array else []
+	if idx >= conds.size():
+		return
+	conds.remove_at(idx)
+	entry["conds"] = conds
+	er[sid] = entry
+	g["ed_ranges"] = er
+	_range_ctx["cond"] = -1
+	data.dirty = true
+	_mark_dirty()
+	_refresh_range_page()
+	status("已删除该条件层")
+
+
+func _set_range_cond_expr(t: String) -> void:
+	if cur_key == "" or busy:
+		return
+	var owner := str(_range_ctx.get("owner", ""))
+	if owner == "" or not data.generals.has(owner):
+		return
+	var sid := str(_range_ctx.get("sid", "basic"))
+	var idx := int(_range_ctx.get("cond", -1))
+	if idx < 0:
+		return
+	var g: Dictionary = data.generals[owner]
+	var er: Dictionary = g.get("ed_ranges", {}) if g.get("ed_ranges") is Dictionary else {}
+	if not er.has(sid):
+		return
+	var entry: Dictionary = er[sid]
+	var conds: Array = entry.get("conds", []) if entry.get("conds") is Array else []
+	while conds.size() <= idx:
+		conds.append({"when": {"type": "always"}, "cast": [], "area": []})
+	var one: Dictionary = conds[idx] if conds[idx] is Dictionary else {}
+	one["when"] = _parse_cond_expr(t)
+	conds[idx] = one
+	entry["conds"] = conds
+	er[sid] = entry
+	g["ed_ranges"] = er
+	data.dirty = true
+	_mark_dirty()
+	_update_range_info()
+
+
 func _on_range_changed(_which: String) -> void:
 	if busy or cur_key == "":
 		return
@@ -3365,7 +3579,19 @@ func _on_range_changed(_which: String) -> void:
 	var entry = er.get(sid, {})
 	if not (entry is Dictionary):
 		entry = {}
-	if sid == "basic":
+	var cond_idx := int(_range_ctx.get("cond", -1))
+	if cond_idx >= 0 and sid != "basic":
+		# ---- 写进条件层：该状态命中时用这一套形状 ----
+		var conds: Array = entry.get("conds", []) if entry.get("conds") is Array else []
+		while conds.size() <= cond_idx:
+			conds.append({"when": {"type": "always"}, "cast": [], "area": []})
+		var one: Dictionary = conds[cond_idx] if conds[cond_idx] is Dictionary else {}
+		one["cast"] = cast_grid.get_area_raw()
+		one["area"] = effect_grid.get_area_raw()
+		conds[cond_idx] = one
+		entry["conds"] = conds
+		entry["cd"] = int(range_cd_spin.value)
+	elif sid == "basic":
 		# 普攻形状：各等级独立存放（layer_1/2/3），area 只作为 Lv1 基准
 		entry["layer_%s" % layer] = cast_grid.get_area_raw()
 		if int(layer) == 1:
@@ -3472,25 +3698,58 @@ func _refresh_range_page() -> void:
 		range_cd_spin.editable = false
 	else:
 		var d: Dictionary = data.get_skill(sid)
+		# ---- 条件层下拉：0 = 无条件（按升阶），1..n = 各条件层 ----
+		var conds: Array = entry.get("conds", []) if entry.get("conds") is Array else []
+		var cond_sel := int(_range_ctx.get("cond", -1))
+		if range_cond_opt != null:
+			range_cond_opt.clear()
+			range_cond_opt.add_item("（无条件）按升阶")
+			for ci in conds.size():
+				var cw: Dictionary = conds[ci] if conds[ci] is Dictionary else {}
+				range_cond_opt.add_item("条件%d：%s" % [ci + 1, _cond_to_expr(cw.get("when", {}))])
+			if cond_sel >= conds.size():
+				cond_sel = -1
+				_range_ctx["cond"] = -1
+			range_cond_opt.selected = cond_sel + 1
+		if range_cond_edit != null:
+			if cond_sel >= 0 and cond_sel < conds.size():
+				var cw2: Dictionary = conds[cond_sel] if conds[cond_sel] is Dictionary else {}
+				range_cond_edit.text = _cond_to_expr(cw2.get("when", {}))
+				range_cond_edit.editable = true
+			else:
+				range_cond_edit.text = ""
+				range_cond_edit.editable = false
 		var layers: Dictionary = entry.get("layers", {}) if entry.get("layers") is Dictionary else {}
 		var cast_a: Array = []
 		var area_a: Array = []
-		# 取 ≤ 当前层 的最高一层（向下继承）
-		var best := -1
-		for k in layers.keys():
-			var n := int(String(k).replace("lv_", ""))
-			if n <= layer and n > best and layers[k] is Dictionary:
-				best = n
-		if best > 0:
-			var lyr: Dictionary = layers["lv_%d" % best]
-			if lyr.has("cast"):
-				cast_a = RULEZ.parse_area(lyr["cast"])
-			if lyr.has("area"):
-				area_a = RULEZ.parse_area(lyr["area"])
-		if cast_a.is_empty():
-			cast_a = RULEZ.parse_area(entry["cast"]) if entry.has("cast") else _default_cast(sid, d, layer)
-		if area_a.is_empty():
-			area_a = RULEZ.parse_area(entry["area"]) if entry.has("area") else _default_area(sid, d, layer)
+		# 选中条件层时，显示该条件层自己的形状
+		if cond_sel >= 0 and cond_sel < conds.size():
+			var cwd: Dictionary = conds[cond_sel] if conds[cond_sel] is Dictionary else {}
+			if cwd.get("cast") is Array:
+				cast_a = RULEZ.parse_area(cwd["cast"])
+			if cwd.get("area") is Array:
+				area_a = RULEZ.parse_area(cwd["area"])
+			if cast_a.is_empty():
+				cast_a = RULEZ.parse_area(entry["cast"]) if entry.has("cast") else _default_cast(sid, d, layer)
+			if area_a.is_empty():
+				area_a = RULEZ.parse_area(entry["area"]) if entry.has("area") else _default_area(sid, d, layer)
+		else:
+			# 取 ≤ 当前层 的最高一层（向下继承）
+			var best := -1
+			for k in layers.keys():
+				var n := int(String(k).replace("lv_", ""))
+				if n <= layer and n > best and layers[k] is Dictionary:
+					best = n
+			if best > 0:
+				var lyr: Dictionary = layers["lv_%d" % best]
+				if lyr.has("cast"):
+					cast_a = RULEZ.parse_area(lyr["cast"])
+				if lyr.has("area"):
+					area_a = RULEZ.parse_area(lyr["area"])
+			if cast_a.is_empty():
+				cast_a = RULEZ.parse_area(entry["cast"]) if entry.has("cast") else _default_cast(sid, d, layer)
+			if area_a.is_empty():
+				area_a = RULEZ.parse_area(entry["area"]) if entry.has("area") else _default_area(sid, d, layer)
 		cast_grid.set_area(cast_a)
 		effect_grid.set_area(area_a)
 		effect_grid.modulate = Color(1, 1, 1, 1)

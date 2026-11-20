@@ -717,13 +717,74 @@ func _pick_layer(layers: Dictionary, lv: int, which: String) -> Array:
 	return found
 
 
+# ---- 条件层：按单位当前状态切换技能形状（无双/斗气/资源/血量等） ----
+# 条件定义 {"type": "...", ...}，全部满足才算命中；多个条件层时取最靠前命中的
+func cond_match(u, when: Dictionary) -> bool:
+	if u == null or not (when is Dictionary) or when.is_empty():
+		return false
+	var t := String(when.get("type", ""))
+	match t:
+		"wushuang":      # 处于无双状态
+			return int(u.get("wushuang", 0)) > 0
+		"no_wushuang":
+			return int(u.get("wushuang", 0)) <= 0
+		"douqi":         # 斗气层数 >= min
+			return int(u.get("douqi", 0)) >= int(when.get("min", 1))
+		"zhanyi":        # 战意 >= min
+			return int(u.get("zhanyi", 0)) >= int(when.get("min", 1))
+		"res":           # 某资源层数 >= min
+			var rs: Dictionary = u.get("res", {}) if u.get("res") is Dictionary else {}
+			return int(rs.get(String(when.get("name", "")), 0)) >= int(when.get("min", 1))
+		"form":          # 技能已切换到某形态
+			var fs: Dictionary = u.get("form_state", {}) if u.get("form_state") is Dictionary else {}
+			return String(fs.get(String(when.get("host", "")), "")) == String(when.get("form", ""))
+		"hp_pct":        # 兵力百分比 <= max（或 >= min）
+			var mx := int(u.get("max_hp", 1))
+			var pct := (float(u.get("hp", 0)) / float(maxi(1, mx))) * 100.0
+			if when.has("max"):
+				return pct <= float(when["max"])
+			return pct >= float(when.get("min", 0))
+		"buff":          # 身上有某增益/减益
+			var want := String(when.get("name", ""))
+			for b in (u.get("buffs", []) as Array):
+				if String((b as Dictionary).get("name", "")) == want:
+					return true
+			for b in (u.get("debuffs", []) as Array):
+				if String((b as Dictionary).get("name", "")) == want:
+					return true
+			return false
+		"always":
+			return true
+	return false
+
+
+# 在条件层里找第一个命中的，返回它的 cast/area
+func _pick_cond(conds: Array, u, which: String) -> Array:
+	if not (conds is Array):
+		return []
+	for c in conds:
+		if not (c is Dictionary):
+			continue
+		var cd: Dictionary = c
+		if not cond_match(u, cd.get("when", {})):
+			continue
+		var arr = cd.get(which, [])
+		if arr is Array and not (arr as Array).is_empty():
+			return arr
+	return []
+
+
 # 技能释放形状 / 作用范围形状：
-#   武将 ed_ranges[技能].layers 的分层 > 武将 ed_ranges[技能].cast/area > 技能自带 > 自动生成
+#   条件层（状态命中）> 武将 ed_ranges 的 layers 升阶分层 > 武将 cast/area > 技能自带 > 自动生成
 func skill_cast_area(u, sid: String) -> Array:
 	var er: Dictionary = _general_ranges(String(u.get("key", "")))
 	var lv := int(u["skill_lv"].get(sid, 1))
 	if er.has(sid):
 		var e: Dictionary = er[sid]
+		# 条件层优先（无双等状态改变形状）
+		var from_cond := _pick_cond(e.get("conds", []), u, "cast")
+		if not from_cond.is_empty():
+			return RULEZ.parse_area(from_cond)
 		var from_layer := _pick_layer(e.get("layers", {}), lv, "cast")
 		if not from_layer.is_empty():
 			return RULEZ.parse_area(from_layer)
@@ -743,6 +804,10 @@ func skill_effect_area(u, sid: String) -> Array:
 	var lv := int(u["skill_lv"].get(sid, 1))
 	if er.has(sid):
 		var e: Dictionary = er[sid]
+		# 条件层优先（无双等状态改变作用范围）
+		var from_cond := _pick_cond(e.get("conds", []), u, "area")
+		if not from_cond.is_empty():
+			return RULEZ.parse_area(from_cond)
 		var from_layer := _pick_layer(e.get("layers", {}), lv, "area")
 		if not from_layer.is_empty():
 			return RULEZ.parse_area(from_layer)
