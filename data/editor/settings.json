@@ -1,5 +1,5 @@
 {
-  "max_level": 50.0,
+  "max_level": 60.0,
   "max_star": 10.0,
   "star_hp_bonus": 10.0,
   "star_stat_pct": 0.08,
@@ -95,6 +95,7 @@
   "anim_frame_w": 64.0,
   "anim_frame_h": 64.0,
   "anim_default_frames": 4.0,
+  "use_official_panel": false,
   "arm_base_move": {
     "盾": 5.0,
     "枪": 5.0,

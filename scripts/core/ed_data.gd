@@ -781,26 +781,55 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 	var st_c := clampi(e_star, 1, RULEZ.max_star())
 	var base: Dictionary = (g.get("stats", {}) as Dictionary).duplicate(true)
 	var base_fives: Dictionary = ext.get("fives", {}) if ext.get("fives") is Dictionary else {}
-	# 武将升级升五维：按等级算出当前五维
-	var cur_fives: Dictionary = RULEZ.fives_at(base_fives, lv_c)
+	var lo: Dictionary = g.get("ed_base_stats", {}) if g.get("ed_base_stats") is Dictionary else {}
+	var hi: Dictionary = g.get("ed_max_stats", {}) if g.get("ed_max_stats") is Dictionary else {}
+	var use_official := bool(RULEZ.settings.get("use_official_panel", false)) \
+		and not lo.is_empty() and not hi.is_empty()
+	var cur_fives: Dictionary = base_fives.duplicate(true)  # 官方面板模式：五维不随等级成长
+	if not use_official:
+		# 旧模式：武将升级升五维
+		cur_fives = RULEZ.fives_at(base_fives, lv_c)
 	base["five"] = cur_fives
-	# 面板属性【完全由五维换算】：兵力/物攻/物防/谋攻/谋防/幸运（暴击）
-	var derived: Dictionary = RULEZ.stat_from_fives(cur_fives)
-	for k in ["max_hp", "atk", "matk", "def", "mdef", "luck"]:
-		base[k] = int(derived[k])
-	var rates: Dictionary = ext.get("growth_rates", {})
-	var curve := String(ext.get("level_curve", "linear"))
-	# 成长曲线也和五维挂钩：高五维 → 高成长倍率
-	var gmult := RULEZ.growth_mult_by_five(float(cur_fives.get("wu", 50)))
-	var stats := RULEZ.apply_growth(base, base, lv_c, st_c, e_arm, rates, ext.get("growth_tags", []))
-	stats["atk"] = int(round(float(stats["atk"]) * gmult))
-	stats["matk"] = int(round(float(stats["matk"]) * (0.5 + 0.5 * RULEZ.growth_mult_by_five(float(cur_fives.get("zhi", 50))))))
-	if curve == "fast":
-		stats["atk"] = int(round(float(stats["atk"]) * (1.0 + 0.02 * float(lv_c - 1))))
-		stats["matk"] = int(round(float(stats["matk"]) * (1.0 + 0.02 * float(lv_c - 1))))
-	elif curve == "slow":
-		stats["atk"] = int(round(float(stats["atk"]) * (1.0 - 0.01 * float(lv_c - 1) * 0.5)))
-		stats["matk"] = int(round(float(stats["matk"]) * (1.0 - 0.01 * float(lv_c - 1) * 0.5)))
+	var stats: Dictionary
+	if use_official:
+		# 官方面板模式：1级→满级(60)线性插值，不升五维；星级/兵种修正照常叠加
+		var maxlv := maxf(1.0, float(RULEZ.max_level()))
+		var t := clampf(float(lv_c - 1) / (maxlv - 1.0), 0.0, 1.0)
+		var sm := 1.0 + float(maxi(0, st_c - 1)) * RULEZ.get_f("star_stat_pct")
+		var am: Dictionary = RULEZ.arm_mods(e_arm)
+		stats = {}
+		for k in ["hp", "atk", "matk", "def", "mdef", "luck"]:
+			var a := float(lo.get(k, 0))
+			var b := float(hi.get(k, a))
+			var v := a + (b - a) * t
+			match k:
+				"hp": v = (v + float(maxi(0, st_c - 1)) * RULEZ.get_f("star_hp_bonus")) * sm * float(am.get("hp", 1.0))
+				"atk": v = v * sm * float(am.get("atk", 1.0))
+				"def": v = v * sm * float(am.get("def", 1.0))
+				"matk": v = v * sm
+				"mdef": v = v * sm * float(am.get("mdef", 1.0))
+			stats[k] = int(round(v))
+		stats["max_hp"] = stats["hp"]
+		stats["move"] = int(base.get("move", RULEZ.get_i("default_move"))) + int(am.get("move", 0))
+		stats["range"] = int(base.get("range", RULEZ.get_i("default_range"))) + int(am.get("range", 0))
+	else:
+		# 面板属性【完全由五维换算】：兵力/物攻/物防/谋攻/谋防/幸运（暴击）
+		var derived: Dictionary = RULEZ.stat_from_fives(cur_fives)
+		for k2 in ["max_hp", "atk", "matk", "def", "mdef", "luck"]:
+			base[k2] = int(derived[k2])
+		var rates: Dictionary = ext.get("growth_rates", {})
+		var curve := String(ext.get("level_curve", "linear"))
+		# 成长曲线也和五维挂钩：高五维 → 高成长倍率
+		var gmult := RULEZ.growth_mult_by_five(float(cur_fives.get("wu", 50)))
+		stats = RULEZ.apply_growth(base, base, lv_c, st_c, e_arm, rates, ext.get("growth_tags", []))
+		stats["atk"] = int(round(float(stats["atk"]) * gmult))
+		stats["matk"] = int(round(float(stats["matk"]) * (0.5 + 0.5 * RULEZ.growth_mult_by_five(float(cur_fives.get("zhi", 50))))))
+		if curve == "fast":
+			stats["atk"] = int(round(float(stats["atk"]) * (1.0 + 0.02 * float(lv_c - 1))))
+			stats["matk"] = int(round(float(stats["matk"]) * (1.0 + 0.02 * float(lv_c - 1))))
+		elif curve == "slow":
+			stats["atk"] = int(round(float(stats["atk"]) * (1.0 - 0.01 * float(lv_c - 1) * 0.5)))
+			stats["matk"] = int(round(float(stats["matk"]) * (1.0 - 0.01 * float(lv_c - 1) * 0.5)))
 	# 扩展项：装备/天赋面板加成
 	stats["atk"] = int(round(float(stats["atk"]) * (1.0 + float(ext.get("damage_bonus", 0.0)))))
 	# ---- 副将数值加成（固定属性 base_attr/max_attr + 百分比韬略 taolue） ----
