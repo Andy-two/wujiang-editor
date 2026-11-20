@@ -1454,7 +1454,7 @@ func _open_skill_workshop() -> void:
 			var mine := (g.get("skills", []) as Array).has(sid)
 			var grp_note := ""
 			if data.is_group(sid):
-				grp_note = "〔组合：%d 项〕" % data.group_children(sid).size()
+				grp_note = "〔组合：%d 项〕" % data.selectable_children(sid).size()
 			var tag := "【本武将】" if mine else ""
 			var lb := THEME.label("%s%s　[%s] %s%s" % [tag, nm,
 				_skill_kind_name(String(d.get("kind", ""))), grp_note, own_txt], 12,
@@ -1463,7 +1463,7 @@ func _open_skill_workshop() -> void:
 			h.add_child(lb)
 			if data.is_group(sid):
 				var kids: Array = []
-				for c in data.group_children(sid):
+				for c in data.selectable_children(sid):
 					kids.append(data.skill_name(String(c)))
 				h.add_child(THEME.label(" → " + " / ".join(kids), 11, THEME.ACCENT))
 	ws_search.text_changed.connect(rebuild_list)
@@ -1709,7 +1709,7 @@ func refresh_skill_list() -> void:
 		var grp_info := ""
 		if data.is_group(sid):
 			var kids: Array = []
-			for c in data.group_children(sid):
+			for c in data.selectable_children(sid):
 				kids.append(data.skill_name(String(c)))
 			grp_info = "　⇄ 可选：" + " / ".join(kids) + "　（升阶时子技能同步升级）"
 		var merged_info := ""
@@ -1743,7 +1743,7 @@ func refresh_skill_list() -> void:
 		eb.pressed.connect(func() -> void: _show_skill_edit(sid))
 		row.add_child(eb)
 		if data.is_group(sid):
-			var gb := THEME.button("组合 %d 项…" % data.group_children(sid).size(), 12)
+			var gb := THEME.button("组合 %d 项…" % data.selectable_children(sid).size(), 12)
 			gb.tooltip_text = "增删该组合技策里的子技能"
 			gb.pressed.connect(func() -> void: _open_group_editor(sid))
 			row.add_child(gb)
@@ -1759,7 +1759,7 @@ func refresh_skill_list() -> void:
 		skill_list.add_child(panel)
 		# 组合技：在下方逐个列出子技能，可单独编辑效果与范围
 		if data.is_group(sid):
-			for kid in data.group_children(sid):
+			for kid in data.selectable_children(sid):
 				var ksid := String(kid)
 				var kd: Dictionary = data.get_skill(ksid)
 				var krow := HBoxContainer.new()
@@ -1988,6 +1988,74 @@ func _show_skill_edit(sid: String) -> void:
 	box.add_child(THEME.hint("升阶规则：写在哪一级，就从那一级起一直生效到满级。当前技能等级上限 Lv%d（可在「⑪ 全局设定」调整，四阶为预留位）。" % max_lv))
 	var range_sum := THEME.hint(_range_summary(sid))
 	box.add_child(range_sum)
+	# ---------- 射程 / 半径数值直调（真正生效的数值，不用去画格子） ----------
+	box.add_child(THEME.sep())
+	box.add_child(THEME.label("射程与范围（数值直接生效）", 15, THEME.ORANGE))
+	box.add_child(THEME.hint("这里改的是技能真实生效的射程数值，和「⑧ 技能范围」页画格子等价；" +
+		"格子画过的以格子为准（格子在「⑧」页可清除）。组合技的每个子技能都各自独立。"))
+	# 技能自带 range（无 cast 时作为释放距离）
+	var rng_sp := SpinBox.new()
+	rng_sp.min_value = 0
+	rng_sp.max_value = 12
+	rng_sp.custom_minimum_size = Vector2(100, 0)
+	rng_sp.value = int(d.get("range", 1))
+	rng_sp.tooltip_text = "释放距离（菱形半径）。仅在该技能没有自定义释放格时生效"
+	rng_sp.value_changed.connect(func(val: float) -> void:
+		d["range"] = int(val)
+		data.dirty = true
+		_mark_dirty()
+		_refresh_range_page())
+	_form_row(grid, "射程 range", rng_sp)
+	# 技能自带 radius（无 area 时作为作用半径）
+	var rad_sp := SpinBox.new()
+	rad_sp.min_value = 0
+	rad_sp.max_value = 8
+	rad_sp.custom_minimum_size = Vector2(100, 0)
+	rad_sp.value = int(d.get("radius", 0))
+	rad_sp.tooltip_text = "作用范围半径（0=只打目标格）。仅在该技能没有自定义作用格时生效"
+	rad_sp.value_changed.connect(func(val: float) -> void:
+		d["radius"] = int(val)
+		data.dirty = true
+		_mark_dirty()
+		_refresh_range_page())
+	_form_row(grid, "作用半径 radius", rad_sp)
+	# 清除本技能的自定义格子（恢复按 range/radius 走）
+	var clr_row := HBoxContainer.new()
+	clr_row.add_theme_constant_override("separation", 8)
+	box.add_child(clr_row)
+	var clr_btn := THEME.button("清除本技能自定义格子", 12)
+	clr_btn.tooltip_text = "删掉该武将为这个技能画过的释放/作用格，改回按上面的 range/radius 数值生效"
+	clr_btn.pressed.connect(func() -> void:
+		var gg: Dictionary = data.generals[cur_key]
+		var er2: Dictionary = gg.get("ed_ranges", {}) if gg.get("ed_ranges") is Dictionary else {}
+		if er2.has(sid):
+			er2.erase(sid)
+			gg["ed_ranges"] = er2
+			data.dirty = true
+			_mark_dirty()
+			_refresh_range_page()
+			_show_skill_edit(sid)
+			status("已清除「%s」的自定义格子" % data.skill_name(sid))
+		else:
+			status("「%s」本来就没有自定义格子" % data.skill_name(sid)))
+	clr_row.add_child(clr_btn)
+	# 组合技：子技能独立编辑入口
+	if data.is_group(sid):
+		var is_fs := data.is_form_switch(sid)
+		var kids_now: Array = data.selectable_children(sid)
+		var tip := "形态切换技（用完后换成另一个形态）" if is_fs else "多选一组合技"
+		var kid_lbl := THEME.label("%s · 子技能各自独立改效果与范围：%d 个" % [tip, kids_now.size()], 13, THEME.GOOD)
+		box.add_child(kid_lbl)
+		var kid_row := HBoxContainer.new()
+		kid_row.add_theme_constant_override("separation", 6)
+		box.add_child(kid_row)
+		for kid in kids_now:
+			var ks := String(kid)
+			var kb := THEME.button(data.skill_name(ks), 11)
+			kb.tooltip_text = "单独编辑子技能「%s」的效果、射程、范围" % data.skill_name(ks)
+			kb.pressed.connect(func() -> void:
+				_show_skill_edit(ks))
+			kid_row.add_child(kb)
 	# ---------- 效果块编辑器（真正改效果，而不只是改描述） ----------
 	box.add_child(THEME.sep())
 	box.add_child(THEME.label("技能效果（按顺序执行，可自由增删）", 15, THEME.GOOD))
@@ -2223,7 +2291,8 @@ func _sync_fx_to_desc(sid: String) -> void:
 		data.dirty = true
 		return
 	# 按「自Lv」分级：某级生效 = 所有 min_lv ≤ 该级 的效果
-	for L in [1, 2, 3]:
+	var _mlv3 := maxi(3, RULEZ.max_skill_lv())
+	for L in range(1, _mlv3 + 1):
 		var parts: Array = []
 		for fx in effects:
 			if int((fx as Dictionary).get("min_lv", 1)) <= L:
@@ -2561,10 +2630,11 @@ func _build_effect_editor(box: Control, sid: String, d: Dictionary) -> void:
 			row.add_child(THEME.label("自Lv", 11, THEME.MUTED))
 			var lv_opt := OptionButton.new()
 			lv_opt.custom_minimum_size = Vector2(56, 0)
-			for L in [1, 2, 3]:
+			var max_slv := maxi(3, RULEZ.max_skill_lv())
+			for L in range(1, max_slv + 1):
 				lv_opt.add_item("Lv%d" % L)
-			lv_opt.selected = clampi(int(fx.get("min_lv", 1)) - 1, 0, 2)
-			lv_opt.tooltip_text = "该效果从第几级开始生效：选 Lv2 则 1 级无效，2/3 级有效"
+			lv_opt.selected = clampi(int(fx.get("min_lv", 1)) - 1, 0, max_slv - 1)
+			lv_opt.tooltip_text = "该效果从第几级开始生效：选 Lv2 则 1 级无效，2 级及以上有效"
 			lv_opt.item_selected.connect(func(sel2: int) -> void:
 				fx["min_lv"] = sel2 + 1
 				data.dirty = true
@@ -2872,9 +2942,10 @@ func _sync_talent_desc(t: Dictionary) -> void:
 	var lvs: Array = t.get("lv", [])
 	if not (lvs is Array):
 		lvs = []
-	while lvs.size() < 3:
+	var _mlv1 := maxi(3, RULEZ.max_skill_lv())
+	while lvs.size() < _mlv1:
 		lvs.append("")
-	for L in [1, 2, 3]:
+	for L in range(1, _mlv1 + 1):
 		var parts: Array = []
 		for fx in (fx_raw as Array):
 			if not (fx is Dictionary):
@@ -2961,9 +3032,10 @@ func _refresh_talent_fx() -> void:
 			# 生效等级
 			var lo := OptionButton.new()
 			lo.custom_minimum_size = Vector2(56, 0)
-			for L in [1, 2, 3]:
+			var _mlv2 := maxi(3, RULEZ.max_skill_lv())
+			for L in range(1, _mlv2 + 1):
 				lo.add_item("Lv%d" % L)
-			lo.selected = clampi(int(fx.get("min_lv", 1)) - 1, 0, 2)
+			lo.selected = clampi(int(fx.get("min_lv", 1)) - 1, 0, _mlv2 - 1)
 			lo.item_selected.connect(func(sel2: int) -> void:
 				fx["min_lv"] = sel2 + 1
 				data.dirty = true
@@ -3138,7 +3210,7 @@ func _page_range() -> Control:
 	var layer_row := HBoxContainer.new()
 	layer_row.add_theme_constant_override("separation", 6)
 	layer_row.add_child(THEME.label("  升阶：", 13, THEME.MUTED))
-	for i in [1, 2, 3]:
+	for i in range(1, maxi(3, RULEZ.max_skill_lv()) + 1):
 		var b := THEME.button("Lv%d" % i, 13, 52)
 		b.toggle_mode = true
 		b.pressed.connect(func() -> void:
@@ -3327,7 +3399,7 @@ func _refresh_range_page() -> void:
 		var ss2 := String(sid)
 		if not data.is_group(ss2):
 			continue
-		for kid in data.group_children(ss2):
+		for kid in data.selectable_children(ss2):
 			var kk := String(kid)
 			if seen_r.has(kk):
 				continue

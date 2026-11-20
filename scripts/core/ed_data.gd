@@ -654,6 +654,21 @@ func group_children(host: String) -> Array:
 	return arr.duplicate() if arr is Array else []
 
 
+# 形态切换技：ed_group 里包含自身，表示「A 用完切换成 B、B 用完切回 A」
+func is_form_switch(sid: String) -> bool:
+	var arr := group_children(sid)
+	return arr.has(sid) and arr.size() >= 2
+
+
+# 真正可选的多选一子技能（形态切换技要排除自身那个形态）
+func selectable_children(sid: String) -> Array:
+	var out: Array = []
+	for c in group_children(sid):
+		if String(c) != sid:
+			out.append(c)
+	return out
+
+
 func is_group(sid: String) -> bool:
 	var d: Dictionary = skills.get(sid, {})
 	return String(d.get("kind", "")) == GROUP_KIND or (d.get("ed_group") is Array and not (d.get("ed_group") as Array).is_empty())

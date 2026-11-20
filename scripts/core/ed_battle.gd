@@ -666,6 +666,21 @@ func group_children(sid: String) -> Array:
 	return arr.duplicate() if arr is Array else []
 
 
+# 形态切换技：ed_group 含自身（A↔B 互换）
+func is_form_switch(sid: String) -> bool:
+	var arr := group_children(sid)
+	return arr.has(sid) and arr.size() >= 2
+
+
+# 可选子技能：形态切换技排除自身形态
+func selectable_children(sid: String) -> Array:
+	var out: Array = []
+	for c in group_children(sid):
+		if String(c) != sid:
+			out.append(c)
+	return out
+
+
 func is_group(sid: String) -> bool:
 	return not group_children(sid).is_empty()
 
@@ -920,7 +935,7 @@ func cast_skill(u, sid: String, target: Vector2i, choice: String = "") -> Dictio
 	if d.is_empty():
 		return {"ok": false, "msg": "未知技能"}
 	# ---- 二选一组：若未指定子技能，返回可选列表让 UI 弹菜单 ----
-	var children := group_children(sid)
+	var children := selectable_children(sid)
 	if not children.is_empty():
 		if choice == "":
 			var opts: Array = []
