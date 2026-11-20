@@ -1991,17 +1991,34 @@ func _show_skill_edit(sid: String) -> void:
 	# ---------- 射程 / 半径数值直调（真正生效的数值，不用去画格子） ----------
 	box.add_child(THEME.sep())
 	box.add_child(THEME.label("射程与范围（数值直接生效）", 15, THEME.ORANGE))
-	box.add_child(THEME.hint("这里改的是技能真实生效的射程数值，和「⑧ 技能范围」页画格子等价；" +
-		"格子画过的以格子为准（格子在「⑧」页可清除）。组合技的每个子技能都各自独立。"))
+	# 说明当前到底是谁在生效：武将画的格子 > 技能自带 cast/area > range/radius
+	var has_own_cast := d.has("cast") and not RULEZ.parse_area(d["cast"]).is_empty()
+	var has_own_area := d.has("area") and not RULEZ.parse_area(d["area"]).is_empty()
+	var gg_er: Dictionary = (g.get("ed_ranges", {}) as Dictionary) if g.get("ed_ranges") is Dictionary else {}
+	var has_gen_override := gg_er.has(sid)
+	if has_gen_override:
+		box.add_child(THEME.hint("⚠ 该武将已为「%s」画过自定义格子，目前以格子为准；" +
+			"改下面的数字不会立刻生效，需先点「清除本技能自定义格子」。" % data.skill_name(sid)))
+	elif has_own_cast or has_own_area:
+		box.add_child(THEME.hint("⚠ 该技能自带写死的释放/作用格（技能库里的 cast/area）。" +
+			"改下面的数字会自动清掉那份写死的形状，改由数字生效。"))
+	else:
+		box.add_child(THEME.hint("这里改的是技能真实生效的射程数值，和「⑧ 技能范围」页画格子等价；" +
+			"组合技的每个子技能都各自独立。"))
 	# 技能自带 range（无 cast 时作为释放距离）
 	var rng_sp := SpinBox.new()
 	rng_sp.min_value = 0
 	rng_sp.max_value = 12
 	rng_sp.custom_minimum_size = Vector2(100, 0)
 	rng_sp.value = int(d.get("range", 1))
-	rng_sp.tooltip_text = "释放距离（菱形半径）。仅在该技能没有自定义释放格时生效"
+	rng_sp.tooltip_text = "释放距离（菱形半径）。改了会清掉技能自带的写死释放格，让这个数字生效"
 	rng_sp.value_changed.connect(func(val: float) -> void:
 		d["range"] = int(val)
+		# 清掉技能库写死的 cast，否则改 range 无效
+		d.erase("cast")
+		d.erase("ed_layers")
+		# 清掉该武将为这个技能画的格子，否则格子优先
+		_clear_range_override(sid)
 		data.dirty = true
 		_mark_dirty()
 		_refresh_range_page())
@@ -2012,9 +2029,12 @@ func _show_skill_edit(sid: String) -> void:
 	rad_sp.max_value = 8
 	rad_sp.custom_minimum_size = Vector2(100, 0)
 	rad_sp.value = int(d.get("radius", 0))
-	rad_sp.tooltip_text = "作用范围半径（0=只打目标格）。仅在该技能没有自定义作用格时生效"
+	rad_sp.tooltip_text = "作用范围半径（0=只打目标格）。改了会清掉技能自带的写死作用格，让这个数字生效"
 	rad_sp.value_changed.connect(func(val: float) -> void:
 		d["radius"] = int(val)
+		d.erase("area")
+		d.erase("ed_layers")
+		_clear_range_override(sid)
 		data.dirty = true
 		_mark_dirty()
 		_refresh_range_page())
@@ -3515,9 +3535,19 @@ func _update_range_info() -> void:
 		data.name_of(owner), "普攻" if sid == "basic" else data.skill_name(sid),
 		int(_range_ctx["layer"]), cast_n, area_n, reach,
 		"（已自定义）" if has_override else "（默认形状）"]
+# 清掉当前武将为某技能画过的自定义格子（让 range/radius 数值生效）
+func _clear_range_override(sid: String) -> void:
+	if cur_key == "" or not data.generals.has(cur_key):
+		return
+	var gg: Dictionary = data.generals[cur_key]
+	if not (gg.get("ed_ranges") is Dictionary):
+		return
+	var er2: Dictionary = gg["ed_ranges"]
+	if er2.has(sid):
+		er2.erase(sid)
+		gg["ed_ranges"] = er2
+		data.dirty = true
 func _range_summary(sid: String) -> String:
-	if cur_key == "":
-		return ""
 	var g: Dictionary = data.generals[cur_key]
 	var er: Dictionary = g.get("ed_ranges", {})
 	if sid != "basic" and er.has(sid):
