@@ -934,7 +934,11 @@ func basic_attack(attacker, target) -> Dictionary:
 	# 独立被动技能：袭扰（主动攻击时物攻 +8%，之后获得「继续移动」）
 	var xirao_bonus := 0.0
 	var xirao_extra_move := false
-	for psid in (attacker.get("skills", []) as Array):
+	# 技能列表 + 天赋引用的被动技能，一起检查
+	var check_ids: Array = (attacker.get("skills", []) as Array).duplicate()
+	for rid in (attacker.get("ref_skill_ids", []) as Array):
+		check_ids.append(rid)
+	for psid in check_ids:
 		var pd := skill_def(String(psid))
 		if String(pd.get("name", "")).contains("袭扰"):
 			var ab := float(pd.get("ed_attack_bonus", 0.0))
@@ -2205,8 +2209,26 @@ func _rebuild_talent_passives() -> void:
 		if not (fx_raw is Array):
 			continue
 		var lv := int(u.get("talent_lv", 1))
+		# 天赋引用的被动技能 id（供 basic_attack 等读取自定义字段）
+		var ref_ids: Array = []
 		for fx in RULEZ.effects_for_level(fx_raw, lv):
 			var fd: Dictionary = fx
+			# ---- 引用被动技能：把它效果块展开成本天赋的常驻被动 ----
+			if str(fd.get("type", "")) == RULEZ.SFX_REF_SKILL:
+				var ref_sid := str(fd.get("value", ""))
+				var rd := skill_def(ref_sid)
+				if not rd.is_empty() and String(rd.get("kind", "")) == "passive":
+					ref_ids.append(ref_sid)
+					var rname := String(rd.get("name", ref_sid))
+					for rfx in RULEZ.skill_effects(rd):
+						var rcp := (rfx as Dictionary).duplicate(true)
+						rcp["_from"] = rname
+						var rl: Array = u.get("talent_passives", [])
+						rl.append(rcp)
+						u["talent_passives"] = rl
+					_emit("%s 的天赋「%s」引用被动「%s」" % [u["name"],
+						String(td.get("name", tid)), rname], "info")
+				continue
 			if str(fd.get("trigger", "")) == "":
 				continue
 			var cp := fd.duplicate(true)
@@ -2214,6 +2236,7 @@ func _rebuild_talent_passives() -> void:
 			var lst: Array = u.get("talent_passives", [])
 			lst.append(cp)
 			u["talent_passives"] = lst
+		u["ref_skill_ids"] = ref_ids
 
 # ============================================================
 # 被动技能系统

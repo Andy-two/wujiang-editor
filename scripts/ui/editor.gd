@@ -2365,12 +2365,18 @@ func _build_effect_editor(box: Control, sid: String, d: Dictionary) -> void:
 			# 类型选择
 			var type_opt := OptionButton.new()
 			type_opt.custom_minimum_size = Vector2(130, 0)
+			# 技能效果里不提供「引用被动技能」（那是天赋专用的）
+			var skill_types: Array = []
 			for k in RULEZ.SFX_TYPES:
+				if String(k) == RULEZ.SFX_REF_SKILL:
+					continue
+				skill_types.append(k)
+			for k in skill_types:
 				type_opt.add_item(String(RULEZ.SFX_LABELS.get(k, k)))
-			type_opt.selected = maxi(0, RULEZ.SFX_TYPES.find(t))
+			type_opt.selected = maxi(0, skill_types.find(t))
 			var fi := i
 			type_opt.item_selected.connect(func(sel: int) -> void:
-				var nt := String(RULEZ.SFX_TYPES[sel])
+				var nt := String(skill_types[sel])
 				(d["ed_fx_list"] as Array)[fi] = RULEZ.default_sfx(nt)
 				data.dirty = true
 				_mark_dirty()
@@ -2690,12 +2696,16 @@ func _build_effect_editor(box: Control, sid: String, d: Dictionary) -> void:
 		list_box.add_child(add_row)
 		var add_opt := OptionButton.new()
 		add_opt.custom_minimum_size = Vector2(160, 0)
+		var add_types: Array = []
 		for k in RULEZ.SFX_TYPES:
+			if String(k) == RULEZ.SFX_REF_SKILL:
+				continue
+			add_types.append(k)
 			add_opt.add_item("＋ " + String(RULEZ.SFX_LABELS.get(k, k)))
 		add_row.add_child(add_opt)
 		var add_btn := THEME.button("添加效果", 12)
 		add_btn.pressed.connect(func() -> void:
-			var nt := String(RULEZ.SFX_TYPES[add_opt.selected])
+			var nt := String(add_types[add_opt.selected])
 			if not (d.get("ed_fx_list") is Array):
 				d["ed_fx_list"] = []
 			(d["ed_fx_list"] as Array).append(RULEZ.default_sfx(nt))
@@ -3020,6 +3030,18 @@ func _sync_talent_desc(t: Dictionary) -> void:
 		t["desc"] = (base2 + "\n" + body) if base2 != "" else body
 
 
+# 技能库里所有被动技能 id（按名称排序），供天赋「引用被动技能」下拉用
+func _passive_skill_ids() -> Array:
+	var out: Array = []
+	for sid in data.skills.keys():
+		var d: Dictionary = data.skills[sid]
+		if String(d.get("kind", "")) == "passive":
+			out.append(String(sid))
+	out.sort_custom(func(a, b) -> bool:
+		return data.skill_name(a) < data.skill_name(b))
+	return out
+
+
 func _refresh_talent_fx() -> void:
 	if talent_fx_box == null:
 		return
@@ -3080,7 +3102,31 @@ func _refresh_talent_fx() -> void:
 			row.add_child(lo)
 			# 数值 / 状态名
 			var tp := String(fx.get("type", ""))
-			if tp in [RULEZ.SFX_DEBUFF, RULEZ.SFX_BUFF]:
+			if tp == RULEZ.SFX_REF_SKILL:
+				# 引用被动技能：下拉选择技能库里的被动技能
+				var po := OptionButton.new()
+				po.custom_minimum_size = Vector2(180, 0)
+				po.tooltip_text = "选一个被动技能，其所有效果块会作为本天赋的常驻被动生效；" + \
+					"技能等级跟随天赋等级"
+				var pids := _passive_skill_ids()
+				po.add_item("（请选择被动技能）")
+				for pid in pids:
+					po.add_item("%s  [%s]" % [data.skill_name(String(pid)), String(pid)])
+				var cur_sid := str(fx.get("value", ""))
+				po.selected = maxi(0, pids.find(cur_sid) + 1)
+				po.item_selected.connect(func(sel3: int) -> void:
+					if sel3 <= 0:
+						fx["value"] = ""
+						fx["skill_name"] = ""
+					else:
+						var sid3 := String(pids[sel3 - 1])
+						fx["value"] = sid3
+						fx["skill_name"] = data.skill_name(sid3)
+					data.dirty = true
+					_mark_dirty()
+					_refresh_talent_fx())
+				row.add_child(po)
+			elif tp in [RULEZ.SFX_DEBUFF, RULEZ.SFX_BUFF]:
 				var ne := LineEdit.new()
 				ne.custom_minimum_size = Vector2(100, 0)
 				ne.text = String(fx.get("value", ""))
@@ -3100,7 +3146,7 @@ func _refresh_talent_fx() -> void:
 					data.dirty = true
 					_mark_dirty())
 				row.add_child(tn)
-			elif tp != RULEZ.SFX_EXTRA_MOVE and tp != RULEZ.SFX_SELF_DISPEL:
+			elif tp != RULEZ.SFX_EXTRA_MOVE and tp != RULEZ.SFX_SELF_DISPEL and tp != RULEZ.SFX_REF_SKILL:
 				var vs := SpinBox.new()
 				vs.min_value = 0
 				vs.max_value = 999

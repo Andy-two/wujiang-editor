@@ -783,6 +783,7 @@ const SFX_LIFELINK_HIT := "lifesteal" # 攻心（造成的伤害按比例回血�
 const SFX_EXECUTE := "execute"        # 处决/斩杀（低血秒杀）
 const SFX_TRAIT := "trait"            # 按性格/兵种筛选生效
 const SFX_FIRST_STRIKE := "first_strike"  # 先攻（兼容旧数据）
+const SFX_REF_SKILL := "ref_skill"    # 天赋引用被动技能：value=技能id，注入其全部效果块
 
 const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_DISPEL, SFX_SELF_DISPEL, SFX_SELF_HEAL, SFX_CD_DOWN, SFX_EXTRA_MOVE,
@@ -792,7 +793,7 @@ const SFX_TYPES := [SFX_DAMAGE, SFX_HEAL, SFX_DEBUFF, SFX_BUFF, SFX_PUSH,
 	SFX_NO_COUNTER, SFX_PURSUIT, SFX_ZHANYI, SFX_COUNTER_UP, SFX_SWITCH,
 	SFX_RESOURCE, SFX_CONSUME, SFX_ZOC,
 	SFX_PRIORITY, SFX_BLOCK, SFX_DODGE, SFX_IMMUNITY, SFX_RESIST, SFX_COMBO,
-	SFX_SPLASH, SFX_TRANSFER, SFX_FACILITY]
+	SFX_SPLASH, SFX_TRANSFER, SFX_FACILITY, SFX_REF_SKILL]
 
 # 资源名（用于层数系统）
 const RESOURCES := ["智", "深谋", "斗气", "机巧", "备战", "武魂", "凤羽", "凤衣", "威严", "被动层数"]
@@ -825,6 +826,7 @@ const SFX_LABELS := {
 	SFX_SPLASH: "溅射",
 	SFX_TRANSFER: "转移",
 	SFX_FACILITY: "设施",
+	SFX_REF_SKILL: "引用被动技能",
 }
 
 # ============================================================
@@ -953,6 +955,8 @@ static func default_sfx(type: String) -> Dictionary:
 				"heal_pct": 0.15, "buff": "奋强", "buff_turns": 2, "extra_turn": true}
 		SFX_COMBO:
 			return {"type": type, "value": 1}
+		SFX_REF_SKILL:
+			return {"type": type, "value": "", "skill_name": "", "trigger": "on_start"}
 		_:
 			return {"type": type, "value": 0}
 
@@ -960,6 +964,11 @@ static func default_sfx(type: String) -> Dictionary:
 static func sfx_text(fx: Dictionary) -> String:
 	var t := String(fx.get("type", ""))
 	match t:
+		SFX_REF_SKILL:
+			var sn := String(fx.get("skill_name", ""))
+			if sn == "":
+				sn = String(fx.get("value", "被动技能"))
+			return "获得被动技能「%s」" % sn
 		SFX_DAMAGE:
 			var times := int(fx.get("times", 1))
 			return "造成%s%.0f%%伤害%s" % ["谋攻" if bool(fx.get("magic", false)) else "物攻",
