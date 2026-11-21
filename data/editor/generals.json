@@ -20,7 +20,8 @@
     "skills": [
       "yuanmen",
       "guiku",
-      "liehuo"
+      "liehuo",
+      "xirao"
     ],
     "arm": "骑",
     "talent_stages": [
@@ -898,7 +899,8 @@
     "skills": [
       "pianruo",
       "wuying",
-      "chenyu"
+      "chenyu",
+      "youlian"
     ],
     "arm": "盾",
     "talent_stages": [
@@ -1886,7 +1888,8 @@
     "skills": [
       "guan_qinglong",
       "qianli",
-      "guan_weizhen"
+      "guan_weizhen",
+      "guan_yanyue"
     ],
     "arm": "骑",
     "id": 2002.0,
@@ -2430,7 +2433,8 @@
     "skills": [
       "zhang_paoxiao",
       "wanren",
-      "fei_tannang"
+      "fei_tannang",
+      "9220071"
     ],
     "arm": "枪",
     "id": 2003.0,
@@ -2896,7 +2900,8 @@
       "zhao_didan",
       "zhao_touwei",
       "zhao_jiuwei",
-      "xirao"
+      "xirao",
+      "xingcai_zudi"
     ],
     "arm": "骑",
     "id": 2004.0,

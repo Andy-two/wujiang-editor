@@ -2700,12 +2700,6 @@
       "该技策对1格范围内没有其他友军的敌军伤害提升20%。"
     ],
     "from_official": true,
-    "ed_merged_passives": [
-      "袭扰"
-    ],
-    "ed_merged_from": [
-      "xirao"
-    ],
     "ed_fx_list": [
       {
         "type": "damage",
@@ -2894,12 +2888,6 @@
         "min_lv": 3.0,
         "trigger": "on_turn_end"
       }
-    ],
-    "ed_merged_passives": [
-      "犹怜"
-    ],
-    "ed_merged_from": [
-      "youlian"
     ],
     "shenbing": true,
     "shenbing_weapon": "闭月连环刃"
@@ -3122,13 +3110,7 @@
       }
     ],
     "shenbing": true,
-    "shenbing_weapon": "青龙偃月刀",
-    "ed_merged_passives": [
-      "偃月阵"
-    ],
-    "ed_merged_from": [
-      "guan_yanyue"
-    ]
+    "shenbing_weapon": "青龙偃月刀"
   },
   "zhang_paoxiao": {
     "name": "燕人咆哮",
@@ -3287,13 +3269,7 @@
       }
     ],
     "shenbing": true,
-    "shenbing_weapon": "万军裂胆矛",
-    "ed_merged_passives": [
-      "游刃八方"
-    ],
-    "ed_merged_from": [
-      "9220071"
-    ]
+    "shenbing_weapon": "万军裂胆矛"
   },
   "zhao_didan": {
     "name": "敌胆寒",
@@ -3338,13 +3314,7 @@
       "zhao_zhanqianjun"
     ],
     "shenbing": true,
-    "shenbing_weapon": "龙胆亮银枪",
-    "ed_merged_passives": [
-      "阻敌"
-    ],
-    "ed_merged_from": [
-      "xingcai_zudi"
-    ]
+    "shenbing_weapon": "龙胆亮银枪"
   },
   "zhao_touwei": {
     "name": "透重围",
@@ -22747,5 +22717,114 @@
         "min_lv": 1.0
       }
     ]
+  },
+  "guan_yanyue": {
+    "name": "偃月阵",
+    "kind": "passive",
+    "cd": 0.0,
+    "desc": "自身3格范围内的我方部队受到谋略伤害降低10%。",
+    "icon": "res://assets/icons/skills/sk_1012501.png",
+    "lv": [
+      "自身3格范围内的我方部队受到谋略伤害降低10%。",
+      "自身3格范围内的我方部队受到谋略伤害降低10%。",
+      "自身3格范围内的我方部队受到谋略伤害降低10%。"
+    ],
+    "from_official": true,
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "严阵·壹",
+        "turns": 99.0,
+        "min_lv": 1.0
+      }
+    ]
+  },
+  "9220071": {
+    "name": "游刃八方",
+    "kind": "passive",
+    "cd": 0.0,
+    "desc": "自身2格范围内每有一个敌军物攻物防提升5%（最多10%）。",
+    "icon": "res://assets/icons/skills/sk_1001502.png",
+    "cast": [
+      [
+        0.0,
+        -1.0
+      ],
+      [
+        -1.0,
+        0.0
+      ],
+      [
+        0.0,
+        0.0
+      ],
+      [
+        1.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0
+      ]
+    ],
+    "area": [
+      [
+        0.0,
+        0.0
+      ]
+    ],
+    "lv": [
+      "自身2格范围内每有一个敌军物攻物防提升5%（最多10%）。",
+      "自身2格范围内每有一个敌军物攻物防提升5%（最多10%）。",
+      "自身2格范围内每有一个敌军物攻物防提升5%（最多10%）。"
+    ],
+    "from_official": true,
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "坚壁",
+        "turns": 99.0,
+        "min_lv": 1.0
+      }
+    ]
+  },
+  "xingcai_zudi": {
+    "name": "阻敌",
+    "kind": "passive",
+    "cd": 0.0,
+    "desc": "自身1格「阻挡领域」；物防提升10%。",
+    "icon": "res://assets/icons/skills/sk_1008501.png",
+    "lv": [
+      "自身1格「阻挡领域」；物防提升10%。",
+      "自身1格「阻挡领域」；物防提升10%。注释：「阻挡领域」：敌军移动至阻挡领域内会消耗全部移动力",
+      "自身1格「阻挡领域」；物防提升10%。注释：「阻挡领域」：敌军移动至阻挡领域内会消耗全部移动力"
+    ],
+    "from_official": true,
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "坚壁",
+        "turns": 99.0,
+        "min_lv": 1.0
+      },
+      {
+        "type": "zoc",
+        "value": 1.0,
+        "min_lv": 1.0
+      }
+    ]
+  },
+  "youlian": {
+    "name": "犹怜",
+    "kind": "passive",
+    "cd": 0.0,
+    "icon": "https://s2-12602.game.kspkg.com/bs2/image-easydata/marketing_admin11a62d2977604f09be9c28fbb92fc5d4UI/UIRes/Texture/IconSkill/sk_10010.png",
+    "desc": "兵力等于100%时，受到伤害降低25%。",
+    "lv": [
+      "兵力等于100%时，受到伤害降低25%。",
+      "兵力等于100%时，受到伤害降低25%。",
+      "兵力等于100%时，受到伤害降低25%。"
+    ],
+    "from_official": true
   }
 }

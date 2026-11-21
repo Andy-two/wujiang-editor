@@ -90,9 +90,14 @@ func _init() -> void:
 
 	print("===== 6. 吕布的鬼哭神嚎仍保留融合袭扰 =====")
 	var gk: Dictionary = data.get_skill("guiku")
-	_check("guiku 仍含 ed_merged_passives 袭扰",
-		(gk.get("ed_merged_passives", []) as Array).has("袭扰"),
+	# 袭扰已还原为独立被动技能，鬼哭神嚎不再保留融合标记
+	_check("guiku 已移除融合标记",
+		not gk.has("ed_merged_passives") and not gk.has("ed_merged_from"),
 		str(gk.get("ed_merged_passives", [])))
+	var lb: Dictionary = data.generals["lu_bu"]
+	_check("吕布已独立拥有袭扰技能",
+		(lb.get("skills", []) as Array).has("xirao"),
+		str(lb.get("skills", [])))
 
 	print("===== 结果：%d 通过，%d 失败 =====" % [passed, failed])
 	quit(0)
