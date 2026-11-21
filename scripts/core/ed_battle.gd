@@ -246,10 +246,15 @@ func _update_cond_mult(u) -> void:
 			"always":
 				ok = true
 		if ok:
+			# 按数量叠加型（游刃八方：每有1敌军 +per%，封顶 cap）
+			var real_pct := pct
+			if str(cd.get("cond", "")) == "foes_near" and float(cd.get("per", 0.0)) > 0.0:
+				real_pct = clampf(float(cd.get("per")) * float(foes_near), 0.0,
+					float(cd.get("cap", 1.0)))
 			if stat == "general_add" or stat == "general_cut":
-				mult[stat] = float(mult.get(stat, 0.0)) + pct
+				mult[stat] = float(mult.get(stat, 0.0)) + real_pct
 			else:
-				mult[stat] = float(mult.get(stat, 1.0)) + pct
+				mult[stat] = float(mult.get(stat, 1.0)) + real_pct
 	u["cond_mult"] = mult
 	# 通用增减伤并入 ext（damage_direct 已读 ext.damage_bonus/damage_cut）
 	if float(mult.get("general_add", 0.0)) > 0.0:
@@ -263,6 +268,57 @@ func _refresh_all_cond_mult() -> void:
 	for u in units:
 		if u["alive"]:
 			_update_cond_mult(u)
+	_refresh_passive_auras()
+
+
+# 被动技能光环 / 条件减伤：每回合刷新，先清零再重算，避免叠加残留
+#   偃月阵：3格内友军受谋略伤害降低（magic_cut）
+#   犹怜：自身满血时受伤害降低（damage_cut）
+func _refresh_passive_auras() -> void:
+	# 先清掉上一轮光环值
+	for u in units:
+		if not (u.get("ext") is Dictionary):
+			continue
+		var e: Dictionary = u["ext"]
+		e["aura_magic_cut"] = 0.0
+		e["full_hp_cut"] = 0.0
+	# 重算
+	for src in units:
+		if not src["alive"] or not (src.get("ext") is Dictionary):
+			continue
+		var impls: Array = (src["ext"] as Dictionary).get("passive_impls", [])
+		if impls.is_empty():
+			continue
+		for imv in impls:
+			var im: Dictionary = imv
+			# 偃月阵光环
+			if im.has("aura_magic_cut"):
+				var amc: Dictionary = im["aura_magic_cut"]
+				var radius := int(amc.get("radius", 3))
+				var pct := float(amc.get("pct", 0.1))
+				for ally in units:
+					if not ally["alive"] or int(ally["side"]) != int(src["side"]):
+						continue
+					var d := absi(int(ally["pos"].x) - int(src["pos"].x)) + \
+						absi(int(ally["pos"].y) - int(src["pos"].y))
+					if d <= radius and (ally.get("ext") is Dictionary):
+						var ae: Dictionary = ally["ext"]
+						ae["aura_magic_cut"] = maxf(float(ae.get("aura_magic_cut", 0.0)), pct)
+			# 犹怜：满血减伤
+			if im.has("full_hp_cut"):
+				var fhc := float(im["full_hp_cut"])
+				if src["hp"] >= src["max_hp"] and (src.get("ext") is Dictionary):
+					var se: Dictionary = src["ext"]
+					se["full_hp_cut"] = maxf(float(se.get("full_hp_cut", 0.0)), fhc)
+	# 把光环值并入实际生效的减伤键
+	for u in units:
+		if not (u.get("ext") is Dictionary):
+			continue
+		var e2: Dictionary = u["ext"]
+		var mcut := float(e2.get("aura_magic_cut", 0.0))
+		if mcut > 0.0:
+			e2["magic_cut"] = mcut
+		# full_hp_cut 保持独立字段，由伤害计算直接读取，避免每回合累加滚雪球
 
 
 func alive(side: int) -> Array:
@@ -2311,6 +2367,9 @@ func _apply_passive_startup() -> void:
 					n += 1
 				RULEZ.SFX_RESIST:
 					grant_resist(u, str(fd.get("value", "眩晕")), int(fd.get("turns", 2)))
+					n += 1
+				RULEZ.SFX_ZOC:
+					u["zoc"] = maxi(int(u.get("zoc", 0)), int(fd.get("value", 1)))
 					n += 1
 		if n > 0:
 			_emit("%s 的被动生效：%d 项（开局型）" % [u["name"], n], "info")

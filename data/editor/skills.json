@@ -22737,7 +22737,13 @@
         "turns": 99.0,
         "min_lv": 1.0
       }
-    ]
+    ],
+    "ed_impl": {
+      "aura_magic_cut": {
+        "radius": 3.0,
+        "pct": 0.1
+      }
+    }
   },
   "9220071": {
     "name": "游刃八方",
@@ -22786,7 +22792,18 @@
         "turns": 99.0,
         "min_lv": 1.0
       }
-    ]
+    ],
+    "ed_impl": {
+      "foes_stat": {
+        "radius": 2.0,
+        "per": 0.05,
+        "cap": 0.1,
+        "stats": [
+          "atk",
+          "def"
+        ]
+      }
+    }
   },
   "xingcai_zudi": {
     "name": "阻敌",
@@ -22812,7 +22829,13 @@
         "value": 1.0,
         "min_lv": 1.0
       }
-    ]
+    ],
+    "ed_impl": {
+      "zoc": 1.0,
+      "stat_always": {
+        "def": 0.1
+      }
+    }
   },
   "youlian": {
     "name": "犹怜",
@@ -22825,6 +22848,9 @@
       "兵力等于100%时，受到伤害降低25%。",
       "兵力等于100%时，受到伤害降低25%。"
     ],
-    "from_official": true
+    "from_official": true,
+    "ed_impl": {
+      "full_hp_cut": 0.25
+    }
   }
 }

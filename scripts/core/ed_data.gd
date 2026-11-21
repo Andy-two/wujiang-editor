@@ -929,6 +929,46 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 				var ev := float(tmech.get(ek, 0.0))
 				if ev != 0.0:
 					ext[String(ext_map[ek])] = float(ext.get(String(ext_map[ek]), 0.0)) + ev
+	# ---- 被动技能机制（ed_impl）：武将携带的被动技能里声明的机制，转成单位标记 ----
+	#   支持：foes_stat（范围内敌军数加成）/ stat_always（常驻属性）/ zoc /
+	#         aura_*（光环，战斗内刷新）/ full_hp_cut（满血减伤）
+	var passive_impls: Array = []
+	var cond_from_passive: Array = []
+	for psid in (g.get("skills", []) as Array):
+		var pd: Variant = skills.get(String(psid), {})
+		if not (pd is Dictionary):
+			continue
+		if String((pd as Dictionary).get("kind", "")) != "passive":
+			continue
+		var impl = (pd as Dictionary).get("ed_impl", {})
+		if not (impl is Dictionary) or (impl as Dictionary).is_empty():
+			continue
+		passive_impls.append((impl as Dictionary).duplicate(true))
+		var im: Dictionary = impl
+		# 常驻属性加成 → 并入 cond_attrs（always 条件）
+		var sa = im.get("stat_always", {})
+		if sa is Dictionary:
+			for ssk in (sa as Dictionary).keys():
+				cond_from_passive.append({"cond": "always", "stat": String(ssk),
+					"pct": float((sa as Dictionary)[ssk])})
+		# 范围内敌军数加成（游刃八方：每有1敌军 +5%，上限10%）
+		var fs = im.get("foes_stat", {})
+		if fs is Dictionary and not (fs as Dictionary).is_empty():
+			var radius := int((fs as Dictionary).get("radius", 2))
+			var per := float((fs as Dictionary).get("per", 0.05))
+			var cap := float((fs as Dictionary).get("cap", 0.10))
+			for fsk in ((fs as Dictionary).get("stats", ["atk", "def"]) as Array):
+				cond_from_passive.append({"cond": "foes_near", "radius": radius,
+					"stat": String(fsk), "pct": per, "cap": cap, "per": per})
+		# zoc 阻挡领域
+		if int(im.get("zoc", 0)) > 0:
+			ext["zoc_base"] = maxi(int(ext.get("zoc_base", 0)), int(im["zoc"]))
+	if not passive_impls.is_empty():
+		ext["passive_impls"] = passive_impls
+	if not cond_from_passive.is_empty():
+		var ca2: Array = ext.get("cond_attrs", []) if ext.get("cond_attrs") is Array else []
+		ca2.append_array(cond_from_passive)
+		ext["cond_attrs"] = ca2
 	# 升星额外属性加成（如 8 星全属性 +8%）
 	var sb_mult := star_bonus_mult(g)
 	if sb_mult != 1.0:

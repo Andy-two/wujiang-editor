@@ -1444,6 +1444,9 @@ static func damage_direct(attacker: Dictionary, target: Dictionary, opt: Diction
 	mult_area *= 1.0 + float(opt.get("multi_hit_add", 0.0))
 	mult_area *= 1.0 + float(opt.get("elem_add", 0.0))
 	mult_area *= 1.0 + float(opt.get("general_add", 0.0)) - float(opt.get("general_cut", 0.0))
+	# 谋略伤害减免（偃月阵光环等）：仅魔法伤害吃这一段
+	if ia == 1:
+		mult_area *= 1.0 - clampf(float(opt.get("magic_cut", 0.0)), 0.0, 0.9)
 	mult_area *= 1.0 + float(opt.get("final_add", 0.0))
 	# 按伤害来源类型的增伤（副将韬略：技能伤害 / 普攻伤害 / 反击伤害 / 合击伤害 / 克制伤害）
 	mult_area *= 1.0 + float(opt.get("kind_add", 0.0))
@@ -1544,7 +1547,8 @@ static func roll_damage(attacker: Dictionary, target: Dictionary, mult: float,
 		"multi_hit_add": _mul(ext_a, "multi_hit_add"),
 		"elem_add": float(opt.get("elem_add", 0.0)) + _mul(ext_a, "elem_add"),
 		"general_add": _mul(ext_a, "damage_bonus"),
-		"general_cut": _mul(ext_t, "damage_cut"),
+		"general_cut": _mul(ext_t, "damage_cut") + _mul(ext_t, "full_hp_cut"),
+		"magic_cut": _mul(ext_t, "magic_cut"),
 		"final_add": _mul(ext_a, "final_add"),
 		"kind_add": _kind_add(ext_a, kind, "damage_bonus_kind"),
 		"kind_cut": _kind_cut(ext_t, kind),
@@ -1584,7 +1588,8 @@ static func expected_damage(attacker: Dictionary, target: Dictionary, mult: floa
 		"multi_hit_add": _mul(ext_a, "multi_hit_add"),
 		"elem_add": _mul(ext_a, "elem_add"),
 		"general_add": _mul(ext_a, "damage_bonus"),
-		"general_cut": _mul(ext_t, "damage_cut"),
+		"general_cut": _mul(ext_t, "damage_cut") + _mul(ext_t, "full_hp_cut"),
+		"magic_cut": _mul(ext_t, "magic_cut"),
 		"kind_add": _kind_add(ext_a, kind, ""),
 		"kind_cut": _kind_cut(ext_t, kind),
 		"final_add": _mul(ext_a, "final_add"),
