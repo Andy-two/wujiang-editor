@@ -463,55 +463,6 @@
       }
     ]
   },
-  "9220071": {
-    "name": "游刃八方",
-    "kind": "passive",
-    "cd": 0.0,
-    "desc": "自身2格范围内每有一个敌军物攻物防提升5%（最多10%）。",
-    "icon": "res://assets/icons/skills/sk_1001502.png",
-    "cast": [
-      [
-        0.0,
-        -1.0
-      ],
-      [
-        -1.0,
-        0.0
-      ],
-      [
-        0.0,
-        0.0
-      ],
-      [
-        1.0,
-        0.0
-      ],
-      [
-        0.0,
-        1.0
-      ]
-    ],
-    "area": [
-      [
-        0.0,
-        0.0
-      ]
-    ],
-    "lv": [
-      "自身2格范围内每有一个敌军物攻物防提升5%（最多10%）。",
-      "自身2格范围内每有一个敌军物攻物防提升5%（最多10%）。",
-      "自身2格范围内每有一个敌军物攻物防提升5%（最多10%）。"
-    ],
-    "from_official": true,
-    "ed_fx_list": [
-      {
-        "type": "buff",
-        "value": "坚壁",
-        "turns": 99.0,
-        "min_lv": 1.0
-      }
-    ]
-  },
   "9220201": {
     "name": "据险",
     "kind": "passive",
@@ -3151,7 +3102,7 @@
     "name": "千里单骑",
     "kind": "passive",
     "cd": 0.0,
-    "desc": "自身1圈范围内没有其他我方部队时，物攻物防提升10%；「武魂」达到2层时攻防额外提升5%。",
+    "desc": "自身1圈范围内没有其他我方部队时，物攻物防提升10%；「武魂」达到2层时攻防额外提升5%。\n[合并自「偃月阵」] 自身3格范围内的我方部队受到谋略伤害降低10%。",
     "icon": "res://assets/icons/skills/sk_2002501.png",
     "lv": [
       "自身1圈范围内没有其他我方部队时，物攻物防提升10%；「武魂」达到2层时攻防额外提升5%。",
@@ -3171,7 +3122,13 @@
       }
     ],
     "shenbing": true,
-    "shenbing_weapon": "青龙偃月刀"
+    "shenbing_weapon": "青龙偃月刀",
+    "ed_merged_passives": [
+      "偃月阵"
+    ],
+    "ed_merged_from": [
+      "guan_yanyue"
+    ]
   },
   "zhang_paoxiao": {
     "name": "燕人咆哮",
@@ -3296,7 +3253,7 @@
     "name": "万人敌",
     "kind": "passive",
     "cd": 0.0,
-    "desc": "自身1圈范围内没有其他我方部队时物防提升15%；敌军在反击范围内结束行动时，对该敌军及路径上的敌军造成物攻50%伤害的「追击」。",
+    "desc": "自身1圈范围内没有其他我方部队时物防提升15%；敌军在反击范围内结束行动时，对该敌军及路径上的敌军造成物攻50%伤害的「追击」。\n[合并自「游刃八方」] 自身2格范围内每有一个敌军物攻物防提升5%（最多10%）。",
     "icon": "res://assets/icons/skills/sk_2003501.png",
     "lv": [
       "自身1圈范围内没有其他我方部队时物防提升15%；敌军在反击范围内结束行动时，对该敌军及路径上的敌军造成物攻50%伤害的「追击」。",
@@ -3330,13 +3287,19 @@
       }
     ],
     "shenbing": true,
-    "shenbing_weapon": "万军裂胆矛"
+    "shenbing_weapon": "万军裂胆矛",
+    "ed_merged_passives": [
+      "游刃八方"
+    ],
+    "ed_merged_from": [
+      "9220071"
+    ]
   },
   "zhao_didan": {
     "name": "敌胆寒",
     "kind": "single",
     "cd": 4.0,
-    "desc": "对敌军造成物攻140%的伤害并突进至敌军身后，使用后切换为「斩千军」。",
+    "desc": "对敌军造成物攻140%的伤害并突进至敌军身后，使用后切换为「斩千军」。\n[合并自「阻敌」] 自身1格「阻挡领域」；物防提升10%。",
     "icon": "res://assets/icons/skills/sk_2004503.png",
     "lv": [
       "对敌军造成物攻140%的伤害并突进至敌军身后，使用后切换为「斩千军」。",
@@ -3375,7 +3338,13 @@
       "zhao_zhanqianjun"
     ],
     "shenbing": true,
-    "shenbing_weapon": "龙胆亮银枪"
+    "shenbing_weapon": "龙胆亮银枪",
+    "ed_merged_passives": [
+      "阻敌"
+    ],
+    "ed_merged_from": [
+      "xingcai_zudi"
+    ]
   },
   "zhao_touwei": {
     "name": "透重围",
@@ -8146,32 +8115,6 @@
     "range": 3.0,
     "radius": 0.0
   },
-  "xingcai_zudi": {
-    "name": "阻敌",
-    "kind": "passive",
-    "cd": 0.0,
-    "desc": "自身1格「阻挡领域」；物防提升10%。",
-    "icon": "res://assets/icons/skills/sk_1008501.png",
-    "lv": [
-      "自身1格「阻挡领域」；物防提升10%。",
-      "自身1格「阻挡领域」；物防提升10%。注释：「阻挡领域」：敌军移动至阻挡领域内会消耗全部移动力",
-      "自身1格「阻挡领域」；物防提升10%。注释：「阻挡领域」：敌军移动至阻挡领域内会消耗全部移动力"
-    ],
-    "from_official": true,
-    "ed_fx_list": [
-      {
-        "type": "buff",
-        "value": "坚壁",
-        "turns": 99.0,
-        "min_lv": 1.0
-      },
-      {
-        "type": "zoc",
-        "value": 1.0,
-        "min_lv": 1.0
-      }
-    ]
-  },
   "cao_weiwu": {
     "name": "魏武挥鞭",
     "kind": "support",
@@ -9859,27 +9802,6 @@
     "radius": 0.0,
     "shenbing": true,
     "shenbing_weapon": "青龙偃月刀"
-  },
-  "guan_yanyue": {
-    "name": "偃月阵",
-    "kind": "passive",
-    "cd": 0.0,
-    "desc": "自身3格范围内的我方部队受到谋略伤害降低10%。",
-    "icon": "res://assets/icons/skills/sk_1012501.png",
-    "lv": [
-      "自身3格范围内的我方部队受到谋略伤害降低10%。",
-      "自身3格范围内的我方部队受到谋略伤害降低10%。",
-      "自身3格范围内的我方部队受到谋略伤害降低10%。"
-    ],
-    "from_official": true,
-    "ed_fx_list": [
-      {
-        "type": "buff",
-        "value": "严阵·壹",
-        "turns": 99.0,
-        "min_lv": 1.0
-      }
-    ]
   },
   "youren_bafang": {
     "name": "游刃八方",
@@ -22801,6 +22723,28 @@
         "turns": 1.0,
         "stacks": 1.0,
         "min_lv": 3.0
+      }
+    ]
+  },
+  "xirao": {
+    "name": "袭扰",
+    "kind": "passive",
+    "cd": 0.0,
+    "desc": "主动攻击时物攻提升8%，之后获得「继续移动」。",
+    "lv": [
+      "主动攻击时物攻提升8%，之后获得「继续移动」。"
+    ],
+    "from_official": true,
+    "icon": "res://assets/icons/skills/sk_4002401.png",
+    "ed_attack_bonus": 0.08,
+    "ed_extra_move_on_attack": true,
+    "ed_fx_list": [
+      {
+        "type": "buff",
+        "value": "袭扰",
+        "turns": 1.0,
+        "trigger": "on_attack",
+        "min_lv": 1.0
       }
     ]
   }

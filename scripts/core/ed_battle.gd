@@ -897,6 +897,11 @@ func try_move(u, dest: Vector2i) -> Dictionary:
 	if is_in_enemy_zoc(dest, int(u["side"])):
 		_emit("  → 进入敌方「阻挡领域」，移动力耗尽", "info")
 	passive_on("on_move", u, {"tiles": int(u["moved_tiles"])})
+	# 袭扰：完成「继续移动」后，本次行动结束
+	if bool(u.get("extra_move_only", false)):
+		u["extra_move_only"] = false
+		u["done"] = true
+		_emit("  → %s「袭扰」继续移动结束" % [u["name"]], "info")
 	return {"ok": true}
 
 
@@ -905,6 +910,9 @@ func basic_attack(attacker, target) -> Dictionary:
 		return {"ok": false}
 	if bool(attacker["done"]):
 		return {"ok": false, "msg": "已行动"}
+	# 袭扰给的「继续移动」：只能移动，不能再攻击/放技
+	if bool(attacker.get("extra_move_only", false)):
+		return {"ok": false, "msg": "「袭扰」触发的再动只能移动"}
 	if not attack_area(attacker).has(target["pos"] - attacker["pos"]):
 		return {"ok": false, "msg": "超出普攻射程"}
 	attacker["_turn_attacked"] = true
@@ -923,6 +931,19 @@ func basic_attack(attacker, target) -> Dictionary:
 			passive_bonus *= 1.08
 		if pn.contains("奋勇"):
 			passive_bonus *= 1.20
+	# 独立被动技能：袭扰（主动攻击时物攻 +8%，之后获得「继续移动」）
+	var xirao_bonus := 0.0
+	var xirao_extra_move := false
+	for psid in (attacker.get("skills", []) as Array):
+		var pd := skill_def(String(psid))
+		if String(pd.get("name", "")).contains("袭扰"):
+			var ab := float(pd.get("ed_attack_bonus", 0.0))
+			if ab > 0.0:
+				xirao_bonus = maxf(xirao_bonus, ab)
+			if bool(pd.get("ed_extra_move_on_attack", false)):
+				xirao_extra_move = true
+	if xirao_bonus > 0.0:
+		passive_bonus *= (1.0 + xirao_bonus)
 	# 羁绊：主动攻击前（范围伤害增伤在 roll_damage 前通过 ext 处理）
 	trigger_bonds("on_attack_before", attacker, [target], {"move_tiles": int(attacker.get("moved_tiles", 0))})
 	passive_bonus *= bond_damage_mult(attacker, "normal", false)
@@ -942,6 +963,11 @@ func basic_attack(attacker, target) -> Dictionary:
 		passive_on("on_crit", attacker, {"target": target})
 		trigger_bonds("on_crit", attacker, [target])
 	passive_on("on_hit", attacker, {"target": target})
+	# 袭扰：主动攻击后获得「继续移动」（可再移动一次，但本回合不能再攻击）
+	if xirao_extra_move and bool(attacker.get("alive", false)):
+		attacker["done"] = false
+		attacker["extra_move_only"] = true
+		_emit("  → %s 触发「袭扰」，可继续移动" % attacker["name"], "info")
 	# 羁绊：主动攻击后（徐庶司马徽：固伤+驱散增益）
 	trigger_bonds("on_attack_after", attacker, [target])
 	passive_on("on_hurt", target, {"source": attacker})
@@ -996,6 +1022,8 @@ func cast_skill(u, sid: String, target: Vector2i, choice: String = "") -> Dictio
 		return {"ok": false}
 	if bool(u["done"]):
 		return {"ok": false, "msg": "已行动"}
+	if bool(u.get("extra_move_only", false)):
+		return {"ok": false, "msg": "「袭扰」触发的再动只能移动"}
 	var d := skill_def(sid)
 	if d.is_empty():
 		return {"ok": false, "msg": "未知技能"}
@@ -2103,6 +2131,7 @@ func start_side(side: int) -> void:
 			u["can_combo"] = false
 			u["resist_once"] = {}
 			u["_first_hit_used"] = false
+			u["extra_move_only"] = false
 			for sid in (u["cd"] as Dictionary).keys():
 				u["cd"][sid] = maxi(0, int(u["cd"][sid]) - 1)
 			_tick_statuses(u)

@@ -1886,10 +1886,7 @@
     "skills": [
       "guan_qinglong",
       "qianli",
-      "guan_tuodao",
-      "guan_weizhen",
-      "guan_zhenfen",
-      "guan_yanyue"
+      "guan_weizhen"
     ],
     "arm": "骑",
     "id": 2002.0,
@@ -1963,8 +1960,7 @@
       "qianli": 1.0,
       "guan_tuodao": 1.0,
       "guan_weizhen": 1.0,
-      "guan_zhenfen": 1.0,
-      "guan_yanyue": 1.0
+      "guan_zhenfen": 1.0
     },
     "ed_art": {
       "portrait_path": "res://assets/guan_yu.png",
@@ -2324,7 +2320,70 @@
       "fps": 8.0
     },
     "ed_ranges": {
-      "basic": {}
+      "basic": {},
+      "guan_qinglong": {
+        "layers": {
+          "lv_1": {
+            "cast": [
+              [
+                0.0,
+                -1.0
+              ],
+              [
+                -1.0,
+                0.0
+              ],
+              [
+                0.0,
+                0.0
+              ],
+              [
+                1.0,
+                0.0
+              ],
+              [
+                0.0,
+                1.0
+              ]
+            ],
+            "area": [
+              [
+                0.0,
+                0.0
+              ]
+            ]
+          }
+        },
+        "cast": [
+          [
+            0.0,
+            -1.0
+          ],
+          [
+            -1.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ],
+          [
+            1.0,
+            0.0
+          ],
+          [
+            0.0,
+            1.0
+          ]
+        ],
+        "area": [
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "cd": 3.0
+      }
     },
     "ed_note": "",
     "ed_tags": [],
@@ -2371,10 +2430,7 @@
     "skills": [
       "zhang_paoxiao",
       "wanren",
-      "hengsao",
-      "fei_tannang",
-      "9220071",
-      "off_突刺"
+      "fei_tannang"
     ],
     "arm": "枪",
     "id": 2003.0,
@@ -2448,7 +2504,6 @@
       "wanren": 1.0,
       "hengsao": 1.0,
       "fei_tannang": 1.0,
-      "9220071": 1.0,
       "off_突刺": 1.0
     },
     "ed_art": {
@@ -2840,10 +2895,8 @@
     "skills": [
       "zhao_didan",
       "zhao_touwei",
-      "guiku",
       "zhao_jiuwei",
-      "zhao_beishui",
-      "xingcai_zudi"
+      "xirao"
     ],
     "arm": "骑",
     "id": 2004.0,
@@ -2916,8 +2969,7 @@
       "zhao_didan": 1.0,
       "zhao_touwei": 1.0,
       "zhao_jiuwei": 1.0,
-      "zhao_beishui": 1.0,
-      "xingcai_zudi": 1.0
+      "zhao_beishui": 1.0
     },
     "ed_art": {
       "portrait_path": "res://assets/zhao_yun.png",
@@ -6139,7 +6191,7 @@
       "wei_juwang",
       "wei_jianbi",
       "wei_ziwu",
-      "9220071",
+      "wanren",
       "youren_bafang"
     ],
     "arm": "盾",
@@ -6214,7 +6266,6 @@
       "wei_juwang": 1.0,
       "wei_jianbi": 1.0,
       "wei_ziwu": 1.0,
-      "9220071": 1.0,
       "youren_bafang": 1.0
     },
     "ed_art": {
@@ -8014,7 +8065,7 @@
       "xingcai_zhendun",
       "xingcai_dunji",
       "xingcai_feizhi",
-      "xingcai_zudi",
+      "zhao_didan",
       "xingcai_beitou"
     ],
     "arm": "盾",
@@ -8089,7 +8140,6 @@
       "xingcai_zhendun": 1.0,
       "xingcai_dunji": 1.0,
       "xingcai_feizhi": 1.0,
-      "xingcai_zudi": 1.0,
       "xingcai_beitou": 1.0
     },
     "ed_art": {
@@ -10357,7 +10407,7 @@
     "talent_lv": 1.0,
     "skills": [
       "xu_linwei",
-      "xingcai_zudi",
+      "zhao_didan",
       "xu_luoyi",
       "xu_taishan",
       "hengsao",
@@ -10431,7 +10481,6 @@
     "ed_talent_lv": 1.0,
     "ed_skill_lv": {
       "xu_linwei": 1.0,
-      "xingcai_zudi": 1.0,
       "xu_luoyi": 1.0,
       "xu_taishan": 1.0,
       "hengsao": 1.0,
@@ -14581,7 +14630,7 @@
       "10185111",
       "9110221",
       "10184121",
-      "9220071",
+      "wanren",
       "xhd_tujin"
     ],
     "arm": "骑",
@@ -14655,7 +14704,6 @@
       "10185111": 1.0,
       "9110221": 1.0,
       "10184121": 1.0,
-      "9220071": 1.0,
       "xhd_tujin": 1.0
     },
     "ed_art": {
@@ -20258,7 +20306,7 @@
       "zhang_xiu_s2",
       "off_突刺",
       "off_百鸟朝凤",
-      "9220071",
+      "wanren",
       "zhang_xiu_s1"
     ],
     "arm": "枪",
@@ -20332,7 +20380,6 @@
       "zhang_xiu_s2": 1.0,
       "off_突刺": 1.0,
       "off_百鸟朝凤": 1.0,
-      "9220071": 1.0,
       "zhang_xiu_s1": 1.0
     },
     "ed_art": {
@@ -21671,7 +21718,7 @@
       "dian_wei_s1",
       "zhao_beishui",
       "off_古之恶来",
-      "xingcai_zudi",
+      "zhao_didan",
       "dian_wei_s2"
     ],
     "arm": "盾",
@@ -21745,7 +21792,6 @@
       "dian_wei_s1": 1.0,
       "zhao_beishui": 1.0,
       "off_古之恶来": 1.0,
-      "xingcai_zudi": 1.0,
       "dian_wei_s2": 1.0
     },
     "ed_art": {
@@ -24968,7 +25014,7 @@
       "chen_dao_s1",
       "off_裂伤",
       "off_征西御东",
-      "xingcai_zudi",
+      "zhao_didan",
       "9110221"
     ],
     "arm": "枪",
@@ -25042,7 +25088,6 @@
       "chen_dao_s1": 1.0,
       "off_裂伤": 1.0,
       "off_征西御东": 1.0,
-      "xingcai_zudi": 1.0,
       "9110221": 1.0
     },
     "ed_art": {
@@ -26378,7 +26423,7 @@
     "talent_desc": "受到伤害降低5%；行动结束时为自身回复兵力上限15%的兵力。",
     "skills": [
       "cao_hong_s3",
-      "xingcai_zudi",
+      "zhao_didan",
       "cao_hong_s1",
       "off_献马救主",
       "dian_wei_s2",
@@ -26452,7 +26497,6 @@
     "ed_talent_lv": 1.0,
     "ed_skill_lv": {
       "cao_hong_s3": 1.0,
-      "xingcai_zudi": 1.0,
       "cao_hong_s1": 1.0,
       "off_献马救主": 1.0,
       "dian_wei_s2": 1.0,
