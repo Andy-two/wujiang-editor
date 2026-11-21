@@ -1090,6 +1090,31 @@ static func sfx_text(fx: Dictionary) -> String:
 	return t
 
 
+# 展开式文案：ref_skill（天赋引用被动技能）不显示「获得某被动」，
+# 而是直接显示该被动技能本身的效果描述；其它类型同 sfx_text。
+# skills: 技能库字典，用于查引用技能
+static func sfx_text_ex(fx: Dictionary, skills: Dictionary) -> String:
+	if String(fx.get("type", "")) != SFX_REF_SKILL:
+		return sfx_text(fx)
+	var sid := String(fx.get("value", ""))
+	var sd: Dictionary = skills.get(sid, {})
+	if sd.is_empty():
+		var nm := String(fx.get("skill_name", sid))
+		return ("获得被动技能「%s」" % nm) if nm != "" else sfx_text(fx)
+	# 优先用技能的描述正文（官方文案），没有则拼效果块
+	var desc := String(sd.get("desc", "")).strip_edges()
+	if desc != "":
+		# 只取第一行，避免多行描述把天赋表格撑乱
+		var first_line := String(desc.split("\n")[0]).strip_edges()
+		if first_line != "":
+			return first_line
+	var parts: Array = []
+	for rfx in skill_effects(sd):
+		if rfx is Dictionary:
+			parts.append(sfx_text(rfx))
+	return "；".join(parts) if not parts.is_empty() else sfx_text(fx)
+
+
 # 只取在某个技能等级下生效的效果块
 #   min_lv = 该效果块从第几级开始生效（在 Lv2 时添加 → min_lv=2，则 Lv1 不生效）
 static func effects_for_level(effects: Array, lv: int) -> Array:

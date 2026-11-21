@@ -2998,7 +2998,7 @@ func _sync_talent_desc(t: Dictionary) -> void:
 			# 累积：min_lv ≤ 当前级 的都生效（Lv2 加的 3 级也有）
 			if int((fx as Dictionary).get("min_lv", 1)) > L:
 				continue
-			parts.append(String(RULEZ.sfx_text(fx)))
+			parts.append(String(RULEZ.sfx_text_ex(fx, data.skills)))
 		var line := "【效果·天赋Lv%d】%s" % [L, "；".join(parts)] if not parts.is_empty() else ""
 		var cur := String(lvs[L - 1])
 		# 去掉旧行再加（删除效果时 line 为空 → 旧行被清掉）
@@ -3013,7 +3013,7 @@ func _sync_talent_desc(t: Dictionary) -> void:
 	var all_parts: Array = []
 	for fx in (fx_raw as Array):
 		if fx is Dictionary:
-			all_parts.append("[Lv%d]%s" % [int(fx.get("min_lv", 1)), String(RULEZ.sfx_text(fx))])
+			all_parts.append("[Lv%d]%s" % [int(fx.get("min_lv", 1)), String(RULEZ.sfx_text_ex(fx, data.skills))])
 	var desc := String(t.get("desc", ""))
 	var kept2: Array = []
 	for ln2 in desc.split("\n"):
@@ -3157,7 +3157,7 @@ func _refresh_talent_fx() -> void:
 					data.dirty = true
 					_mark_dirty())
 				row.add_child(vs)
-			var sm := THEME.label("＝ " + RULEZ.sfx_text(fx), 11, THEME.ACCENT)
+			var sm := THEME.label("＝ " + RULEZ.sfx_text_ex(fx, data.skills), 11, THEME.ACCENT)
 			sm.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			row.add_child(sm)
 			var dl := THEME.button("✕", 11, 26)
