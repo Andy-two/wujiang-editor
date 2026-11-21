@@ -1,0 +1,57 @@
+武将id	名称	有被动伤害	无被动伤害	差值	说明
+lu_bu	吕布	156	145	11	被动生效
+diao_chan	貂蝉	246	246	0	
+guan_yu	关羽	145	145	0	
+zhang_fei	张飞	171	175	-4	被动生效
+zhao_yun	赵云	156	145	11	被动生效
+zhuge_liang	诸葛亮	79	79	0	
+liu_bei	刘备	246	246	0	
+ma_chao	马超	159	145	14	被动生效
+huang_zhong	黄忠	201	201	0	
+sun_shangxiang	孙尚香	201	201	0	
+pang_tong	庞统	71	71	0	
+wei_yan	魏延	246	246	0	
+qian_zhao	牵招	246	246	0	
+ma_yunlu	马云禄	159	145	14	被动生效
+huang_yueying	黄月英	105	105	0	
+zhang_xingcai	张星彩	271	246	25	被动生效
+cao_cao	曹操	145	145	0	
+xiahou_dun	夏侯惇	159	145	14	被动生效
+xiahou_yuan	夏侯渊	201	201	0	
+zhang_liao	张辽	145	145	0	
+xu_chu	许褚	246	246	0	
+guo_jia	郭嘉	18	18	0	
+si_ma_yi	司马懿	201	201	0	
+zhang_chunhua	张春华	71	71	0	
+zhen_mi	甄宓	18	18	0	
+yue_jin	乐进	159	145	14	被动生效
+cheng_yu	程昱	221	201	20	被动生效
+xun_yu	荀彧	18	18	0	
+cao_ren	曹仁	159	145	14	被动生效
+xu_huang	徐晃	145	145	0	
+zhang_he	张郃	145	145	0	
+yu_jin	于禁	145	145	0	
+cai_wenji	蔡文姬	17	17	0	
+sun_quan	孙权	201	201	0	
+canglan_cao_cao	沧澜·曹操	192	175	17	被动生效
+xiao_qiao	小乔	18	18	0	
+zhou_yu	周瑜	221	201	20	被动生效
+pang_de	庞德	246	246	0	
+da_qiao	大乔	17	17	0	
+jia_xu	贾诩	187	187	0	
+gao_shun	高顺	271	246	25	被动生效
+zhang_xiu	张绣	175	175	0	
+xun_you	荀攸	53	53	0	
+lv_lingqi	吕玲绮	145	145	0	
+dian_wei	典韦	246	246	0	
+chen_qun	陈群	18	18	0	
+liu_ye	刘晔	221	201	20	被动生效
+ji_ling	纪灵	159	145	14	被动生效
+gan_mei	甘梅	16	16	0	
+mi_zhu	糜竺	94	94	0	
+jian_yong	简雍	77	77	0	
+chen_dao	陈到	175	175	0	
+chen_deng	陈登	201	201	0	
+li_dian	李典	246	246	0	
+cao_hong	曹洪	246	246	0	
+sun_ce	孙策	159	145	14	被动生效
