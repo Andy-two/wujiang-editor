@@ -2813,13 +2813,26 @@ func _open_skill_picker() -> void:
 		for c in list.get_children():
 			c.queue_free()
 		var n := 0
+		# 排序：被动在前（新做的被动往往要手动添加），其余按名称
+		var ids: Array = []
 		for sid in data.skills.keys():
+			ids.append(String(sid))
+		ids.sort_custom(func(a, b) -> bool:
+			var da: Dictionary = data.skills.get(a, {})
+			var db: Dictionary = data.skills.get(b, {})
+			var pa := String(da.get("kind", "")) == "passive"
+			var pb := String(db.get("kind", "")) == "passive"
+			if pa != pb:
+				return pa
+			return String(da.get("name", a)) < String(db.get("name", b)))
+		for sid in ids:
 			var d: Dictionary = data.skills[sid]
 			var nm := String(d.get("name", sid))
-			var hay := (nm + " " + String(sid) + " " + String(d.get("kind", "")) + " " + _skill_kind_name(String(d.get("kind", "")))).to_lower()
+			var kind_name := _skill_kind_name(String(d.get("kind", "")))
+			var hay := (nm + " " + String(sid) + " " + String(d.get("kind", "")) + " " + kind_name).to_lower()
 			if q != "" and not hay.contains(q.to_lower()):
 				continue
-			var b := THEME.button("%s   [%s]   %s" % [nm, _skill_kind_name(String(d.get("kind", ""))), sid], 13)
+			var b := THEME.button("%s   [%s]   %s" % [nm, kind_name, sid], 13)
 			b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 			b.pressed.connect(func() -> void:
 				_add_skill(String(sid))
