@@ -179,6 +179,10 @@ func _build_topbar() -> Control:
 	b_test.tooltip_text = "部署改好的武将，实际移动 / 普攻 / 放技能，验证效果"
 	b_test.pressed.connect(_on_open_sandbox.bind("battle"))
 	h.add_child(b_test)
+	var b_open := THEME.button("🔓 开放编辑器", 14, 130)
+	b_open.tooltip_text = "导入/导出单个武将（JSON / Excel / 文字），清空项目武将，做成完全开放的编辑器"
+	b_open.pressed.connect(_on_open_editor)
+	h.add_child(b_open)
 	var b_set := THEME.button("⚙ 全局设定", 14, 110)
 	b_set.tooltip_text = "等级上限、星级成长、兵种修正、克制、暴击、伤害浮动等全局参数"
 	b_set.pressed.connect(func() -> void:
@@ -5266,6 +5270,345 @@ func _on_save() -> void:
 			data.order.size(), data.skills.size(), data.talents.size()])
 	else:
 		status("✖ 保存失败")
+# ============================================================
+# 开放编辑器：导入/导出单个武将，清空项目
+# ============================================================
+func _on_open_editor() -> void:
+	var win := Window.new()
+	win.title = "🔓 开放编辑器（导入 / 导出 / 清空武将）"
+	win.size = Vector2i(760, 680)
+	win.exclusive = false
+	add_child(win)
+	var v := VBoxContainer.new()
+	v.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	v.offset_left = 12; v.offset_right = -12; v.offset_top = 12; v.offset_bottom = -12
+	win.add_child(v)
+	v.add_child(THEME.hint("把项目做成开放编辑器：导入一个武将 → 修改测试 → 满意后导出参数 → 放进你的新游戏。"))
+
+	# --- 1. 导出当前武将 ---
+	var s1 := _section("① 导出当前武将（自包含 JSON）",
+		"包含武将本体 + 它引用的技能/天赋/副将/羁绊/神兵。导出的 JSON 可保存成文件，或复制文本。")
+	v.add_child(s1)
+	var b_exp := THEME.button("导出当前武将到文件…", 13)
+	b_exp.pressed.connect(func() -> void:
+		if cur_key == "":
+			status("请先在左侧选中一名武将")
+			return
+		var pack: Dictionary = data.export_general_pack(cur_key)
+		if pack.is_empty():
+			status("导出失败")
+			return
+		var txt := JSON.stringify(pack, "  ")
+		var dlg := FileDialog.new()
+		dlg.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+		dlg.access = FileDialog.ACCESS_FILESYSTEM
+		dlg.add_filter("*.json", "武将包 JSON")
+		dlg.title = "导出武将「%s」" % data.name_of(cur_key)
+		dlg.file_selected.connect(func(path: String) -> void:
+			var f := FileAccess.open(path, FileAccess.WRITE)
+			if f == null:
+				status("✖ 无法写入文件")
+				return
+			f.store_string(txt); f.close()
+			status("✔ 已导出武将包：%s" % path))
+		add_child(dlg))
+	s1.add_child(b_exp)
+
+	# --- 2. JSON 导入 ---
+	var s2 := _section("② 导入武将 JSON（粘贴文本）",
+		"粘贴导出的自包含 JSON，或只含武将字段的 JSON。可改 key 避免覆盖已有武将。")
+	v.add_child(s2)
+	var je := TextEdit.new()
+	je.custom_minimum_size = Vector2(0, 110)
+	je.placeholder_text = "在这里粘贴武将 JSON…"
+	s2.add_child(je)
+	var jrow := HBoxContainer.new()
+	jrow.add_theme_constant_override("separation", 6)
+	s2.add_child(jrow)
+	var jkey := LineEdit.new()
+	jkey.placeholder_text = "新 key（留空用包内 key）"
+	jkey.custom_minimum_size = Vector2(200, 0)
+	jrow.add_child(jkey)
+	var b_imp := THEME.button("导入 JSON", 13)
+	b_imp.pressed.connect(func() -> void:
+		var txt := je.text.strip_edges()
+		if txt == "":
+			status("请先粘贴 JSON 文本")
+			return
+		var parsed = JSON.parse_string(txt)
+		if parsed == null or not (parsed is Dictionary):
+			status("✖ JSON 解析失败")
+			return
+		var pd: Dictionary = parsed
+		var nk := jkey.text.strip_edges()
+		var key := data.import_general_pack(pd, nk)
+		if key == "":
+			status("✖ 不是有效的武将包（需 _pack=wujiang_general_v1 或含 name/skills 字段）")
+			return
+		data.save_all()
+		refresh_list()
+		status("✔ 已导入武将「%s」" % data.name_of(key)))
+	jrow.add_child(b_imp)
+
+	# --- 3. Excel 模板 ---
+	var s3 := _section("③ Excel 模板导入 / 导出",
+		"导出一份 Excel 模板，按列填写武将数据后再导入（一行一个武将）。")
+	v.add_child(s3)
+	var e_row := HBoxContainer.new()
+	e_row.add_theme_constant_override("separation", 6)
+	s3.add_child(e_row)
+	var b_tpl := THEME.button("导出 Excel 模板…", 13)
+	b_tpl.pressed.connect(func() -> void: _on_export_general_template())
+	e_row.add_child(b_tpl)
+	var b_xlimp := THEME.button("从 Excel 导入…", 13)
+	b_xlimp.pressed.connect(func() -> void: _on_import_general_excel())
+	e_row.add_child(b_xlimp)
+
+	# --- 4. 文字解析 ---
+	var s4 := _section("④ 文字 / 表格导入",
+		"直接粘贴自然语言或表格文字（如「吕布 武力100 谋攻20 技能:辕门射戟,鬼哭神嚎」），自动解析成武将。")
+	v.add_child(s4)
+	var te := TextEdit.new()
+	te.custom_minimum_size = Vector2(0, 90)
+	te.placeholder_text = "每行一个武将，例如：\n吕布 武力100 谋攻20 统率90 兵力3000 技能:辕门射戟,鬼哭神嚎 天赋:三国无双"
+	s4.add_child(te)
+	var b_txt := THEME.button("解析并导入文字", 13)
+	b_txt.pressed.connect(func() -> void: _on_import_general_text(te.text))
+	s4.add_child(b_txt)
+
+	# --- 5. 清空 ---
+	var s5 := _section("⑤ 清空项目武将",
+		"清空 generals.json 里的全部武将，做成空白编辑器。技能/天赋库保留。清空前请确认已备份。")
+	v.add_child(s5)
+	var warn := THEME.hint("⚠ 此操作会删除全部 %d 名武将！请先备份。" % data.order.size())
+	s5.add_child(warn)
+	var b_clear := THEME.button("⚠ 清空全部武将", 13)
+	b_clear.pressed.connect(func() -> void:
+		var n := data.clear_all_generals()
+		data.save_all()
+		refresh_list()
+		status("✔ 已清空 %d 名武将（技能/天赋库保留）" % n))
+	s5.add_child(b_clear)
+
+
+# Excel(CSV) 模板列
+const GENERAL_CSV_COLS := ["key", "name", "arm", "level", "star", "skill_lv", "talent_lv",
+	"atk", "matk", "def", "mdef", "hp", "luck", "move", "range", "skills", "talent", "note"]
+
+
+func _on_export_general_template() -> void:
+	var dlg := FileDialog.new()
+	dlg.file_mode = FileDialog.FILE_MODE_SAVE_FILE
+	dlg.access = FileDialog.ACCESS_FILESYSTEM
+	dlg.add_filter("*.csv", "Excel CSV 模板")
+	dlg.title = "导出武将 Excel 模板"
+	dlg.file_selected.connect(func(path: String) -> void:
+		var f := FileAccess.open(path, FileAccess.WRITE)
+		if f == null:
+			status("✖ 无法写入"); return
+		f.store_line(",".join(GENERAL_CSV_COLS))
+		# 写一行示例（当前武将或吕布）
+		var sample := ""
+		if cur_key != "" and data.generals.has(cur_key):
+			sample = _general_to_csv_row(cur_key)
+		elif data.generals.has("lu_bu"):
+			sample = _general_to_csv_row("lu_bu")
+		if sample != "":
+			f.store_line(sample)
+		f.close()
+		status("✔ 已导出 Excel 模板：%s" % path))
+	add_child(dlg)
+
+
+func _general_to_csv_row(key: String) -> String:
+	var g: Dictionary = data.generals[key]
+	var st: Dictionary = g.get("stats", {})
+	var e: Dictionary = g.get("ed_ext", {})
+	var row := []
+	row.append(key)
+	row.append(String(g.get("name", key)))
+	row.append(String(g.get("arm", "盾")))
+	row.append(str(int(g.get("ed_level", 1))))
+	row.append(str(int(g.get("ed_star", 1))))
+	row.append(str(int((g.get("ed_skill_lv", {}) as Dictionary).get((g.get("skills", []) as Array)[0] if not (g.get("skills", []) as Array).is_empty() else "", 1))))
+	row.append(str(int(g.get("ed_talent_lv", 1))))
+	for k in ["atk", "matk", "def", "mdef", "hp", "luck", "move", "range"]:
+		row.append(str(int(st.get(k, 0))))
+	row.append("|".join(PackedStringArray(g.get("skills", []))))
+	row.append(String(g.get("talent", "")))
+	row.append(String(g.get("ed_note", "")))
+	# CSV 转义：字段里的逗号/引号/换行用双引号包裹
+	var out: Array = []
+	for cell in row:
+		var s := String(cell)
+		if s.contains(",") or s.contains("\"") or s.contains("\n"):
+			s = "\"" + s.replace("\"", "\"\"") + "\""
+		out.append(s)
+	return ",".join(out)
+
+
+func _on_import_general_excel() -> void:
+	var dlg := FileDialog.new()
+	dlg.file_mode = FileDialog.FILE_MODE_OPEN_FILE
+	dlg.access = FileDialog.ACCESS_FILESYSTEM
+	dlg.add_filter("*.csv,*.txt", "Excel CSV")
+	dlg.title = "从 Excel(CSV) 导入武将"
+	dlg.file_selected.connect(func(path: String) -> void:
+		var f := FileAccess.open(path, FileAccess.READ)
+		if f == null:
+			status("✖ 无法读取"); return
+		var lines: Array = []
+		while not f.eof_reached():
+			var ln := f.get_line()
+			if ln.strip_edges() != "":
+				lines.append(ln)
+		f.close()
+		if lines.is_empty():
+			status("✖ 文件为空"); return
+		var n := 0
+		for i in range(1, lines.size()):
+			var cells := _parse_csv_line(String(lines[i]))
+			if cells.size() < 2:
+				continue
+			var key := String(cells[0]).strip_edges()
+			if key == "":
+				continue
+			var g := _general_from_cells(cells)
+			if data.generals.has(key):
+				# 已存在则合并
+				var old: Dictionary = data.generals[key]
+				for k in g.keys():
+					old[k] = g[k]
+				data.generals[key] = old
+			else:
+				data.order.append(key)
+				data.generals[key] = data._normalize_general(key, g)
+			n += 1
+		data.save_all()
+		refresh_list()
+		status("✔ 从 Excel 导入 %d 名武将" % n))
+	add_child(dlg)
+
+
+func _parse_csv_line(line: String) -> Array:
+	var out: Array = []
+	var cur := ""
+	var in_q := false
+	var i := 0
+	while i < line.length():
+		var c := line[i]
+		if c == "\"":
+			if in_q and i + 1 < line.length() and line[i + 1] == "\"":
+				cur += "\""; i += 2; continue
+			in_q = not in_q
+		elif c == "," and not in_q:
+			out.append(cur); cur = ""
+		else:
+			cur += c
+		i += 1
+	out.append(cur)
+	return out
+
+
+func _general_from_cells(cells: Array) -> Dictionary:
+	var g := {"name": String(cells[1]).strip_edges(), "arm": "盾", "stats": {}, "skills": []}
+	if cells.size() > 2: g["arm"] = String(cells[2]).strip_edges()
+	var st: Dictionary = g["stats"]
+	var keys := ["atk", "matk", "def", "mdef", "hp", "luck", "move", "range"]
+	for j in keys.size():
+		var idx := 7 + j
+		if idx < cells.size():
+			st[keys[j]] = int(String(cells[idx]).strip_edges().to_int())
+	for k in ["hp", "atk", "def", "matk", "mdef", "luck", "move", "range"]:
+		if not st.has(k): st[k] = 50
+	if cells.size() > 3: g["ed_level"] = int(String(cells[3]).strip_edges().to_int())
+	if cells.size() > 4: g["ed_star"] = int(String(cells[4]).strip_edges().to_int())
+	if cells.size() > 6: g["ed_talent_lv"] = int(String(cells[6]).strip_edges().to_int())
+	if cells.size() > 15:
+		var sk := String(cells[15]).strip_edges()
+		if sk != "":
+			g["skills"] = sk.split("|")
+	if cells.size() > 16: g["talent"] = String(cells[16]).strip_edges()
+	if cells.size() > 17: g["ed_note"] = String(cells[17]).strip_edges()
+	return g
+
+
+func _on_import_general_text(text: String) -> void:
+	var lines: Array = []
+	for ln in text.split("\n"):
+		if ln.strip_edges() != "":
+			lines.append(String(ln).strip_edges())
+	var n := 0
+	for ln in lines:
+		var g := _parse_general_text(String(ln))
+		if g.is_empty():
+			continue
+		var key := String(g.get("_key", ""))
+		if key == "":
+			continue
+		g.erase("_key")
+		if data.generals.has(key):
+			var old: Dictionary = data.generals[key]
+			for k in g.keys():
+				old[k] = g[k]
+			data.generals[key] = old
+		else:
+			data.order.append(key)
+			data.generals[key] = data._normalize_general(key, g)
+		n += 1
+	if n > 0:
+		data.save_all()
+		refresh_list()
+	status("✔ 从文字解析导入 %d 名武将（失败 %d 行）" % [n, lines.size() - n])
+
+
+# 解析一行文字：支持「姓名 武力100 谋攻20 ... 技能:a,b 天赋:x」
+func _parse_general_text(line: String) -> Dictionary:
+	var g := {"stats": {"hp": 100, "atk": 50, "def": 30, "matk": 30, "mdef": 20,
+		"luck": 50, "move": 4, "range": 1}, "skills": [], "arm": "盾"}
+	# 第一词作为名字
+	var parts := line.split(" ", false)
+	if parts.is_empty():
+		return {}
+	var name := String(parts[0]).strip_edges()
+	if name == "":
+		return {}
+	g["name"] = name
+	# key：名字的拼音简化，直接用名字（可在编辑器里改）
+	g["_key"] = "custom_" + name
+	# 解析 key:value 或 keyN
+	var rest := String(line).substr(String(line).find(name) + name.length())
+	var tokens := rest.split(" ")
+	var stat_map := {"武力": "atk", "攻击": "atk", "谋攻": "matk", "智力": "matk",
+		"物防": "def", "防御": "def", "谋防": "mdef", "兵力": "hp", "生命": "hp",
+		"幸运": "luck", "魅力": "luck", "移动": "move", "射程": "range"}
+	for t in tokens:
+		var ts := String(t).strip_edges()
+		if ts == "":
+			continue
+		# 技能: a,b
+		if ts.begins_with("技能"):
+			var sk := ts.substr(ts.find(":") + 1) if ts.contains(":") else ts.substr(2)
+			if sk.strip_edges() != "":
+				g["skills"] = sk.strip_edges().split(",")
+			continue
+		if ts.begins_with("天赋"):
+			var tl := ts.substr(ts.find(":") + 1) if ts.contains(":") else ts.substr(2)
+			g["talent"] = tl.strip_edges()
+			continue
+		if ts.begins_with("兵种"):
+			var ar := ts.substr(ts.find(":") + 1) if ts.contains(":") else ts.substr(2)
+			g["arm"] = ar.strip_edges()
+			continue
+		# 数值：如 武力100 / 武力:100 / atk100
+		for cn in stat_map.keys():
+			if ts.begins_with(cn):
+				var num := ts.substr(cn.length()).lstrip(":：").to_int()
+				(g["stats"] as Dictionary)[stat_map[cn]] = num
+				break
+	return g
+
+
 func _on_export() -> void:
 	var win := Window.new()
 	win.title = "导出给战棋游戏"

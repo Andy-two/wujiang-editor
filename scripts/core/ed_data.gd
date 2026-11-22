@@ -401,6 +401,102 @@ func add_general(key: String, tmpl: Dictionary = {}) -> String:
 	return key
 
 
+# ============================================================
+# 单武将自包含包：导出 / 导入 / 清空
+#   包内自带该武将引用的技能、天赋、副将、羁绊、神兵，导入到空项目即可还原
+# ============================================================
+
+# 导出一个武将及其全部依赖
+func export_general_pack(key: String) -> Dictionary:
+	if not generals.has(key):
+		return {}
+	var pack := {
+		"_pack": "wujiang_general_v1",
+		"key": key,
+		"general": (generals[key] as Dictionary).duplicate(true),
+		"skills": {},
+		"talents": {},
+		"vice": {},
+		"bonds": [],
+		"shenbing": {},
+		"exported_at": Time.get_datetime_string_from_system(),
+	}
+	var g: Dictionary = generals[key]
+	# 技能（本体 + ed_merged_from 引用）
+	for sid in (g.get("skills", []) as Array):
+		var d = skills.get(String(sid), {})
+		if d is Dictionary:
+			(pack["skills"] as Dictionary)[String(sid)] = (d as Dictionary).duplicate(true)
+	# 天赋（本体 + talent_stages 里的引用）
+	var tid := String(g.get("talent", ""))
+	if tid != "" and talents.has(tid):
+		(pack["talents"] as Dictionary)[tid] = (talents[tid] as Dictionary).duplicate(true)
+	# 副将
+	var vid := int((g.get("ed_ext", {}) as Dictionary).get("vice_id", 0))
+	if vid != 0:
+		var vid_s := str(vid)
+		var vd = vices.get(vid_s, {})
+		if vd is Dictionary:
+			(pack["vice"] as Dictionary)[vid_s] = (vd as Dictionary).duplicate(true)
+	# 羁绊：涉及该武将的条目
+	for b in bonds.values():
+		if not (b is Dictionary):
+			continue
+		if _bond_mentions(b, key):
+			(pack["bonds"] as Array).append((b as Dictionary).duplicate(true))
+	# 神兵：专属神兵以 general_key 为键
+	if shenbings.has(key):
+		(pack["shenbing"] as Dictionary)[key] = (shenbings[key] as Dictionary).duplicate(true)
+	return pack
+
+
+func _bond_mentions(b: Dictionary, key: String) -> bool:
+	var s := JSON.stringify(b)
+	var nm := String((generals.get(key, {}) as Dictionary).get("name", key))
+	return s.contains(key) or (nm != "" and s.contains(nm))
+
+
+# 导入自包含包：合并依赖 + 武将，返回新 key
+func import_general_pack(pack: Dictionary, new_key: String = "") -> String:
+	if String(pack.get("_pack", "")) != "wujiang_general_v1":
+		return ""
+	var key := new_key if new_key != "" else String(pack.get("key", ""))
+	if key == "":
+		return ""
+	# 合并依赖
+	for sid in (pack.get("skills", {}) as Dictionary).keys():
+		skills[String(sid)] = ((pack["skills"] as Dictionary)[sid] as Dictionary).duplicate(true)
+	for tid in (pack.get("talents", {}) as Dictionary).keys():
+		talents[String(tid)] = ((pack["talents"] as Dictionary)[tid] as Dictionary).duplicate(true)
+	for vid in (pack.get("vice", {}) as Dictionary).keys():
+		vices[String(vid)] = ((pack["vice"] as Dictionary)[vid] as Dictionary).duplicate(true)
+	for sbid in (pack.get("shenbing", {}) as Dictionary).keys():
+		shenbings[String(sbid)] = ((pack["shenbing"] as Dictionary)[sbid] as Dictionary).duplicate(true)
+	for b in (pack.get("bonds", []) as Array):
+		if not (b is Dictionary):
+			continue
+		var bid := String((b as Dictionary).get("id", "import_%d" % bonds.size()))
+		bonds[bid] = (b as Dictionary).duplicate(true)
+	# 武将本体
+	var g = pack.get("general", {})
+	if not (g is Dictionary):
+		return ""
+	if not generals.has(key):
+		order.append(key)
+	generals[key] = _normalize_general(key, (g as Dictionary).duplicate(true))
+	dirty = true
+	return key
+
+
+# 清空全部武将（保留技能/天赋/羁绊等库）
+func clear_all_generals() -> int:
+	var n := order.size()
+	generals.clear()
+	order.clear()
+	dirty = true
+	return n
+
+
 func duplicate_general(src: String) -> String:
 	var key := src + "_copy"
 	var i := 2
