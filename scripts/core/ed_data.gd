@@ -810,7 +810,7 @@ func unit_template(key: String, lv: int = -1, star: int = -1, arm: String = "") 
 		# 官方面板模式：1级→满级(60)线性插值，不升五维；星级/兵种修正照常叠加
 		var maxlv := maxf(1.0, float(RULEZ.max_level()))
 		var t := clampf(float(lv_c - 1) / (maxlv - 1.0), 0.0, 1.0)
-		var sm := 1.0 + float(maxi(0, st_c - 1)) * RULEZ.get_f("star_stat_pct")
+		var sm := RULEZ.star_mult(st_c)
 		var am: Dictionary = RULEZ.arm_mods(e_arm)
 		stats = {}
 		for k in ["hp", "atk", "matk", "def", "mdef", "luck"]:

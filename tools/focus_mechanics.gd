@@ -50,7 +50,7 @@ func _unit(cfg: Dictionary, key: String):
 	return t
 
 
-func _foe(hp: int = 30000):
+func _foe(hp: int = 300000):
 	var ft = data.unit_template("jia_xu", 60, 5, "")
 	ft["stats"]["max_hp"] = hp
 	ft["stats"]["hp"] = hp
@@ -83,7 +83,7 @@ func _skill_dmg(cfg: Dictionary, key: String, sid: String, choice: String = "") 
 		var eo: Vector2i = e if e is Vector2i else Vector2i(int(e.x), int(e.y))
 		if eo != Vector2i.ZERO:
 			targets.append(bt.add_unit(_foe(), land + eo, 1))
-	var hp0 := 30000 * targets.size()
+	var hp0 := 300000 * targets.size()
 	var rr: Dictionary = bt.cast_skill(u, sid, land, choice)
 	if not bool(rr.get("ok", false)):
 		return -3
@@ -146,7 +146,7 @@ func _heal_amt(cfg: Dictionary) -> int:
 	bt._apply_passive_startup(); bt._refresh_all_cond_mult()
 	var before := int(ally["hp"])
 	bt.cast_skill(u, "10274031", ally["pos"])
-	return clampi(int(ally["hp"]) - before, 0, 30000)
+	return clampi(int(ally["hp"]) - before, 0, 300000)
 
 
 # 暴击
@@ -277,6 +277,27 @@ func _init() -> void:
 	for v in sbs:
 		var cs2 := _cfg(); cs2["shenbing"] = v; cs2["skill_lv"] = 1; cs2["keep_skill_lv"] = true
 		_rec("神兵升阶专项(蔡文姬Lv1技)", "shenbing", v, "善哉行治疗", _heal_amt(cs2))
+
+	# 贾诩 DOT 累积专项：施放4次四胜决机叠4层溃逃，连续结算3回合的总持续伤害
+	for turns in [1, 2, 3]:
+		var bt2 = _bt()
+		var u2 = bt2.add_unit(_unit(_cfg(), "jia_xu"), Vector2i(10, 10), 0)
+		var foes2: Array = []
+		for i in 4:
+			var ff = bt2.add_unit(_foe(300000), Vector2i(8 + i, 11), 1)
+			foes2.append(ff)
+		bt2._apply_passive_startup(); bt2._refresh_all_cond_mult()
+		for ff in foes2:
+			# 直接叠4层溃逃（避开技能CD，专注测DOT结算）
+			for lay in 4:
+				bt2._add_debuff(ff, "溃逃", 3, u2)
+		var tot := 0
+		for t2 in turns:
+			for ff in foes2:
+				var hb := int((ff as Dictionary).get("hp", 0))
+				bt2.end_unit_turn(ff)
+				tot += hb - int((ff as Dictionary).get("hp", 0))
+		_rec("贾诩DOT累积", "turns", turns, "4目标总DOT伤害", tot)
 
 	var f = FileAccess.open("res://data/stats/focus_mechanics.tsv", FileAccess.WRITE)
 	if f != null:

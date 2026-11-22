@@ -193,7 +193,8 @@ const STAR_DEFAULTS := {
 	"cost_common": 1,                  # 兼容旧配置
 	"cost_rare": 1,                    # 兼容旧配置
 	"gacha_same_pity": 100,            # 抽卡保底（抽次数）——游戏侧使用
-	"star_stat_pct": 0.08,             # 每星全属性 %
+	"star_stat_pct": 0.08,             # 每星全属性 %（旧线性口径，保留兼容）
+	"star_max_mult": 5.0,              # 满星(10星)属性倍率，指数插值使星级影响大于等级
 	"star_hp_bonus": 10,
 }
 
@@ -838,7 +839,8 @@ const SFX_LABELS := {
 #   未在表中的状态（如「撕裂」「灼烧」）保持纯层数标记语义，由特定技能结算
 # ============================================================
 const DOT_STATUS := {
-	"溃逃": {"kind": "matk", "value": 0.25, "cap": 5},
+	# fixed: 每层固定伤害（不吃等级/属性放大）；value 保留为旧口径兼容
+	"溃逃": {"kind": "matk", "value": 0.25, "cap": 5, "fixed": 3000},
 }
 
 # 取某状态的持续伤害配置；无配置返回空字典
@@ -1260,10 +1262,18 @@ static func per_level_gain(lv_from: int) -> Dictionary:
 	return out
 
 
+# 星级属性倍率：1星=1倍，满星=star_max_mult倍（指数插值，星级影响明显大于等级）
+static func star_mult(star: int) -> float:
+	var mx := float(settings.get("star_max_mult", 5.0))
+	var max_s := maxi(2, int(get_f("max_star")))
+	var s := clampi(star, 1, max_s)
+	return pow(maxf(1.0, mx), float(s - 1) / float(max_s - 1))
+
+
 static func apply_growth(base: Dictionary, stats: Dictionary, lv: int, star: int,
 		arm: String, rates: Dictionary = {}, tags: Array = []) -> Dictionary:
 	var add := level_add(lv)
-	var mult := 1.0 + float(maxi(0, star - 1)) * get_f("star_stat_pct")
+	var mult := star_mult(star)
 	var add_hp := float(add["hp"]) + float(maxi(0, star - 1)) * get_f("star_hp_bonus")
 	var am := arm_mods(arm)
 	var g := get_d("growth")

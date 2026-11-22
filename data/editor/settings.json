@@ -95,6 +95,7 @@
   "anim_frame_w": 64.0,
   "anim_frame_h": 64.0,
   "anim_default_frames": 4.0,
+  "star_max_mult": 5.0,
   "use_official_panel": false,
   "arm_base_move": {
     "盾": 5.0,
@@ -144,7 +145,8 @@
     "gacha_same_pity": 100.0,
     "star_stat_pct": 0.08,
     "star_hp_bonus": 10.0,
-    "cost_per_star": 1.0
+    "cost_per_star": 1.0,
+    "star_max_mult": 5.0
   },
   "gacha_rate_same": 0.05,
   "five_growth": {

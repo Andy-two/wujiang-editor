@@ -1875,6 +1875,8 @@ func _add_debuff(t, name: String, turns: int, src = null) -> void:
 		rec["dot_value"] = float(_dot.get("value", 0.0))
 		rec["dot_atk"] = atkval
 		rec["dot_cap"] = int(_dot.get("cap", 1))
+		# 固定伤 DOT：不吃施加者属性/等级放大
+		rec["dot_fixed"] = float(_dot.get("fixed", 0.0))
 	t["debuffs"].append(rec)
 	# 同状态叠加：DOT 叠层上限
 	if not _dot.is_empty():
@@ -2133,7 +2135,8 @@ func _settle_dot(u) -> void:
 		if not fd.has("dot_value"):
 			continue
 		var stacks := clampi(1, 1, int(fd.get("dot_cap", 5)))
-		var base := float(fd.get("dot_atk", 0)) * float(fd.get("dot_value", 0.0))
+		var fixed := float(fd.get("dot_fixed", 0.0))
+		var base := fixed if fixed > 0.0 else (float(fd.get("dot_atk", 0)) * float(fd.get("dot_value", 0.0)))
 		var dmg := int(round(base * float(stacks)))
 		if dmg <= 0:
 			continue
