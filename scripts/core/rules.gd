@@ -195,6 +195,7 @@ const STAR_DEFAULTS := {
 	"gacha_same_pity": 100,            # 抽卡保底（抽次数）——游戏侧使用
 	"star_stat_pct": 0.08,             # 每星全属性 %（旧线性口径，保留兼容）
 	"star_max_mult": 5.0,              # 满星(10星)属性倍率，指数插值使星级影响大于等级
+	"level_stat_scale": 0.6,           # 官方面板满级属性压缩系数（1级不变）
 	"star_hp_bonus": 10,
 }
 
@@ -840,7 +841,7 @@ const SFX_LABELS := {
 # ============================================================
 const DOT_STATUS := {
 	# fixed: 每层固定伤害（不吃等级/属性放大）；value 保留为旧口径兼容
-	"溃逃": {"kind": "matk", "value": 0.25, "cap": 5, "fixed": 3000},
+	"溃逃": {"kind": "matk", "value": 0.25, "cap": 5, "fixed": 2000},
 }
 
 # 取某状态的持续伤害配置；无配置返回空字典
